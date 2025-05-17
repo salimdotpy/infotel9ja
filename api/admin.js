@@ -12,8 +12,8 @@ const firebaseConfig = {
   projectId: "salimtech-d4171",
   storageBucket: "salimtech-d4171.firebasestorage.app",
   messagingSenderId: "1007953204162",
-  appId: "1:1007953204162:web:f353d5fc5f8164c032bc5b",
-  measurementId: "G-YQE8ZJB3S0"
+  appId: "1:1007953204162:web:ba283d062a210f0132bc5b",
+  measurementId: "G-BREFY0C2E0"
 };
 
 // Initialize Firebase
