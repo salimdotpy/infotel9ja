@@ -10,8 +10,9 @@ import { fetchSetting } from '../utils';
 const links = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Services', href: '/#services' },
-    { name: 'Payment', href: '/#payment' },
+    { name: 'Competitions', href: '/competitions' },
+    { name: 'Past Winners', href: '/past-winners' },
+    { name: 'Terms and Conditions', href: '/terms' },
     { name: 'Contact', href: '/#contact' },
 ]
 
