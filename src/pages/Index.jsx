@@ -4,7 +4,7 @@ import { AboutSection, ContactSection, FooterSection, HeroSection, PaymentSectio
 
 export default function Index() {
     return (
-        <MainLayout sitename={'Deran More'}>
+        <MainLayout sitename={'InfoTel9ja'}>
             <HeroSection />
             <AboutSection />
             <ServiceSection />

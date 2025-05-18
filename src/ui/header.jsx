@@ -48,14 +48,14 @@ const Header = ({ sitename }) => {
     
     return (
         <React.Fragment>
-            <header className='fixed z-20 inset-x-0 top-0 w-full shadow-md bg-header'>
-                <Navbar className="mx-auto shadow-none rounded-none inset-x-0 max-w-screen-2xl px-4 py-2 lg:px-8 bg-header text-fore border-none">
+            <header className='fixed z-20 inset-x-0 top-0 w-full shadow-md backdrop-saturate-200 backdrop-blur-2xl'>
+                <Navbar className="mx-auto shadow-none rounded-none inset-x-0 max-w-screen-2xl px-4 py-2 lg:px-8 text-fore border-none !bg-inherit">
                     <div className="flex items-center gap-x-2">
                         <Link to="/" className="me-auto font-bold text-primary">
                             <div className='flex items-center gap-2'>
                                 <img src={`${didMount && images ? images.logo :'/images/logoIcon/logo.png'}`} alt='company logo' className='size-12 p-1 rounded-full bg-white' />
                                 <span className="hidden lg:block font-[tahoma]">
-                                    {didMount && seo ? seo.social_title : 'DeranMore'}
+                                    {didMount && seo ? seo.social_title : 'InfoTel9ja'}
                                 </span>
                             </div>
                         </Link>
@@ -111,7 +111,7 @@ const SideDrawer = ({ open, onClose, sitename }) => {
                 </div>
             </div>
             <div className='text-center font-semibold mt-auto py-3 bg-primary text-white'>
-                &copy; {sitename || 'DeranMore'}
+                &copy; {sitename || 'InfoTel9ja'}
             </div>
         </Drawer>
     );

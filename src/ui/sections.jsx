@@ -291,7 +291,7 @@ export const AboutsSection = () => {
             title: "Introduction",
             bottom: "Whether you need guidance on selecting a research topic, developing a research plan, or overcoming challenges in your research pursuits, our educational consult services provide the expertise, support, and peace of mind necessary for success.",
             content: [
-                "At DeranMore Educational Consult Services, we understand that every student's and educator's educational journey is distinct, marked by unique challenges and opportunities. As a trusted educational consult service, we provide personalized guidance and support to clients navigating the complex and ever-changing educational landscape.",
+                "At InfoTel9ja Educational Consult Services, we understand that every student's and educator's educational journey is distinct, marked by unique challenges and opportunities. As a trusted educational consult service, we provide personalized guidance and support to clients navigating the complex and ever-changing educational landscape.",
                 "Our team of experienced educational consultants is dedicated to empowering students/clients to reach their full potential and achieve their academic goals. We offer expert advice and tailored solutions on various educational issues, including but not limited to:",
             ],
             elements: [
@@ -434,7 +434,7 @@ export const ContactSection = () => {
 
     const contact_info = [
         { title: 'Phone', desc: data?.phone || '+18329844722, +2348034066961', Icon: PhoneIcon },
-        { title: 'Email', desc: data?.email || 'deranmore@hotmail.com', Icon: EnvelopeIcon },
+        { title: 'Email', desc: data?.email || 'infotel9ja@gmail.com', Icon: EnvelopeIcon },
         { title: 'Address', desc: data?.address || 'Ede, Osun Sta.', Icon: MapPinIcon },
     ]
     return (
@@ -528,7 +528,7 @@ export const FooterSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='flex flex-wrap items-center justify-center md:justify-between gap-5 px-4'>
                     <div>
-                        © Copyright <b>DeranMore.</b> All Rights Reserved
+                        © Copyright <b>InfoTel9ja.</b> All Rights Reserved
                     </div>
                     <div className='flex gap-x-3 text-2xl'>
                     {elements ? elements.map(({data_values:dv}, key) =>{
