@@ -7,6 +7,7 @@ import { ToastContainer } from "react-toastify";
 import Index from "./pages/Index";
 import About from "./pages/About";
 import useTheme from "./store/themeStore";
+import PublicRoute from "./routers/PublicRoute";
 
 function App() {
   const { theme } = useTheme();
@@ -32,8 +33,10 @@ function App() {
     <BrowserRouter>
       <LoadingComponent />
       <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/about" element={<About />} />
+        <Route path="/" element={<PublicRoute />}>
+          <Route index element={<Index />} />
+          <Route path="/about" element={<About />} />
+        </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
       <ToastContainer theme={theme} />
