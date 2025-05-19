@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionBody, AccordionHeader, Breadcrumbs, Button, Card, CardBody, Dialog, DialogBody, Input, List, ListItem, ListItemPrefix, Option, Select, Textarea, Typography } from '@material-tailwind/react';
+import { Accordion, AccordionBody, AccordionHeader, Breadcrumbs, Button, Card, CardBody, CardFooter, CardHeader, Chip, Dialog, DialogBody, Input, List, ListItem, ListItemPrefix, Option, Select, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
-import { ArrowDownIcon, ArrowRightIcon, CheckCircleIcon, ChevronDownIcon, CreditCardIcon, EnvelopeIcon, FaceFrownIcon, MapPinIcon,  XMarkIcon } from '@heroicons/react/24/outline';
+import { ArrowDownIcon, ArrowRightIcon, CheckCircleIcon, ChevronDownIcon, CreditCardIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon,  XMarkIcon } from '@heroicons/react/24/outline';
 import { getContent, keyToTitle } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
@@ -46,60 +46,89 @@ export function FormSkeleton({ size = 5, className = ''}) {
 
 export const HeroSection = () => {
     return (
-        <div id="hero" style={{ backgroundImage: `url(/images/img1.jpeg)`, backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'top center' }} className='h-screen md:h-[80vh] bg-no-repeat relative'>
-            <div className='absolute flex w-full h-screen md:h-[80vh] bg-black bg-opacity-40'>
+        <div id="hero" className='h-screen md:h-[80vh] bg-[url(/images/img1.jpeg)] bg-cover bg-fixed bg-[bottom] bg-no-repeat relative'>
+            <div className='absolute flex w-full h-screen md:h-[80vh] from-black via-transparent to-black bg-gradient-to-b'>
                 <div className='container m-auto text-white px-4 md:px-0 text-center'>
-                    <Typography variant='h1' className="text-2xl md:text-4xl lg:text-5xl font-normal" data-aos="fade-left" data-aos-delay={100}>
-                        You take awesome shots.<br/>Now let's celebrate you!
+                    <Typography variant='h1' className="text-2xl md:text-4xl lg:text-5xl lg:!leading-[1.4] font-normal" data-aos="fade-left" data-aos-delay={100}>
+                        Osun State Influencers:<br/>Vote, Engage, and Celebrate!
                     </Typography>
-                    <Typography className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-gray-200' data-aos="fade-right" data-aos-delay={200}>
+                    <Typography className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-white' data-aos="fade-right" data-aos-delay={200}>
                         To identify and reward the most influential personalities and football diehard fans<br/>in Osun State, while promoting community engagement and social interaction.
                     </Typography>
-                    <a href={"/about"} data-aos="fade-up" data-aos-delay={300}>
+                    <Link to="/about" data-aos="fade-up" data-aos-delay={300}>
                         <Button className="rounded-full border-white hover:border-primary border-2 bg-transparent hover:bg-primary">
-                            <FormSkeleton className='!p-0' size={1} />
+                            Learn More
                         </Button>
-                    </a>
+                    </Link>
                 </div>
             </div>
         </div>
     );
 };
 
-export const AboutSection = () => {
-    const [data, setData] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await frontSections('about');
-        setData(snapshot?.content.data_values);
-    };
+export const FactSection = () => {
+    
+    return (
+        <section id='fact' className='py-10'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-center'>
+                    <h3 className='font-bold text-2xl'>
+                        Our 2-Step Process
+                    </h3>
+                </div>
+                <div className='flex flex-wrap p-4 w-full'>
+                    <div className='text-fore mb-8 w-full flex gap-4 flex-col items-center text-center md:flex-1 lg:w-1/3 md:w-1/2 p-4 group' data-aos="fade-up" data-aos-delay={`100`}>
+                        <div className='float-left flex justify-center items-center size-20 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
+                            <MagnifyingGlassIcon className='size-10' />
+                        </div>
+                        <Typography variant='h6'>
+                            Discover
+                        </Typography>
+                        <Typography as={'div'}>
+                            We are in the business of deliberately seeking and discovering amazing photographers.
+                        </Typography>
+                    </div>
+                    <div className='text-fore mb-8 w-full flex flex-col items-center text-center gap-4 p-4 md:flex-1 lg:w-1/3 md:w-1/2 group' data-aos="fade-up" data-aos-delay={`100`}>
+                        <div className='float-left flex justify-center items-center size-20 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
+                            <CubeIcon className='size-10' />
+                        </div>
+                        <Typography variant='h6'>
+                            Launch
+                        </Typography>
+                        <Typography as={'div'}>
+                            After discovery, launching and putting a talent out there is the next big step; We do this through our contests & competitions.
+                        </Typography>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
 
-    useEffect(() => {
-        fetchData();
-        return setData(null);
-    }, []);
+export const AboutSection = () => {
+    
     return (
         <section id='about' className='py-10 bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='flex flex-wrap gap-5 px-4'>
                     <div className='h-1/2 md:flex-1 basis-[100%] flex flex-col gap-y-4 p-5' data-aos="fade-right">
                         <h3 className='text-primary font-bold text-2xl font-[tahoma]'>
-                            {didMount && data ? data.heading : <FormSkeleton className='!p-0' size={1} />}
+                            <FormSkeleton className='!p-0' size={1} />
                             <br />
                             <div className='text-fore text-lg'>
-                                {didMount && data ? data.sub_heading : <FormSkeleton className='!p-0' size={1} />}
+                                <FormSkeleton className='!p-0' size={1} />
                             </div>
                         </h3>
                         <div className='text-fore/80 text-justify'>
-                            {didMount && data ? data.details : <FormSkeleton className='!p-0' />}
+                            <FormSkeleton className='!p-0' />
                         </div>
-                        <Link to={data ? data.button_url :"/#about"} data-aos="fade-up" data-aos-delay={300}>
+                        <Link to={"/#about"} data-aos="fade-up" data-aos-delay={300}>
                             <Button variant='outlined' className='border-primary rounded-full px-16 hover:text-white border-2 text-fore hover:bg-primary justify-self-start'>
-                                {didMount && data ? data.button_text : <FormSkeleton className='!p-0' size={1} />}
+                                <FormSkeleton className='!p-0' size={1} />
                             </Button>
                         </Link>
                     </div>
-                    <div data-aos="fade-left" className='relative min-h-60 md:flex-1 basis-[100%]' style={{ backgroundImage: `url(${didMount && data ? data.image : '/images/default.png'})`, backgroundSize: 'cover', }}>
+                    <div data-aos="fade-left" className='relative min-h-60 md:flex-1 basis-[100%] bg-[url(/images/default.png)] bg-cover'>
                         <div className='absolute inset-0 from-header to-transparent md:bg-gradient-to-r bg-gradient-to-b'>
                         </div>
                     </div>
@@ -108,6 +137,39 @@ export const AboutSection = () => {
         </section>
     );
 };
+
+export const CompetitionSection = () => {
+    return (
+        <section id='competition' className='py-10 bg-header'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-center'>
+                    <h3 className='font-bold text-2xl'>
+                        Competitions
+                    </h3>
+                </div>
+                <div className='flex flex-wrap gap-6 p-4 w-full'>
+                    {[1,2,3,1,3,2,1,3,2,1,2,1,2,1,1,2].map((item, key) => 
+                    <Card key={key} className='basis-full md:basis-[46%] bg-back md:flex-row'>
+                        <CardHeader shadow={false} floated={false} className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-bl-xl">
+                        <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
+                        </CardHeader>
+                        <CardBody className='text-fore'>
+                            <Typography variant="h5" className="mb-2">
+                                18th Edition - Master at Photos Contest
+                            </Typography>
+                            <Typography>Stand a chance to win the sum of 500,000</Typography>
+                            <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' />
+                            <div className='mt-4'>
+                                <Button size='sm' className='bg-primary'>Follow Competition</Button>
+                            </div>
+                        </CardBody>
+                    </Card>
+                    )}
+                </div>
+            </div>
+        </section>
+    )
+}
 
 export const ServiceSection = () => {
     const [content, setContent] = useState(null);
@@ -162,114 +224,6 @@ export const ServiceSection = () => {
                     }
                 </div>
             </div>
-        </section>
-    );
-};
-
-export const PaymentSection = () => {
-    const [open, setOpen] = React.useState(false);
-    const handleOpen = () => { setOpen(!open); };
-
-    const [content, setContent] = useState(null);
-    const [elements, setElements] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await getContent('payment.content', true);
-        setContent(snapshot?.data_values);
-        const snapshot2 = await getContent('payment.element', false, null, true);
-        setElements(snapshot2);
-    };
-
-    useEffect(() => {
-        fetchData();
-        return ()=>{
-            setContent(null);
-            setElements(null);
-        }
-    }, []);
-
-    return (
-        <section id='payment' className='py-10 bg-header'>
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-center'>
-                    <h3 className='font-bold text-2xl'>
-                        {didMount && content ? content.heading : <FormSkeleton className='!p-0' size={1} />}
-                    </h3>
-                    <div className='text-fore/80 my-4'>
-                        {didMount && content ? content.sub_heading : <FormSkeleton className='!p-0' size={1} />}
-                    </div>
-                </div>
-                <div className='flex flex-wrap gap-5 mb-10 px-4'>
-                    <Card data-aos="fade-left" className="bg-back text-fore md:flex-1 basis-[100%]">
-                        <CardBody>
-                            <div className=''>
-                                <CreditCardIcon className='size-16 text-primary inline-block' />
-                                <Typography className="text-fore">
-                                    You can make payment to one of these account:
-                                </Typography>
-                            </div>
-                            <hr className='w-full my-3' />
-                            <List className='p-0'>
-                                {elements ? elements.map(({data_values:dv}, key) => 
-                                <ListItem key={key} className='text-fore'>
-                                    <ListItemPrefix>
-                                        <ArrowRightIcon className='size-6' />
-                                    </ListItemPrefix>
-                                    {dv.account_name}, {dv.account_number},  {dv.bank}
-                                </ListItem>
-                                ) :
-                                <FormSkeleton className='!p-0 w-full' />
-                                }
-                            </List>
-                        </CardBody>
-                    </Card>
-                    <Card data-aos="fade-right" className="bg-back text-fore md:flex-1 basis-[100%]">
-                        <CardBody>
-                            <div className=''>
-                                <CheckCircleIcon className='size-16 text-primary inline-block' />
-                                <Typography className="text-fore">
-                                    I've made the payment?
-                                </Typography>
-                            </div>
-                            <hr className='w-full my-3' />
-                            <div className='flex items-center justify-center my-16'>
-                                <Button variant='outlined' onClick={handleOpen} className='border-primary rounded-full px-16 hover:text-white border-2 text-fore hover:bg-primary'>
-                                {didMount && content ? content.button_text : <FormSkeleton className='!p-0' size={1} />}
-                                </Button>
-                            </div>
-                        </CardBody>
-                    </Card>
-                </div>
-            </div>
-
-            <Dialog open={open} handler={handleOpen} size="sm">
-                <DialogBody divider className=" bg-header border-0 gap-4 md:p-16 relative rounded">
-                    <XMarkIcon className="mr-3 h-5 w-5 absolute top-3 right-0" onClick={handleOpen} />
-                    <form className="mt-8 mb-2 text-fore" method='post' onSubmit={()=>toast.info('Coming soon!')}>
-                        <div className="mb-1 flex flex-col gap-6">
-                            <div>
-                                <Input label='Enter Transaction ID' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0' }} className={cls[1]} required />
-                            </div>
-                            <div>
-                                <Input label='Amount Sent' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0' }} className={cls[1]} required />
-                            </div>
-                            <div>
-                                <Select labelProps={{ className: cls[0] }} className={cls[1]} label="Bank sent to" value='' menuProps={{ className: 'max-h-44 md:max-h-72 bg-header text-fore' }}>
-                                    <Option value=''>Select bank you send to</Option>
-                                    {elements ? elements.map(({data_values:dv}, key) => 
-                                        <Option key={key} value={dv.bank}>{dv.account_name}, {dv.account_number},  {dv.bank}</Option>
-                                        ) :
-                                        <FormSkeleton className='!p-0 mt-5 w-full' size={3} />
-                                    }
-                                </Select>
-                            </div>
-                        </div>
-                        <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={false} fullWidth>
-                            Comfirm
-                        </Button>
-                    </form>
-                </DialogBody>
-            </Dialog>
         </section>
     );
 };

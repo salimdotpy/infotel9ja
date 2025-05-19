@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutSection, ContactSection, FooterSection, HeroSection, PaymentSection, ServiceSection } from "../ui/sections";
+import { AboutSection, CompetitionSection, ContactSection, FactSection, FooterSection, HeroSection, ServiceSection } from "../ui/sections";
 import { useDocumentTitle } from "@/hooks";
 
 export default function Index() {
@@ -7,9 +7,10 @@ export default function Index() {
     return (
         <>
             <HeroSection />
+            <FactSection />
+            <CompetitionSection />
             <AboutSection />
             <ServiceSection />
-            <PaymentSection />
             <ContactSection />
             <FooterSection />
         </>
