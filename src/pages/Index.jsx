@@ -1,5 +1,5 @@
 import React from "react";
-import { AboutSection, CompetitionSection, ContactSection, FactSection, FooterSection, HeroSection, ServiceSection } from "../ui/sections";
+import { AboutSection, CompetitionSection, FactSection, FooterSection, HeroSection } from "../ui/sections";
 import { useDocumentTitle } from "@/hooks";
 
 export default function Index() {
@@ -10,8 +10,6 @@ export default function Index() {
             <FactSection />
             <CompetitionSection />
             <AboutSection />
-            <ServiceSection />
-            <ContactSection />
             <FooterSection />
         </>
     )

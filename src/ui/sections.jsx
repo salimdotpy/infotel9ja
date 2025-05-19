@@ -105,39 +105,6 @@ export const FactSection = () => {
     );
 };
 
-export const AboutSection = () => {
-    
-    return (
-        <section id='about' className='py-10 bg-header'>
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='flex flex-wrap gap-5 px-4'>
-                    <div className='h-1/2 md:flex-1 basis-[100%] flex flex-col gap-y-4 p-5' data-aos="fade-right">
-                        <h3 className='text-primary font-bold text-2xl font-[tahoma]'>
-                            <FormSkeleton className='!p-0' size={1} />
-                            <br />
-                            <div className='text-fore text-lg'>
-                                <FormSkeleton className='!p-0' size={1} />
-                            </div>
-                        </h3>
-                        <div className='text-fore/80 text-justify'>
-                            <FormSkeleton className='!p-0' />
-                        </div>
-                        <Link to={"/#about"} data-aos="fade-up" data-aos-delay={300}>
-                            <Button variant='outlined' className='border-primary rounded-full px-16 hover:text-white border-2 text-fore hover:bg-primary justify-self-start'>
-                                <FormSkeleton className='!p-0' size={1} />
-                            </Button>
-                        </Link>
-                    </div>
-                    <div data-aos="fade-left" className='relative min-h-60 md:flex-1 basis-[100%] bg-[url(/images/default.png)] bg-cover'>
-                        <div className='absolute inset-0 from-header to-transparent md:bg-gradient-to-r bg-gradient-to-b'>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-    );
-};
-
 export const CompetitionSection = () => {
     return (
         <section id='competition' className='py-10 bg-header'>
@@ -148,17 +115,19 @@ export const CompetitionSection = () => {
                     </h3>
                 </div>
                 <div className='flex flex-wrap gap-6 p-4 w-full'>
-                    {[1,2,3,1,3,2,1,3,2,1,2,1,2,1,1,2].map((item, key) => 
+                    {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
                     <Card key={key} className='basis-full md:basis-[46%] bg-back md:flex-row'>
-                        <CardHeader shadow={false} floated={false} className="m-0 md:w-2/5 shrink-0 rounded-b-none md:rounded-r-none md:rounded-bl-xl">
+                        <CardHeader floated={false} className="m-0 md:w-2/5 h-[200px] md:h-auto shrink-0 rounded-b-none md:rounded-r-none md:rounded-bl-xl">
                         <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
                         </CardHeader>
                         <CardBody className='text-fore'>
                             <Typography variant="h5" className="mb-2">
                                 18th Edition - Master at Photos Contest
                             </Typography>
-                            <Typography>Stand a chance to win the sum of 500,000</Typography>
-                            <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' />
+                            <Typography>Stand a chance to win the sum of {' '} 
+                                <span className='naira font-bold'>500,000</span>
+                            </Typography>
+                            <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' icon={ <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" /> } />
                             <div className='mt-4'>
                                 <Button size='sm' className='bg-primary'>Follow Competition</Button>
                             </div>
@@ -170,6 +139,36 @@ export const CompetitionSection = () => {
         </section>
     )
 }
+
+export const AboutSection = () => {
+    
+    return (
+        <section id='about' className='py-10'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='flex flex-wrap gap-5 px-4'>
+                    <div className='h-1/2 md:flex-1 basis-[100%] flex flex-col gap-y-4 p-5' data-aos="fade-right">
+                        <h3 className='text-primary font-bold text-2xl font-[tahoma]'>
+                            InfoTel9ja Global Network
+                        </h3>
+                        <div className='text-fore/80 text-justify'>
+                            Osun State Influential Personalities and Football Diehard Fans Contest.<br />
+                            To identify and reward the most influential personalities and football diehard fans in Osun State, while promoting community engagement and social interaction.
+                        </div>
+                        <Link to={"/#about"} data-aos="fade-up" data-aos-delay={300}>
+                            <Button variant='outlined' className='border-primary rounded-full px-16 hover:text-white border-2 text-fore hover:bg-primary justify-self-start'>
+                                Learn more
+                            </Button>
+                        </Link>
+                    </div>
+                    <div data-aos="fade-left" className='relative min-h-60 md:flex-1 basis-[100%] bg-[url(/images/img1.jpeg)] bg-cover'>
+                        <div className='absolute inset-0 from-header to-transparent md:bg-gradient-to-r bg-gradient-to-b'>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    );
+};
 
 export const ServiceSection = () => {
     const [content, setContent] = useState(null);
