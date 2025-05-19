@@ -1,11 +1,8 @@
-
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Drawer, IconButton, List, ListItem, Navbar } from '@material-tailwind/react';
 import { Link } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import ToggleTheme from './ToggleTheme';
-import { useDidMount } from '../hooks';
-import { fetchSetting } from '../utils';
 
 const links = [
     { name: 'Home', href: '/' },
@@ -16,34 +13,17 @@ const links = [
     { name: 'Contact', href: '/#contact' },
 ]
 
-const Header = ({ sitename }) => {
+const Header = () => {
     const [open, setOpen] = useState(false);
     const openDrawer = () => setOpen(true);
     const closeDrawer = () => setOpen(false);
-    const [images, setImages] = useState(null);
-    const [seo, setSeo] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await fetchSetting('logo_favicon.image');
-        setImages(snapshot);
-        const snapshot2 = await fetchSetting('seo.data');
-        setSeo(snapshot2);
-    };
 
     useEffect(() => {
-        fetchData();
-        return ()=>{
-            setImages(null);
-            setSeo(null);
-        }
-    }, []);
-  
-    useEffect(() => {
-      window.addEventListener("resize", () => {
-        if(window.innerWidth >= 960) {
-          setOpen(false);
-        }
-      });
+        window.addEventListener("resize", () => {
+            if (window.innerWidth >= 960) {
+                setOpen(false);
+            }
+        });
     }, []);
     
     return (
@@ -53,9 +33,9 @@ const Header = ({ sitename }) => {
                     <div className="flex items-center gap-x-2">
                         <Link to="/" className="me-auto font-bold text-primary">
                             <div className='flex items-center gap-2'>
-                                <img src={`${didMount && images ? images.logo :'/images/logoIcon/logo.png'}`} alt='company logo' className='size-12 p-1 rounded-full bg-white' />
+                                <img src={`/images/logoIcon/logo.png`} alt='company logo' className='size-12 p-0.5 rounded-full bg-green-100' />
                                 <span className="hidden lg:block font-[tahoma]">
-                                    {didMount && seo ? seo.social_title : 'InfoTel9ja'}
+                                    InfoTel9ja
                                 </span>
                             </div>
                         </Link>
@@ -69,7 +49,7 @@ const Header = ({ sitename }) => {
                     </div>
                 </Navbar>
             </header>
-            <SideDrawer open={open} onClose={closeDrawer} sitename={sitename} />
+            <SideDrawer open={open} onClose={closeDrawer} />
         </React.Fragment>
     );
 };
@@ -93,7 +73,7 @@ function NavList() {
     )
 }
 
-const SideDrawer = ({ open, onClose, sitename }) => {
+const SideDrawer = ({ open, onClose }) => {
     return(
         <Drawer open={open} onClose={onClose} placement="right" className="overflow-y-auto flex flex-col bg-header">
             <div className='flex items-center font-semibold gap-x-3 justify-end p-3 border-b border-primary/60'>
@@ -111,7 +91,7 @@ const SideDrawer = ({ open, onClose, sitename }) => {
                 </div>
             </div>
             <div className='text-center font-semibold mt-auto py-3 bg-primary text-white'>
-                &copy; {sitename || 'InfoTel9ja'}
+                &copy; InfoTel9ja
             </div>
         </Drawer>
     );

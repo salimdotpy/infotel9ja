@@ -1,20 +1,14 @@
+import { Link, Navigate, Outlet, useParams } from "react-router-dom";
 import React from "react";
 import { Card } from "@material-tailwind/react";
-import { Link } from 'react-router-dom';
-import Header from "./header";
 
-export default function MainLayout({ children, sitename }) {
-  return (
-    <React.Fragment>
-        <Header sitename={sitename} />
-        <main className="pt-16">
-            {children}
-        </main>
-    </React.Fragment>
-  );
-}
- 
-export function AuthLayout({ children, phrase='Get Started Now' }) {
+const AdminAuthRoute = () => {
+  const { role } = useParams();
+
+  const roleAllowed = ['admin', 'admin-employee', 'vendor', 'vendor-employee']
+  if (!role || !roleAllowed.includes(role)) {
+    return <Navigate to="/" replace />
+  }
   return (
     <main role='main'>
       <section id='' className='flex flex-wrap w-full'>
@@ -24,7 +18,9 @@ export function AuthLayout({ children, phrase='Get Started Now' }) {
               <img src={'/images/logoIcon/logo.png'} className="mb-5 size-10 lg:size-14 p-1 bg-white rounded shadow" alt={`Company Logo`} />
             </Link>
             <h2 className='text-[40px] text-white font-thin 2xl:text-4xl font-sans  [text-shadow:_0_0_8px_rgb(var(--color-primary))_,_0_10px_8px_rgb(var(--color-primary))_,_10px_0_8px_rgb(var(--color-primary))]'>
-              {phrase}
+            Your
+            All Service
+            In one field....
             </h2>
           </div>
         </div>
@@ -33,10 +29,12 @@ export function AuthLayout({ children, phrase='Get Started Now' }) {
             <Link to={'/'}>
               <img src={'/images/logoIcon/logo.png'} className="mb-20 size-14 lg:hidden p-1 bg-white rounded shadow" alt={`Company Logo`} />
             </Link>
-            {children}
+            <Outlet />
           </Card>
         </div>
       </section>
     </main>
   );
-}
+};
+
+export default AdminAuthRoute;
