@@ -11,7 +11,7 @@ import { useAuth } from '../AuthContext';
 import { useAdmin } from '../../hooks';
 import { FormSkeleton } from '../sections';
 
-const Header = ({open, onClose}) => {
+const AdminNav = ({open, onClose}) => {
     const [openSearch, setOpenSearch] = React.useState(false);
     const [searchLink, setSearchLink] = React.useState(getSearchLinks());
     
@@ -154,7 +154,7 @@ const Header = ({open, onClose}) => {
     );
 };
 
-export default Header;
+export default AdminNav;
 
 const getSearchLinks = ()=>{
     let newList = []

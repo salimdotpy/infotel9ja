@@ -45,30 +45,19 @@ export function FormSkeleton({ size = 5, className = ''}) {
 }
 
 export const HeroSection = () => {
-    const [data, setData] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await frontSections('hero');
-        setData(snapshot?.content.data_values);
-    };
-
-    useEffect(() => {
-        fetchData();
-        return setData(null);
-    }, []);
     return (
-        <div id="hero" style={{ backgroundImage: `url(${didMount && data ? data.image : '/images/default.png'})`, backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'top center' }} className='h-screen md:h-[80vh] bg-no-repeat relative'>
+        <div id="hero" style={{ backgroundImage: `url(/images/img1.jpeg)`, backgroundSize: 'cover', backgroundAttachment: 'fixed', backgroundPosition: 'top center' }} className='h-screen md:h-[80vh] bg-no-repeat relative'>
             <div className='absolute flex w-full h-screen md:h-[80vh] bg-black bg-opacity-40'>
-                <div className='container m-auto text-white px-4 md:px-0'>
-                    <Typography variant='h1' className="text-2xl md:text-4xl lg:text-5xl" data-aos="fade-left" data-aos-delay={100}>
-                        {didMount && data ? data.heading : <FormSkeleton className='w-1/2 !p-0' size={1} />}
+                <div className='container m-auto text-white px-4 md:px-0 text-center'>
+                    <Typography variant='h1' className="text-2xl md:text-4xl lg:text-5xl font-normal" data-aos="fade-left" data-aos-delay={100}>
+                        You take awesome shots.<br/>Now let's celebrate you!
                     </Typography>
-                    <Typography variant='h6' className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-gray-200' data-aos="fade-right" data-aos-delay={200}>
-                        {didMount && data ? data.sub_heading : <FormSkeleton className='w-1/2 !p-0' size={1} />}
+                    <Typography className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-gray-200' data-aos="fade-right" data-aos-delay={200}>
+                        To identify and reward the most influential personalities and football diehard fans<br/>in Osun State, while promoting community engagement and social interaction.
                     </Typography>
-                    <a href={data ? data.button_url :"/#about"} data-aos="fade-up" data-aos-delay={300}>
+                    <a href={"/about"} data-aos="fade-up" data-aos-delay={300}>
                         <Button className="rounded-full border-white hover:border-primary border-2 bg-transparent hover:bg-primary">
-                            {didMount && data ? data.button_text : <FormSkeleton className='!p-0' size={1} />}
+                            <FormSkeleton className='!p-0' size={1} />
                         </Button>
                     </a>
                 </div>

@@ -5,8 +5,7 @@ import { Card } from "@material-tailwind/react";
 const AdminAuthRoute = () => {
   const { role } = useParams();
 
-  const roleAllowed = ['admin', 'admin-employee', 'vendor', 'vendor-employee']
-  if (!role || !roleAllowed.includes(role)) {
+  if (role !== 'admin' ) {
     return <Navigate to="/" replace />
   }
   return (

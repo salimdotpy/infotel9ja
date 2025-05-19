@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import Layout from "../ui/admin/layout";
 import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { CheckCircleIcon, EyeIcon, EyeSlashIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
 import { showAmount } from "../ui/admin/sidebar";
@@ -10,12 +9,12 @@ import { useAuth } from "../ui/AuthContext";
 export default function Dashboard() {
     const [balanceShown, setBalanceShown] = React.useState(false);
     const toggleBalanceVisiblity = (value) => setBalanceShown(balanceShown === value ? 0 : value);
-    useDocumentTitle('Dashboard - DeranMore');
+    useDocumentTitle('Dashboard - InfoTel9ja');
     const {user, loading} = useAuth();
     
     if (loading) return <p>Loading...</p>;
     return (
-        <Layout>
+        <>
             <div className="flex gap-5 flex-wrap *:flex-1 *:basis-full md:*:basis-1/4 mb-10 text-fore">
                 <Card className="bg-header">
                     <CardBody>
@@ -74,6 +73,6 @@ export default function Dashboard() {
                     </CardBody>
                 </Card>
             </div>
-        </Layout>
+        </>
     )
 }

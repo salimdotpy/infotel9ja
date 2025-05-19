@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Header from "./header";
+import Header from "./AdminNav";
 import { Aside, Sidebar } from "./sidebar";
 
 export default function Layout({ children }) {

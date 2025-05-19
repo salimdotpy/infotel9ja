@@ -8,25 +8,10 @@ import { toast } from "react-toastify";
 
 const AdminRoute = () => {
   const [open, setOpen] = useState(false);
-  const [loading, setLoading] = useState(true);
-  const { user, token, loadUser } = useAuth();
-  const isAuth = !!token && !!user;
-  const role = user?.role?.name || '';
-  const allowed = ['admin', 'admin-employee']
+  // const { user, token, loadUser } = useAuth();
+  const { user, loading } = useAuth();
 
   useEffect(() => {
-    const handleUser = async () => {
-      try {
-        await loadUser();
-      } catch (error) {
-        toast.error(error.response.data.msg)
-      } finally {
-        setLoading(false);
-      }
-    }
-
-    handleUser();
-
     const handResize = () => {
       if (window.innerWidth >= 960) {
         setOpen(false);
@@ -38,9 +23,7 @@ const AdminRoute = () => {
 
   if (loading) return <LoadingComponent />;
 
-  if (!isAuth || !allowed.includes(role)) {
-    return <Navigate to="/" replace />;
-  }
+  if (!user) return <Navigate to="/auth/admin" replace />;
 
   return (
     <div className="h-screen">
