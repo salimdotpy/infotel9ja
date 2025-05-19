@@ -17,7 +17,7 @@
 
 @layer base {
   :root {
-    --color-primary: 51 205 75;
+    --color-primary: 0 198 0;
     --color-secondary: 110 102 191;
     --bg-color: 249 250 252;
     --text-color: 62 89 77;
@@ -30,7 +30,7 @@
 
   /* Dark theme */
   .dark {
-    --color-primary: 101 205 115;
+    --color-primary: 0 220 0;
     --color-secondary: 20 157 221;
     --bg-color: 11 15 25;
     --text-color: 232 234 236;
