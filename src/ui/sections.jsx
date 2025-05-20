@@ -451,10 +451,10 @@ export const ContactSection = () => {
 
 export const FooterSection = () => {
     return (
-        <section id='footer' className='py-5 bg-header'>
+        <section id='footer' className='pt-10 pb-5  bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
-                <div className='flex flex-wrap items-center justify-center md:justify-between gap-5 px-4'>
-                    <div className='basis-1/3'>
+                <div className='flex flex-wrap gap-5 px-4'>
+                    <div className='basis-full md:basis-1/3'>
                         <Avatar src="/images/logoIcon/logo.png" size='xl' />
                         <h3 className='text-primary font-bold text-2xl font-[tahoma]'>
                             InfoTel9ja Global Network
@@ -463,7 +463,34 @@ export const FooterSection = () => {
                             Our mission is to identify and reward the most influential personalities and football diehard fans in Osun State, while promoting community engagement and social interaction.
                         </div>
                     </div>
-                    <div className='basis-full'>
+                    <div className='basis-full md:basis-[30%] grow'>
+                        <h3 className='font-bold text-2xl font-[tahoma] md:text-center'>
+                            Competitions
+                        </h3>
+                        <List className='p-0 mt-4'>
+                            {Array(8).fill(1).map((item, key) => 
+                            <ListItem key={key} className='text-fore py-1.5 justify-start md:justify-end'>
+                                <ListItemPrefix>
+                                    <ArrowRightIcon className='size-4' />
+                                </ListItemPrefix>
+                                18th Edition - Master at Photos Contest
+                            </ListItem>
+                            )}
+                        </List>
+                    </div>
+                    <div className='basis-full md:basis-[30%] grow'>
+                        <h3 className='font-bold text-2xl font-[tahoma] text-left md:text-right'>
+                            Useful Links
+                        </h3>
+                        <List className='p-0 mt-4'>
+                            {['About', 'Competitions', 'Past Winners', 'Contact', 'Terms and Conditions', 'Reports a Contestant'].map((item, key) => 
+                            <ListItem key={key} className='text-fore justify-start md:justify-end py-1.5'>
+                                {item}
+                            </ListItem>
+                            )}
+                        </List>
+                    </div>
+                    <div className='basis-full text-center pt-5'>
                         © Copyright <b>InfoTel9ja.</b> All Rights Reserved
                     </div>
                 </div>
