@@ -151,22 +151,36 @@ export const WinnersSection = () => {
                     These are the winners of recently concluded 18th Edition - Master at Photos Contest[Completed]
                     </p>
                 </div>
-                <div className='flex flex-wrap gap-6 p-4 w-full'>
+                <div className='flex flex-col gap-6 p-4 w-full'>
                     {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back lg:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                        <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl">
-                        <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
-                        </CardHeader>
-                        <CardBody className='text-fore'>
-                            <Typography variant="h5" className="mb-2 !line-clamp-2">
-                                Selim Adekola (SalimTech)
-                            </Typography>
-                            <p className='text-justify'>We say a big congratulations to{' '} 
-                                <span className='font-bold'>Selim Adekola (SalimTech)</span>{' '}
-                                for emerging as the <span className='font-bold'>2nd Runner Up</span>
-                                {' '}of the 18th Edition - Master at Photos Contest[Completed]
-                            </p>
-                        </CardBody>
+                    <Card key={key} className='flex-row flex-wrap gap-5 basis-full bg-back p-4'>
+                        <Card className='basis-full lg:basis-2/3 bg-header lg:flex-row'  data-aos="fade-right" data-aos-delay={`100`}>
+                            <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl relative">
+                            <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
+                            <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary shadow-2xl mb-5 absolute right-3 -bottom-2 block md:hidden' />
+                            </CardHeader>
+                            <CardBody className='text-fore'>
+                                <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary mb-5 hidden md:block' />
+                                <Typography variant="h5" className="mb-2 !line-clamp-2">
+                                    Selim Adekola (SalimTech)
+                                </Typography>
+                                <p className=''>We say a big congratulations to{' '} 
+                                    <span className='font-bold'>Selim Adekola (SalimTech)</span>{' '}
+                                    for emerging as the <span className='font-bold'>2nd Runner Up</span>
+                                    {' '}of the 18th Edition - Master at Photos Contest[Completed]
+                                </p>
+                            </CardBody>
+                        </Card>
+                        <Card className='flex-col-reverse basis-full sm:basis-[46%] lg:basis-1/4 bg-header grow'  data-aos="fade-left" data-aos-delay={`100`}>
+                            <CardHeader floated={false} className="m-0 h-[200px] rounded-t-none">
+                            <img src={`/images/ogimage.jpeg`} alt="card-image" className='h-full w-full' />
+                            </CardHeader>
+                            <CardBody className='text-fore py-3'>
+                                <p className=''>Here is the reciept of transfer we made to{' '} 
+                                    <span className='font-bold'>Selim Adekola (SalimTech)</span>
+                                </p>
+                            </CardBody>
+                        </Card>
                     </Card>
                     )}
                 </div>
