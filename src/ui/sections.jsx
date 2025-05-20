@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionBody, AccordionHeader, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
+import { Accordion, AccordionBody, AccordionHeader, Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
 import { ArrowRightIcon, ChevronDownIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
@@ -413,7 +413,7 @@ export const AboutsSection = () => {
                             </li>
                         </ul>
                     </ol>
-                    <h6 className='font-bold text-xl mt-8'>ADDITIONAL PRIZE FOR THE 1ST PRIZE WINNER UNDER OSUN STATE MOST FOOTBALL DIEHARD FANS CONTEST:</h6>
+                    <h6 className='font-bold text-xl mt-8'>Additional Prize for the 1st Prize Winner under Osun State most football diehard fans contest:</h6>
                     <ul className='list-[square] m-auto'>
                         <li className='text-fore/80 my-4 ml-5'>
                             A customized football kit of their favorite football club, including:
@@ -427,6 +427,16 @@ export const AboutsSection = () => {
                             <li className='text-fore/80 my-4 ml-10'>One professional soccer ball</li>
                         </ol>
                     </ul>
+                </div>
+            </div>
+        </section>
+        <section id='prizes' className='py-10 bg-header'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <Alert color='red' variant='ghost'>
+                        <h3 className='font-bold text-2xl mb-3'>DISCLAIMER:</h3>
+                        InfoTel9ja Global Network reserves the right to modify or cancel the contest at any time without prior notice. Let us be guided accordingly.
+                    </Alert>
                 </div>
             </div>
         </section>
