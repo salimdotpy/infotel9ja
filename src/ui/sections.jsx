@@ -285,11 +285,6 @@ export const AboutsSection = () => {
  
     return (
         <>
-        <section className='py-10 bg-primary/20'>
-            <div className='container xl:w-[90%] mx-auto flex justify-center items-center h-56'>
-                <Typography data-aos="fade-in" variant="h2" className="text-fore text-center">More info About Us</Typography>
-            </div>
-        </section>
         <section id='intro' className='py-10 bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
@@ -530,5 +525,25 @@ export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
                 </Link>
             )}
         </Breadcrumbs>
+    )
+}
+
+export const HeroBreaCrumbs = ({ links = [] }) => {
+    return (
+        <section className='py-10 bg-primary/20'>
+            <div className='container xl:w-[90%] mx-auto flex flex-col gap-5 justify-center items-center h-56'>
+                <Typography data-aos="fade-in" variant="h2" className="text-fore text-center">About Us</Typography>
+                <Breadcrumbs className='shadow-lg bg-transparent'>
+                    <Link to="/" className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
+                        Home
+                    </Link>
+                    {links && links.map((link, key) =>
+                        <Link href={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
+                            {link.name}
+                        </Link>
+                    )}
+                </Breadcrumbs>
+            </div>
+        </section>
     )
 }
