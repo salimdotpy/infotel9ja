@@ -115,12 +115,12 @@ export const CompetitionSection = () => {
                 </div>
                 <div className='flex flex-wrap gap-6 p-4 w-full'>
                     {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='basis-full md:basis-[46%] bg-back md:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                        <CardHeader floated={false} className="m-0 md:w-2/5 h-[200px] md:h-auto shrink-0 rounded-b-none md:rounded-r-none md:rounded-bl-xl">
+                    <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back lg:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
+                        <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl">
                         <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
                         </CardHeader>
                         <CardBody className='text-fore'>
-                            <Typography variant="h5" className="mb-2">
+                            <Typography variant="h5" className="mb-2 !line-clamp-2">
                                 18th Edition - Master at Photos Contest
                             </Typography>
                             <Typography>Stand a chance to win the sum of {' '} 
@@ -553,7 +553,7 @@ export const FooterSection = () => {
                         </h3>
                         <List className='p-0 mt-4'>
                             {Array(8).fill(1).map((item, key) => 
-                            <ListItem key={key} className='text-fore py-1.5 justify-start md:justify-end'>
+                            <ListItem key={key} className='text-fore py-1.5 justify-start md:justify-end lg:justify-center'>
                                 <ListItemPrefix>
                                     <ArrowRightIcon className='size-4' />
                                 </ListItemPrefix>
@@ -563,12 +563,12 @@ export const FooterSection = () => {
                         </List>
                     </div>
                     <div className='basis-full md:basis-[30%] grow'>
-                        <h3 className='font-bold text-2xl font-[tahoma] text-left md:text-right'>
+                        <h3 className='font-bold text-2xl font-[tahoma] text-left lg:text-right'>
                             Useful Links
                         </h3>
                         <List className='p-0 mt-4'>
                             {['About', 'Competitions', 'Past Winners', 'Contact', 'Terms and Conditions', 'Reports a Contestant'].map((item, key) => 
-                            <ListItem key={key} className='text-fore justify-start md:justify-end py-1.5'>
+                            <ListItem key={key} className='text-fore lg:justify-end py-1.5'>
                                 {item}
                             </ListItem>
                             )}
@@ -617,11 +617,11 @@ export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
     )
 }
 
-export const HeroBreaCrumbs = ({ links = [] }) => {
+export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
     return (
         <section className='py-10 bg-primary/20'>
             <div className='container xl:w-[90%] mx-auto flex flex-col gap-5 justify-center items-center h-56'>
-                <Typography data-aos="fade-in" variant="h2" className="text-fore text-center">About Us</Typography>
+                <Typography data-aos="fade-in" variant="h2" className="text-fore text-center">{page}</Typography>
                 <Breadcrumbs className='shadow-lg bg-transparent'>
                     <Link to="/" className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
                         Home

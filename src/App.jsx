@@ -8,6 +8,7 @@ import Index from "./pages/Index";
 import About from "./pages/About";
 import useTheme from "./store/themeStore";
 import PublicRoute from "./routers/PublicRoute";
+import Compitions from "./pages/Compitions";
 
 function App() {
   const { theme } = useTheme();
@@ -36,6 +37,7 @@ function App() {
         <Route path="/" element={<PublicRoute />}>
           <Route index element={<Index />} />
           <Route path="/about" element={<About />} />
+          <Route path="/competitions" element={<Compitions />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
