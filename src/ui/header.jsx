@@ -1,6 +1,6 @@
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Drawer, IconButton, List, ListItem, Navbar } from '@material-tailwind/react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import ToggleTheme from './ToggleTheme';
 
@@ -57,15 +57,16 @@ const Header = () => {
 export default Header;
 
 function NavList() {
+    const currentRoute = useLocation().pathname;
     return (
         <List className="lg:flex min-w-0 lg:flex-row lg:p-1 lg:px-6">
             {links.map((link, key) =>
             (link.href.startsWith('/#') ?
                 <a href={link.href} key={key} className="text-primary">
-                    <ListItem className="flex items-center gap-2 py-3 pr-4">{link.name}</ListItem>
+                    <ListItem className={`flex items-center gap-2 py-3 pr-4 ${link.href === currentRoute && 'bg-primary/30'}`}>{link.name}</ListItem>
                 </a> :
                 <Link to={link.href} key={key} className="text-primary">
-                    <ListItem className="flex items-center gap-2 py-3 pr-4">{link.name}</ListItem>
+                    <ListItem className={`flex items-center gap-2 py-3 pr-4 ${link.href === currentRoute && 'bg-primary/30'}`}>{link.name}</ListItem>
                 </Link>
             )
             )}

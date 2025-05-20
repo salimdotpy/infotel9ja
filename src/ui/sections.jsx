@@ -494,6 +494,117 @@ export const AboutsSection = () => {
     );
 };
 
+export const TermsSection = () => {
+    const term_page = {
+        intro: {
+            title: "Terms and Conditions",
+            sub_title: "By participating in this contest, you agree to be bound by the following terms and conditions:",
+            content: {
+                Eligibility: "The contest is open to everyone living in Osun State, 18 years and above.",
+                Registration: "Registration is free, but contestants must provide accurate and complete information.",
+                Voting: "Voting is open to everyone, and each vote costs ₦50",
+                "Contest Period": "The contest period is 25 weeks, including registration, voting, and prize awarding.",
+                Prizes: "Prizes are non-transferable.",
+                "Winner Selection": "Winners will be selected based on the number of votes received during the contest period by a selected panel of jury.",
+                Notification: "Winners will be notified via phone call, email, or social media.",
+                "Prize Awarding": "Prizes will be awarded at the end of the 25th week in a grand party.",
+                Disqualification: "Any form of fraudulent tactics will result in disqualification and possible prosecution.",
+                "Governing Law": "The contest shall be governed by and construed in accordance with the laws of the Federal Republic of Nigeria.",
+            },
+        },
+        indemnification: {
+            title: "Indemnification",
+            content: [
+                "By participating in this contest, you agree to indemnify and hold harmless InfoTel9ja Global Network, its officers, directors, employees, and agents, against any and all claims, damages, losses, and expenses arising from or related to your participation in the contest."
+            ]
+        },
+        limitation: {
+            title: "Limitation of Liability",
+            sub_title: "In no event shall InfoTel9ja Global Network, its officers, directors, employees, and agents, be liable for any damages, losses, or expenses arising from or related to the contest, including but not limited to:",
+            content: [
+                "Any technical errors or difficulties that may occur during the contest period",
+                "Any unauthorized access or tampering with the contest website or voting system",
+                "Any errors or inaccuracies in the contest rules or prizes"
+            ]
+        },
+        contestChanges: {
+            title: "Changes to the Contest",
+            content: [
+                "InfoTel9ja Global Network reserves the right to modify or cancel the contest at any time without prior notice."
+            ]
+        },
+        acceptance: {
+            title: "Acceptance",
+            content: [
+                "By participating in this contest, you acknowledge that you have read, understood, and agreed to be bound by these terms and conditions."
+            ]
+        },
+    }
+
+    return (
+        <>
+            <section id='intro' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl mb-4'>{term_page.intro.title}</h3>
+                        <p>{term_page.intro.sub_title}</p>
+                        <ol className='list-[auto] m-auto pl-5'>
+                            {Object.entries(term_page.intro.content).map(([k, v], key) =>
+                                <li key={key} className='text-fore/80 my-4 ml-5'>
+                                    <span className='font-bold'>{k}:</span> {v}
+                                </li>
+                            )}
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <section id='indemnification' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{term_page.indemnification.title}</h3>
+                        {term_page.indemnification.content.map((p, key) =>
+                            <p key={key} className='text-fore/80 my-4'>{p}</p>
+                        )}
+                    </div>
+                </div>
+            </section>
+            <section id='limitation' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl mb-4'>{term_page.limitation.title}</h3>
+                        <p>{term_page.limitation.sub_title}</p>
+                        <ul className='list-disc m-auto pl-5'>
+                            {term_page.limitation.content.map((p, key) =>
+                                <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                            )}
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section id='contest-changes' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{term_page.contestChanges.title}</h3>
+                        {term_page.contestChanges.content.map((p, key) =>
+                            <p key={key} className='text-fore/80 my-4'>{p}</p>
+                        )}
+                    </div>
+                </div>
+            </section>
+            <section id='acceptance' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{term_page.acceptance.title}</h3>
+                        {term_page.acceptance.content.map((p, key) =>
+                            <p key={key} className='text-fore/80 my-4'>{p}</p>
+                        )}
+                    </div>
+                </div>
+            </section>
+        </>
+    );
+};
+
 export const ContactSection = () => {
     const [data, setData] = useState(null);
     const didMount = useDidMount();
