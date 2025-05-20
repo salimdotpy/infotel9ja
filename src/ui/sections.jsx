@@ -273,7 +273,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>{about_page.contest_category.title}</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         {about_page.contest_category.content.map((p, key) =>
                         <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
                         )}
@@ -285,7 +285,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>{about_page.reg_process.title}</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         {about_page.reg_process.content.map((p, key) => {
                             if (key === 1) {
                                 return (
@@ -311,7 +311,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Voting Process</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         <li className='text-fore/80 my-4 ml-5'>
                             After successful registration, your landing page will be created with your details and voting links.
                         </li>
@@ -326,7 +326,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Contest Rules</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         <li className='text-fore/80 my-4 ml-5'>
                             Each contestant must generate at least <span className='font-bold'>500 VOTES</span> to be eligible for the leaderboard.
                         </li>
@@ -340,7 +340,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Referral Program</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         <li className='text-fore/80 my-4 ml-5'>
                             Share your referral link with prospective contestants and {' '} 
                             <span className='font-bold'>earn referral bonuses of 2 votes on each referral</span>.
@@ -359,7 +359,7 @@ export const AboutsSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Duration</h3>
-                    <ol className='[list-style:_auto] m-auto'>
+                    <ol className='list-[auto] m-auto'>
                         <li className='text-fore/80 my-4 ml-5'>
                             Registration: <span className='font-bold'>4 WEEKS</span>.
                         </li>
@@ -370,6 +370,63 @@ export const AboutsSection = () => {
                             Prizes will be awarded at the end of the <span className='font-bold'>25th WEEK</span> in a grand party.
                         </li>
                     </ol>
+                </div>
+            </div>
+        </section>
+        <section id='prizes' className='py-10'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <h3 className='font-bold text-2xl'>Prizes</h3>
+                    <ol className='list-[auto] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            The Osun State 10 Most Influential Personalities of the Year 2025 (Men and Women Category)
+                        </li>
+                        <ul className='list-disc m-auto'>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                1ST PRIZE: <span className='naira'>500,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                2ND PRIZE: <span className='naira'>250,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                3RD PRIZE: <span className='naira'>100,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
+                            </li>
+                        </ul>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            The Osun State 10 Most Football Diehard Fans of the Year 2025
+                        </li>
+                        <ul className='list-disc m-auto'>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                1ST PRIZE: <span className='naira'>500,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                2ND PRIZE: <span className='naira'>250,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                3RD PRIZE: <span className='naira'>100,000</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
+                            </li>
+                        </ul>
+                    </ol>
+                    <h6 className='font-bold text-xl mt-8'>ADDITIONAL PRIZE FOR THE 1ST PRIZE WINNER UNDER OSUN STATE MOST FOOTBALL DIEHARD FANS CONTEST:</h6>
+                    <ul className='list-[square] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            A customized football kit of their favorite football club, including:
+                        </li>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-10'>Jersey (customized)</li>
+                            <li className='text-fore/80 my-4 ml-10'>Muffler</li>
+                            <li className='text-fore/80 my-4 ml-10'>Socks</li>
+                            <li className='text-fore/80 my-4 ml-10'>Banner or towel</li>
+                            <li className='text-fore/80 my-4 ml-10'>Lapel pins</li>
+                            <li className='text-fore/80 my-4 ml-10'>One professional soccer ball</li>
+                        </ol>
+                    </ul>
                 </div>
             </div>
         </section>
