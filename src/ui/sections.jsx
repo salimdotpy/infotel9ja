@@ -46,7 +46,7 @@ export function FormSkeleton({ size = 5, className = ''}) {
 export const HeroSection = () => {
     return (
         <div id="hero" className='h-screen md:h-[80vh] bg-[url(/images/img1.jpeg)] bg-cover bg-fixed bg-[bottom] bg-no-repeat relative'>
-            <div className='absolute flex w-full h-screen md:h-[80vh] from-black via-black/70 to-black bg-gradient-to-b'>
+            <div className='absolute flex w-full h-screen md:h-[80vh] from-black/70 via-black/70 to-black/70 bg-gradient-to-b'>
                 <div className='container m-auto text-white px-4 md:px-0 text-center'>
                     <Typography variant='h1' className="text-3xl md:text-4xl lg:text-5xl lg:!leading-[1.4] font-normal" data-aos="fade-left" data-aos-delay={100}>
                         Osun State Influencers:<br/>Vote, Engage, and Celebrate!
