@@ -230,58 +230,31 @@ export const AboutsSection = () => {
     const about_page = {
         intro: {
             title: "Introduction",
-            bottom: "Whether you need guidance on selecting a research topic, developing a research plan, or overcoming challenges in your research pursuits, our educational consult services provide the expertise, support, and peace of mind necessary for success.",
             content: [
-                "At InfoTel9ja Educational Consult Services, we understand that every student's and educator's educational journey is distinct, marked by unique challenges and opportunities. As a trusted educational consult service, we provide personalized guidance and support to clients navigating the complex and ever-changing educational landscape.",
-                "Our team of experienced educational consultants is dedicated to empowering students/clients to reach their full potential and achieve their academic goals. We offer expert advice and tailored solutions on various educational issues, including but not limited to:",
+                "InfoTel9ja Global Network proudly presents the Osun State Influential Personalities and Football Diehard Fans Contest, a groundbreaking initiative designed to recognize and reward the most impactful individuals in Osun State. This contest aims to identify influential personalities and passionate football fans who embody the spirit of community engagement and social interaction.",
+                "The objective is clear: to celebrate those who make a difference in their communities and showcase unwavering dedication to football. By participating in this contest, contestants will not only have the opportunity to win recognition and rewards but also contribute to fostering a sense of unity and shared passion among Osun State residents.",
+                "Through this platform, InfoTel9ja Global Network seeks to promote social interaction, community involvement, and the celebration of Osun State's rich cultural heritage, with a special focus on football enthusiasm. Join us in celebrating the influential personalities and diehard fans who make Osun State shine!"
             ],
-            elements: [
-                "Research design improvement", "Data analysis and interpretation", "Dissertation, thesis, and manuscript writing", "Proposal development for higher degrees and journal publications"
-            ]
         },
-        mission: {
-            title: "Our Mission",
+        contest_category: {
+            title: "Contest Categories",
             content: [
-                "To deliver personalized educational consulting services that empower students, researchers, and educators to achieve their academic objectives and reach their full potential."
+                "The Osun State 10 Most Influential Personalities of the Year 2025 (Men and or Women)",
+                "The Osun State 10 Most Football Diehard Fans of the Year 2025(Men and or Women)"
             ]
         },
-        values: {
-            title: "Our Values",
-            elements: [
-                "Personalized attention and support",
-                "Expertise and knowledge in educational best practices",
-                "Collaboration and partnership with students, researchers, and educators",
-                "Commitment to accessibility, equity, and inclusivity in education",
+        reg_process: {
+            title: "Registration Process",
+            content: [
+                "Visit our website",
+                "Fill out the registration form with the following details:",
+                "Submit the form and wait for your landing page to be created."
+            ],
+            reg_details: [
+                "FULL NAME", "PHONE NUMBER (ACTIVE)", "EMAIL ADDRESS (ACTIVE)", "DATE OF BIRTH", "ADDRESS", "GENDER", "CONTEST CATEGORY", "UPLOAD YOUR PICTURE"
             ]
-        },
-        faq: {
-            title: "Frequently Asked Questions",
-            elements: [
-                {
-                    question: "What types of academic writing services do you offer?",
-                    answer: "We provide expert assistance with proposal, dissertation, thesis writing, manuscript preparation for journal publication, and other academic writing projects."
-                },
-                {
-                    question: "Who are your target clients?",
-                    answer: "Our services cater to undergraduate, graduate students, researchers, academics, and professionals seeking assistance with academic writing projects."
-                },
-                {
-                    question: "How do you ensure the quality and originality of your work?",
-                    answer: "Our team of experienced writers and editors adhere to strict quality control measures, ensuring that all work is original, well-researched, and meets the highest academic standards."
-                },
-                {
-                    question: "Can you help me with my dissertation proposal?",
-                    answer: "Yes, our expert writers can assist you in developing a well-structured and well-written dissertation proposal. We require our clients to provide a draft, which we will then refine and enhance."
-                },
-                {
-                    question: "How do you assist with dissertation and thesis writing?",
-                    answer: "We provide guidance on research design, methodology, literature review, data analysis, and writing chapters. Our team can also help with editing, proofreading, and formatting."
-                },
-            ]
-        },
+        }
     }
-    const [open, setOpen] = useState(0);
-    const handleOpen = (value) => setOpen(open === value ? 0 : value);
  
     return (
         <>
@@ -292,62 +265,111 @@ export const AboutsSection = () => {
                     {about_page.intro.content.map((p, key) =>
                     <p key={key} className='text-fore/80 my-4'>{p}</p>
                     )}
-                    <List className='p-0'>
-                        {about_page.intro.elements.map((element, key) => 
-                        <ListItem key={key} className='text-fore'>
-                            <ListItemPrefix>
-                                <ArrowRightIcon className='size-6' />
-                            </ListItemPrefix>
-                            {element}
-                        </ListItem>
-                        )}
-                    </List>
                     <p className='text-fore/80 my-4'>{about_page.intro.bottom}</p>
                 </div>
             </div>
         </section>
-        <section id='mission' className='py-10'>
+        <section id='contest-category' className='py-10'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.mission.title}</h3>
-                    {about_page.mission.content.map((p, key) =>
-                    <p key={key} className='text-fore/80 my-4'>{p}</p>
-                    )}
-                </div>
-            </div>
-        </section>
-        <section id='values' className='py-10 bg-header'>
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.values.title}</h3>
-                    <List className='p-0'>
-                        {about_page.intro.elements.map((element, key) => 
-                        <ListItem key={key} className='text-fore'>
-                            <ListItemPrefix>
-                                <ArrowRightIcon className='size-6' />
-                            </ListItemPrefix>
-                            {element}
-                        </ListItem>
+                    <h3 className='font-bold text-2xl'>{about_page.contest_category.title}</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        {about_page.contest_category.content.map((p, key) =>
+                        <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
                         )}
-                    </List>
+                    </ol>
                 </div>
             </div>
         </section>
-        <section id='values' className='py-10'>
+        <section id='registration-process' className='py-10 bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.faq.title}</h3>
-                    {about_page.faq.elements.map((faq, key)=>
-                    <Accordion open={open === key + 1} icon={<ChevronDownIcon open={open} className={`${open === key + 1 ? "rotate-180" : ""} h-5 w-5 transition-transform`}
-                    />}>
-                        <AccordionHeader className='text-fore hover:text-primary' onClick={() => handleOpen(key + 1)}>
-                            {faq.question}
-                        </AccordionHeader>
-                        <AccordionBody className='text-fore'>
-                            {faq.answer}
-                        </AccordionBody>
-                    </Accordion>
-                    )}
+                    <h3 className='font-bold text-2xl'>{about_page.reg_process.title}</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        {about_page.reg_process.content.map((p, key) => {
+                            if (key === 1) {
+                                return (
+                                    <>
+                                    <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                                    <ul className='list-disc m-auto'>
+                                    {about_page.reg_process.reg_details.map((detail, key) =>
+                                        <li key={key} className='text-fore/80 my-4 ml-10'>{detail}</li>
+                                    )}
+                                    </ul>
+                                    </>
+                                )
+                            } else {
+                                return <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                            }
+                        }
+                        )}
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <section id='voting-process' className='py-10'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <h3 className='font-bold text-2xl'>Voting Process</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            After successful registration, your landing page will be created with your details and voting links.
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>You will have 30 minutes to activate your welcome bonus votes by paying <span className='naira font-bold'>200</span>, after declaring the contest opened.</li>
+                        <li className='text-fore/80 my-4 ml-5'>Once activated, you will receive <span className='font-bold'>10 VOTES</span> instead of the 4 you paid for.</li>
+                        <li className='text-fore/80 my-4 ml-5'>Each vote costs <span className='naira font-bold'>50</span>.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <section id='contest-rules' className='py-10 bg-header'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <h3 className='font-bold text-2xl'>Contest Rules</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Each contestant must generate at least <span className='font-bold'>500 VOTES</span> to be eligible for the leaderboard.
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>Multiple votes are allowed.</li>
+                        <li className='text-fore/80 my-4 ml-5'>The contestant with the most votes wins.</li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <section id='referral' className='py-10'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <h3 className='font-bold text-2xl'>Referral Program</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Share your referral link with prospective contestants and {' '} 
+                            <span className='font-bold'>earn referral bonuses of 2 votes on each referral</span>.
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>
+                        Refer at least <span className="font-bold">10 CONTESTANTS</span> and earn <span className="font-bold">25 votes, as well become a coach of your team and stand to earn 5% of the total votes of your team every week, though this is subject to meeting  up the weekly targets. Please note that your own votes do not count for your team but your own coach for the team weekly target, however, it will count for your as individual weekly target, be guided accordingly</span>
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Refer the maximum of <span className="font-bold">25 CONTESTANTS</span> and earn all bonuses in 2 above plus 5% of all the funds gathered by your team at the end ofthe contest.
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </section>
+        <section id='duration' className='py-10 bg-header'>
+            <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <h3 className='font-bold text-2xl'>Duration</h3>
+                    <ol className='[list-style:_auto] m-auto'>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Registration: <span className='font-bold'>4 WEEKS</span>.
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Contest Duration: <span className='font-bold'>20 WEEKS</span>.
+                        </li>
+                        <li className='text-fore/80 my-4 ml-5'>
+                            Prizes will be awarded at the end of the <span className='font-bold'>25th WEEK</span> in a grand party.
+                        </li>
+                    </ol>
                 </div>
             </div>
         </section>
