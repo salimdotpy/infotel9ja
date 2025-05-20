@@ -173,7 +173,7 @@ export const WinnersSection = () => {
                         </Card>
                         <Card className='flex-col-reverse basis-full sm:basis-[46%] lg:basis-1/4 bg-header grow'  data-aos="fade-left" data-aos-delay={`100`}>
                             <CardHeader floated={false} className="m-0 h-[200px] rounded-t-none">
-                            <img src={`/images/ogimage.jpeg`} alt="card-image" className='h-full w-full' />
+                            <img src={`/images/img4.jpeg`} alt="card-image" className='h-full w-full' />
                             </CardHeader>
                             <CardBody className='text-fore py-3'>
                                 <p className=''>Here is the reciept of transfer we made to{' '} 
