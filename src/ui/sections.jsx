@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionBody, AccordionHeader, Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
+import { Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
-import { ArrowRightIcon, ChevronDownIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { ArrowRightIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
@@ -258,7 +258,7 @@ export const AboutsSection = () => {
  
     return (
         <>
-        <section id='intro' className='py-10 bg-header'>
+        <section id='intro' className='py-10 bg-header' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>{about_page.intro.title}</h3>
@@ -269,7 +269,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='contest-category' className='py-10'>
+        <section id='contest-category' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>{about_page.contest_category.title}</h3>
@@ -281,7 +281,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='registration-process' className='py-10 bg-header'>
+        <section id='registration-process' className='py-10 bg-header' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>{about_page.reg_process.title}</h3>
@@ -307,7 +307,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='voting-process' className='py-10'>
+        <section id='voting-process' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Voting Process</h3>
@@ -322,7 +322,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='contest-rules' className='py-10 bg-header'>
+        <section id='contest-rules' className='py-10 bg-header' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Contest Rules</h3>
@@ -336,7 +336,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='referral' className='py-10'>
+        <section id='referral' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Referral Program</h3>
@@ -355,7 +355,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='duration' className='py-10 bg-header'>
+        <section id='duration' className='py-10 bg-header' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Duration</h3>
@@ -373,7 +373,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='prizes' className='py-10'>
+        <section id='prizes' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <h3 className='font-bold text-2xl'>Prizes</h3>
@@ -430,7 +430,7 @@ export const AboutsSection = () => {
                 </div>
             </div>
         </section>
-        <section id='prizes' className='py-10 bg-header'>
+        <section id='prizes' className='py-10 bg-header' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <Alert color='red' variant='ghost'>
