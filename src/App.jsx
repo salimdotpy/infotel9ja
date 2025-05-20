@@ -9,6 +9,7 @@ import About from "./pages/About";
 import useTheme from "./store/themeStore";
 import PublicRoute from "./routers/PublicRoute";
 import Compitions from "./pages/Compitions";
+import Winners from "./pages/Winners";
 
 function App() {
   const { theme } = useTheme();
@@ -38,6 +39,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/competitions" element={<Compitions />} />
+          <Route path="/past-winners" element={<Winners />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>
