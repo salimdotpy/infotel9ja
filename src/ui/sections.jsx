@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Accordion, AccordionBody, AccordionHeader, Breadcrumbs, Button, Card, CardBody, CardFooter, CardHeader, Chip, Dialog, DialogBody, Input, List, ListItem, ListItemPrefix, Option, Select, Textarea, Typography } from '@material-tailwind/react';
+import { Accordion, AccordionBody, AccordionHeader, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
-import { ArrowDownIcon, ArrowRightIcon, CheckCircleIcon, ChevronDownIcon, CreditCardIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon,  XMarkIcon } from '@heroicons/react/24/outline';
-import { getContent, keyToTitle } from '../utils';
+import { ArrowRightIcon, ChevronDownIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
 import { frontSections } from '../utils/frontend';
-import { toast } from 'react-toastify';
 
 const cls = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
 const logo = '/images/logoIcon/logo.png'
@@ -53,7 +52,7 @@ export const HeroSection = () => {
                         Osun State Influencers:<br/>Vote, Engage, and Celebrate!
                     </Typography>
                     <Typography className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-white' data-aos="fade-right" data-aos-delay={200}>
-                        To identify and reward the most influential personalities and football diehard fans<br/>in Osun State, while promoting community engagement and social interaction.
+                    Our mission is to identify and reward the most influential personalities and football diehard <br/>fans in Osun State, while promoting community engagement and social interaction.
                     </Typography>
                     <Link to="/about" data-aos="fade-up" data-aos-delay={300}>
                         <Button className="rounded-full border-white hover:border-primary border-2 bg-transparent hover:bg-primary">
@@ -116,7 +115,7 @@ export const CompetitionSection = () => {
                 </div>
                 <div className='flex flex-wrap gap-6 p-4 w-full'>
                     {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='basis-full md:basis-[46%] bg-back md:flex-row'>
+                    <Card key={key} className='basis-full md:basis-[46%] bg-back md:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
                         <CardHeader floated={false} className="m-0 md:w-2/5 h-[200px] md:h-auto shrink-0 rounded-b-none md:rounded-r-none md:rounded-bl-xl">
                         <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
                         </CardHeader>
@@ -152,7 +151,7 @@ export const AboutSection = () => {
                         </h3>
                         <div className='text-fore/80 text-justify'>
                             Osun State Influential Personalities and Football Diehard Fans Contest.<br />
-                            To identify and reward the most influential personalities and football diehard fans in Osun State, while promoting community engagement and social interaction.
+                            Our mission is to identify and reward the most influential personalities and football diehard fans in Osun State, while promoting community engagement and social interaction.
                         </div>
                         <Link to={"/#about"} data-aos="fade-up" data-aos-delay={300}>
                             <Button variant='outlined' className='border-primary rounded-full px-16 hover:text-white border-2 text-fore hover:bg-primary justify-self-start'>
@@ -451,42 +450,21 @@ export const ContactSection = () => {
 };
 
 export const FooterSection = () => {
-    const [elements, setElements] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await getContent('footer.element', false, null, true);
-        setElements(snapshot);
-    };
-
-    useEffect(() => {
-        fetchData();
-        return ()=>{
-            setElements(null);
-        }
-    }, []);
-    
     return (
-        <section id='' className='py-5 bg-header'>
+        <section id='footer' className='py-5 bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='flex flex-wrap items-center justify-center md:justify-between gap-5 px-4'>
-                    <div>
-                        © Copyright <b>InfoTel9ja.</b> All Rights Reserved
+                    <div className='basis-1/3'>
+                        <Avatar src="/images/logoIcon/logo.png" size='xl' />
+                        <h3 className='text-primary font-bold text-2xl font-[tahoma]'>
+                            InfoTel9ja Global Network
+                        </h3>
+                        <div className='text-fore/80 text-justify mt-3'>
+                            Our mission is to identify and reward the most influential personalities and football diehard fans in Osun State, while promoting community engagement and social interaction.
+                        </div>
                     </div>
-                    <div className='flex gap-x-3 text-2xl'>
-                    {elements ? elements.map(({data_values:dv}, key) =>{
-                        const SIcon = social_icons[dv.social_icon];
-                        return (
-                            <Link to={dv?.social_link || '/'} key={key} className='hover:text-primary/60 text-primary/90'>
-                                {SIcon && <SIcon className='size-5' />}
-                            </Link>
-                        )
-                    }) :
-                    <>
-                    <FormSkeleton className='!p-0 size-5 rounded-full' size={1} />
-                    <FormSkeleton className='!p-0 size-5 rounded-full' size={1} />
-                    <FormSkeleton className='!p-0 size-5 rounded-full' size={1} />
-                    </>
-                    }
+                    <div className='basis-full'>
+                        © Copyright <b>InfoTel9ja.</b> All Rights Reserved
                     </div>
                 </div>
             </div>
