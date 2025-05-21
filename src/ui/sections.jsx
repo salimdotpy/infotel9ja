@@ -617,6 +617,11 @@ export const ContactSection = () => {
     return (
         <section id='contact' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
+                <div className='p-4 text-justify'>
+                    <p>
+                    InfoTel9ja Global Network proudly presents the Osun State Influential Personalities and Football Diehard Fans Contest, a groundbreaking initiative designed to recognize and reward the most impactful individuals in Osun State. This contest aims to identify influential personalities and passionate football fans who embody the spirit of community engagement and social interaction.
+                    </p>
+                </div>
                 <div className='flex flex-wrap gap-5 px-4 w-full'>
                     {contact_info && contact_info.map((info, key) =>
                         <Card key={key} className='bg-header text-fore w-full lg:w-1/4 md:w-1/2 md:flex-1 group' data-aos="fade-up" data-aos-delay={`${key}00`}>
