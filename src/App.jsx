@@ -13,6 +13,7 @@ import Winners from "./pages/Winners";
 import Terms from "./pages/Terms";
 import ContactUs from "./pages/ContactUs";
 import ReportContestant from "./pages/ReportContestant";
+import { UseScrollTop } from "./hooks";
 
 function App() {
   const { theme } = useTheme();
@@ -36,6 +37,7 @@ function App() {
 
   return (
     <BrowserRouter>
+      <UseScrollTop />
       <LoadingComponent />
       <Routes>
         <Route path="/" element={<PublicRoute />}>

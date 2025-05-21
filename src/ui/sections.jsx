@@ -10,7 +10,6 @@ import { BiLogoWhatsapp } from 'react-icons/bi';
 import { links } from './header';
 import { IWL, IWOL } from '@/utils/constants';
 
-const cls = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
 const logo = '/images/logoIcon/logo.png'
 
 export function LoadingComponent() {
