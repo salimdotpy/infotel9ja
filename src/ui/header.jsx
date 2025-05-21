@@ -10,7 +10,7 @@ const links = [
     { name: 'Competitions', href: '/competitions' },
     { name: 'Past Winners', href: '/past-winners' },
     { name: 'Terms and Conditions', href: '/terms' },
-    { name: 'Contact', href: '/#contact' },
+    { name: 'Contact', href: '/contact' },
 ]
 
 const Header = () => {

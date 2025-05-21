@@ -7,6 +7,7 @@ import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
 import { frontSections } from '../utils/frontend';
+import { BiLogoWhatsapp } from 'react-icons/bi';
 
 const cls = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
 const logo = '/images/logoIcon/logo.png'
@@ -606,88 +607,32 @@ export const TermsSection = () => {
 };
 
 export const ContactSection = () => {
-    const [data, setData] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await frontSections('contact_us');
-        setData(snapshot?.content.data_values);
-    };
-
-    useEffect(() => {
-        fetchData();
-        return setData(null);
-    }, []);
 
     const contact_info = [
-        { title: 'Phone', desc: data?.phone || '+18329844722, +2348034066961', Icon: PhoneIcon },
-        { title: 'Email', desc: data?.email || 'infotel9ja@gmail.com', Icon: EnvelopeIcon },
-        { title: 'Address', desc: data?.address || 'Ede, Osun Sta.', Icon: MapPinIcon },
+        { title: 'Phone Call', desc: '+234 906 217 8092', Icon: PhoneIcon },
+        { title: 'Whatsapp', desc: '+234 906 217 8092', Icon: BiLogoWhatsapp },
+        { title: 'Email', desc: 'infotel9ja@gmail.com', Icon: EnvelopeIcon },
+        { title: 'Address', desc: 'Ede, Osun Sta.', Icon: MapPinIcon },
     ]
     return (
-        <section id='contact' className='pt-10'>
+        <section id='contact' className='py-10' data-aos="fade-up">
             <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-center'>
-                    <h3 className='font-bold text-2xl'>
-                        {didMount && data ? data.heading : <FormSkeleton className='!p-0' size={1} />}
-                    </h3>
-                    <div className='text-fore/80 my-4'>
-                        {didMount && data ? data.sub_heading : <FormSkeleton className='!p-0' size={1} />}
-                    </div>
-                </div>
-                <div className='flex flex-wrap gap-5 mb-10 px-4'>
-                    <Card data-aos="fade-left" data-aos-delay="100" className="bg-header border text-fore md:flex-1 basis-[100%]">
-                        <CardBody>
-                            <Typography variant="h5" className="text-fore">
-                                {didMount && data ? data.title : <FormSkeleton className='!p-0' size={1} />}
-                            </Typography>
-                            <hr className='w-full my-5' />
-                            <form className="flex flex-col gap-6 mb-2 mt-2 text-fore" method='post'>
-                                <div className='flex flex-wrap gap-6 *:basis-1/3 *:flex-1'>
-                                    <div>
-                                        <Input size='lg' label='Name' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={cls[1]} required />
-                                    </div>
-                                    <div>
-                                        <Input size='lg' type='email' label='Email' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={cls[1]} required />
-                                    </div>
+                <div className='flex flex-wrap gap-5 px-4 w-full'>
+                    {contact_info && contact_info.map((info, key) =>
+                        <Card key={key} className='bg-header text-fore w-full lg:w-1/4 md:w-1/2 md:flex-1 group' data-aos="fade-up" data-aos-delay={`${key}00`}>
+                            <CardBody>
+                                <div className='float-left flex justify-center items-center size-14 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
+                                    <info.Icon className='size-6' />
                                 </div>
-                                <div>
-                                    <Input size='lg' label='Subject' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0' }} className={cls[1]} required />
-                                </div>
-                                <div>
-                                    <Textarea size='lg' label='Your Message' labelProps={{ className: cls[0] }} containerProps={{ className: 'min-w-0' }} className={cls[1]} required />
-                                </div>
-                                <Button type="submit" className="bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center" loading={false} fullWidth>
-                                    {data?.button_text || 'Send Message'}
-                                </Button>
-                            </form>
-                        </CardBody>
-                    </Card>
-                    <Card data-aos="fade-left" data-aos-delay="200" className="bg-header border text-fore md:flex-1 basis-[100%]">
-                        <CardBody>
-                            <iframe src={data?.map_source || 'https://www.google.com/maps/embed/v1/place?q=The+Federal+Polytechnic+Ede,+Ede,+Nigeria&key=AIzaSyBFw0Qbyq9zTFTd-tUY6dZWTgaQzuU17R8'} loading='lazy' className='w-full h-[400px]' allowFullScreen></iframe>
-                        </CardBody>
-                    </Card>
-                </div>
-            </div>
-            <div className='bg-primary/20'>
-                <div className='container xl:w-[90%] mx-auto py-5'>
-                    <div className='flex flex-wrap gap-5 px-4 w-full'>
-                        {contact_info && contact_info.map((info, key) =>
-                            <Card key={key} className='bg-header text-fore w-full lg:w-1/4 md:w-1/2 md:flex-1 group' data-aos="fade-up" data-aos-delay={`${key}00`}>
-                                <CardBody>
-                                    <div className='float-left flex justify-center items-center size-14 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
-                                        <info.Icon className='size-6' />
-                                    </div>
-                                    <Typography variant='h6' className='ml-20'>
-                                        {info.title}
-                                    </Typography>
-                                    <Typography as={'div'} className='ml-20'>
-                                        {didMount && data ? info.desc : <FormSkeleton className='!p-0' size={1} />}
-                                    </Typography>
-                                </CardBody>
-                            </Card>
-                        )}
-                    </div>
+                                <Typography variant='h6' className='ml-20'>
+                                    {info.title}
+                                </Typography>
+                                <Typography as={'div'} className='ml-20'>
+                                    {info.desc}
+                                </Typography>
+                            </CardBody>
+                        </Card>
+                    )}
                 </div>
             </div>
         </section>
