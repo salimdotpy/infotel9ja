@@ -6,8 +6,8 @@ import { ArrowRightIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassI
 import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
-import { frontSections } from '../utils/frontend';
 import { BiLogoWhatsapp } from 'react-icons/bi';
+import { links } from './header';
 
 const cls = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
 const logo = '/images/logoIcon/logo.png'
@@ -645,6 +645,8 @@ export const ContactSection = () => {
 };
 
 export const FooterSection = () => {
+    const useful_links = links.filter((link) => !['Home'].includes(link.name));
+    useful_links.push({name: 'Reports a Contestant', href: '/report-contestant'})
     return (
         <section id='footer' className='pt-10 pb-5  bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
@@ -662,28 +664,25 @@ export const FooterSection = () => {
                         <h3 className='font-bold text-2xl font-[tahoma] md:text-center'>
                             Competitions
                         </h3>
-                        <List className='p-0 mt-4'>
+                        <div className='flex flex-col gap-3 md:items-end lg:items-center p-0 mt-4'>
                             {Array(8).fill(1).map((item, key) => 
-                            <ListItem key={key} className='text-fore py-1.5 justify-start md:justify-end lg:justify-center'>
-                                <ListItemPrefix>
-                                    <ArrowRightIcon className='size-4' />
-                                </ListItemPrefix>
+                            <Link to={'/'} key={key} className="hover:text-primary">
                                 18th Edition - Master at Photos Contest
-                            </ListItem>
+                            </Link>
                             )}
-                        </List>
+                        </div>
                     </div>
                     <div className='basis-full md:basis-[30%] grow'>
                         <h3 className='font-bold text-2xl font-[tahoma] text-left lg:text-right'>
                             Useful Links
                         </h3>
-                        <List className='p-0 mt-4'>
-                            {['About', 'Competitions', 'Past Winners', 'Contact', 'Terms and Conditions', 'Reports a Contestant'].map((item, key) => 
-                            <ListItem key={key} className='text-fore lg:justify-end py-1.5'>
-                                {item}
-                            </ListItem>
+                        <div className='flex flex-col gap-3 lg:items-end p-0 mt-4'>
+                            {useful_links.map((link, key) => 
+                            <Link to={link.href} key={key} className='hover:text-primary lg:justify-end'>
+                                {link.name}
+                            </Link>
                             )}
-                        </List>
+                        </div>
                     </div>
                     <div className='basis-full text-center pt-5'>
                         © Copyright <b>InfoTel9ja.</b> All Rights Reserved

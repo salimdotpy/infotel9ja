@@ -12,6 +12,7 @@ import Compitions from "./pages/Compitions";
 import Winners from "./pages/Winners";
 import Terms from "./pages/Terms";
 import ContactUs from "./pages/ContactUs";
+import ReportContestant from "./pages/ReportContestant";
 
 function App() {
   const { theme } = useTheme();
@@ -44,6 +45,7 @@ function App() {
           <Route path="/past-winners" element={<Winners />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />
+          <Route path="/report-contestant" element={<ReportContestant />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router-dom';
 import React, { useEffect, useState } from 'react';
 import ToggleTheme from './ToggleTheme';
 
-const links = [
+export const links = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
     { name: 'Competitions', href: '/competitions' },
