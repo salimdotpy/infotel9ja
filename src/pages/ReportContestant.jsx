@@ -1,5 +1,5 @@
 import React from "react";
-import { ContactSection, FooterSection, HeroBreaCrumbs } from "../ui/sections";
+import { FooterSection, HeroBreaCrumbs, ReportContestantSection } from "../ui/sections";
 import { useDocumentTitle } from "../hooks";
 
 export default function ReportContestant() {
@@ -7,7 +7,7 @@ export default function ReportContestant() {
     return (
         <>
             <HeroBreaCrumbs page="Report Contestant" links={[{name: 'Report Contestant', href: 'contact'}]} />
-            <ContactSection />
+            <ReportContestantSection />
             <FooterSection />
         </>
     )

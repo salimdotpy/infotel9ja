@@ -644,6 +644,26 @@ export const ContactSection = () => {
     );
 };
 
+export const ReportContestantSection = () => {
+
+    return (
+        <section id='contact' className='py-10' data-aos="fade-up">
+            <div className='container xl:w-[40%] mx-auto'>
+                <Card className='text-justify'>
+                    <CardBody>
+                        <p>
+                            We take this matter seriously. If you believe a contestant in any of our contests is fake, impersonating someone else, or engaging in illegal activity, please report them using the form below. We will review and take appropriate action within 24 to 96 hours.
+                        </p>
+                        <div>
+                            
+                        </div>
+                    </CardBody>
+                </Card>
+            </div>
+        </section>
+    );
+};
+
 export const FooterSection = () => {
     const useful_links = links.filter((link) => !['Home'].includes(link.name));
     useful_links.push({name: 'Reports a Contestant', href: '/report-contestant'})
