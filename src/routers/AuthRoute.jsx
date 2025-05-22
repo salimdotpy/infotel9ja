@@ -17,9 +17,8 @@ const AdminAuthRoute = () => {
               <img src={'/images/logoIcon/logo.png'} className="mb-5 size-10 lg:size-14 p-1 bg-white rounded shadow" alt={`Company Logo`} />
             </Link>
             <h2 className='text-[40px] text-white font-thin 2xl:text-4xl font-sans  [text-shadow:_0_0_8px_rgb(var(--color-primary))_,_0_10px_8px_rgb(var(--color-primary))_,_10px_0_8px_rgb(var(--color-primary))]'>
-            Your
-            All Service
-            In one field....
+            Login now, manage 
+            all the services... 
             </h2>
           </div>
         </div>

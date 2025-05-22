@@ -35,7 +35,7 @@ const ToggleTheme = ({ label = true, className= '', iconOnly = false }) => {
                     <IconButton variant='outlined' className={`rounded-full border-primary ${className}`} onClick={toggleTheme}>
                         {theme ?
                             <MoonIcon className="size-6 text-white" strokeWidth={2} /> :
-                            <SunIcon className="size-6" strokeWidth={2} />}
+                            <SunIcon className="size-6 text-primary" strokeWidth={2} />}
                     </IconButton> :
                     <div className={`flex items-center gap-x-3 shrink-0 ${className}`}>
                         <div className={`w-12 h-6 flex justify-between relative items-center rounded-full p-1 px-1.5 text-[12px] cursor-pointer ${theme ? 'bg-green-500' : 'bg-gray-300'}`} onClick={toggleTheme}>
