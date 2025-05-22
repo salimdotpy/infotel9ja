@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { FooterSection, HeroBreaCrumbs } from "../ui/sections";
 import { useDocumentTitle, useFileHandler } from "../hooks";
-import { Button, Card, CardBody, Input, Option, Radio, Select, Textarea, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, Input, Option, Radio, Select, Textarea, Tooltip, Typography } from "@material-tailwind/react";
 import { IWOL } from "@/utils/constants";
 
 import * as yup from "yup";
@@ -9,6 +9,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { ImageSchema } from "@/utils";
+import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
 
 export default function Register() {
     useDocumentTitle('Sign up - InfoTel9ja');
@@ -120,6 +121,19 @@ const RegisterSection = () => {
                                     {errors.contest_category && <Typography color="red" className="mt-2 text-xs font-normal">
                                     {errors.contest_category.message}
                                     </Typography>}
+                                </div>
+                                <div className='basis-full md:basis-[46%] grow'>
+                                    <label>Profile Image</label>
+                                    <div className='relative mt-1 flex flex-col justify-center items-center min-h-32 rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.image}')`}}>
+                                        <label className='cursor-pointer'>
+                                            <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'image')} accept="image/*" className="hidden" />
+                                            <Tooltip content='Change Image' className='py-1'>
+                                                <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
+                                            </Tooltip>
+                                        <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
+                                        <small>Upload Image</small>
+                                    </div>
+                                    {errors.image && <span className="text-sm text-red-900">{errors.image.message}</span>}
                                 </div>
                             </div>
                             <div className='flex flex-row-reverse justify-between mt-6 items-center gap-5'>
