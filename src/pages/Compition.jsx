@@ -1,6 +1,6 @@
 import { FooterSection, HeroBreaCrumbs } from '@/ui/sections';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
-import { Alert, Avatar, Button, Card, CardBody, CardHeader, Chip, Typography } from '@material-tailwind/react';
+import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, Typography } from '@material-tailwind/react';
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -62,9 +62,27 @@ const Sections = () => {
                     <Card className='bg-header text-fore basis-full lg:basis-[46%] grow'>
                         <CardBody>
                             <Typography variant="h5">Contestants</Typography>
-                            <Alert icon={<InformationCircleIcon className='size-10' />} variant='ghost' color='gold' className='text-justify'>
+                            <Alert icon={<InformationCircleIcon className='size-10' />} variant='ghost' color='yellow' className='text-justify my-3'>
                                 As of today, Thursday, 22 May 2025, 01:01pm, the contestants listed below are the Top Contestants (by votes). Voting is still on. Keep voting to increase the position of your favorite contestants. The Top 3 Contestants wins the prize.
                             </Alert>
+                            <Typography variant="h6">Top Contestants</Typography>
+                            <div className='flex flex-wrap gap-6 px-4 w-full mt-3'>
+                                {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
+                                <Card key={key} className='flex-1 gap-3 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
+                                    <CardBody className='flex flex-col items-center text-center text-fore'>
+                                        <Badge placement="top-end" overlap="circular" content='50' color="green" withBorder>
+                                            <Avatar src={`/images/img${item}.jpeg`} size='xl' />
+                                        </Badge>
+                                        <Typography variant="h6" className="!line-clamp-2">
+                                            Salim Adekola
+                                        </Typography>
+                                        <Link to={'/competition/18th Edition - Master at Photos Contest'}>
+                                            <Button size='sm' className='bg-primary'>Vote</Button>
+                                        </Link>
+                                    </CardBody>
+                                </Card>
+                                )}
+                            </div>
                         </CardBody>
                     </Card>
                 </div>
