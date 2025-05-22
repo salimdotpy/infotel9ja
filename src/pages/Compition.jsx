@@ -68,9 +68,9 @@ const Sections = () => {
                             <Typography variant="h6">Top Contestants</Typography>
                             <div className='flex flex-wrap gap-6 px-4 w-full mt-3'>
                                 {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                                <Card key={key} className='flex-1 gap-3 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                                    <CardBody className='flex flex-col items-center text-center text-fore'>
-                                        <Badge placement="top-end" overlap="circular" content='50' color="green" withBorder>
+                                <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
+                                    <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore'>
+                                        <Badge placement="top-end" overlap="circular" content={item} color="green" withBorder>
                                             <Avatar src={`/images/img${item}.jpeg`} size='xl' />
                                         </Badge>
                                         <Typography variant="h6" className="!line-clamp-2">
