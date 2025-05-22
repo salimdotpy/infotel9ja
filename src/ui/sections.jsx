@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, List, ListItem, ListItemPrefix, Textarea, Typography } from '@material-tailwind/react';
+import { Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
-import { ArrowRightIcon, CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
+import { CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
 import { social_icons } from './admin/frontend';
 import { BiLogoWhatsapp } from 'react-icons/bi';
 import { links } from './header';
-import { IWL, IWOL } from '@/utils/constants';
+import { IWOL } from '@/utils/constants';
 
 const logo = '/images/logoIcon/logo.png'
 
@@ -639,54 +639,6 @@ export const ContactSection = () => {
                         </Card>
                     )}
                 </div>
-            </div>
-        </section>
-    );
-};
-
-export const ReportContestantSection = () => {
-
-    return (
-        <section id='contact' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[35%] mx-auto'>
-                <Card className='text-justify bg-header text-fore'>
-                    <CardBody>
-                        <p>
-                            We take this matter seriously. If you believe a contestant in any of our contests is fake, impersonating someone else, or engaging in illegal activity, please report them using the form below. We will review and take appropriate action within 24 to 96 hours.
-                        </p>
-                        <Typography variant='h4' className='text-fore text-center mt-5'>
-                            Fill below Form
-                        </Typography>
-                        <form method='post' className="mt-8 mb-2 text-fore">
-                            <div className="mb-1 flex flex-col gap-6">
-                                <div>
-                                    <label htmlFor="ContestantName" className="text-fore">Contestant Name</label>
-                                    <Input placeholder='Contestant Name' size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} />
-                                </div>
-                                <div>
-                                    <label htmlFor="VotingLink" className="text-fore">Contestant Voting Link</label>
-                                    <Input placeholder='Contestant Voting Link' type='url' size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} />
-                                </div>
-                                <div>
-                                    <label htmlFor="YourReport" className="text-fore">Write Your Report</label>
-                                    <Textarea placeholder="Write Your Report" className={IWOL[1]} labelProps={{ className: IWOL[0], }} containerProps={{className: IWOL[2]}} />
-                                </div>
-                                <div>
-                                    <label htmlFor="AboutYou" className="text-fore">About You</label>
-                                    <Input placeholder='Tell us about Yourself' size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} />
-                                </div>
-                            </div>
-                            <div className='flex flex-row-reverse justify-between mt-6 items-center gap-5'>
-                                <Button type="submit" className={` bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed`}>
-                                    Submit
-                                </Button>
-                                <Button type="reset" className={`bg-fore text-header disabled:!pointer-events-auto disabled:cursor-not-allowed`}>
-                                    Reset
-                                </Button>
-                            </div>
-                        </form>
-                    </CardBody>
-                </Card>
             </div>
         </section>
     );
