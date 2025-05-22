@@ -1,3 +1,5 @@
+import * as yup from "yup";
+
 import sections_json from "../ui/sections.json";
 import { doc, limit, orderBy, query, where } from "firebase/firestore";
 import { addDoc, collection, db, getDocs, updateDoc } from "./firebase";
@@ -160,3 +162,16 @@ export const getContent = async (data_keys, singleQuery = false, limitValue = nu
 
     return content;
 };
+
+export const ImageSchema = {
+    image_input: yup.mixed()
+        .test("fileType", "Only JPG, PNG, or GIF is image format allowed", (value) => {
+            // if (!value || value.length === 0) return true; // Allow empty files
+            const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+            return value && allowedTypes.includes(value?.type);
+        })
+        .test("fileSize", "File size must be less than 1.5MB", (value) => {
+            // if (!value || value.length === 0) return true; // Allow empty files
+            return value && value?.size <= 0.4 * 1024 * 1024; // 2MB limit
+        }),
+  }

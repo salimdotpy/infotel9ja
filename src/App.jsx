@@ -17,6 +17,7 @@ import { UseScrollTop } from "./hooks";
 import Compition from "./pages/Compition";
 import AdminAuthRoute from "./routers/AuthRoute";
 import AdminLogin from "./ui/admin/login";
+import Register from "./pages/Register";
 
 function App() {
   const { theme } = useTheme();
@@ -52,6 +53,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/report-contestant" element={<ReportContestant />} />
+          <Route path="/signup" element={<Register />} />
         </Route>
         <Route path="/" element={<AdminAuthRoute />}>
           <Route path="/login/:role" element={<AdminLogin />} />

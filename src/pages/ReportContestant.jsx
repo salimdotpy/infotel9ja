@@ -50,7 +50,7 @@ const ReportContestantSection = () => {
 
     return (
         <section id='contact' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[35%] mx-auto'>
+            <div className='container xl:w-[35%] mx-auto px-4'>
                 <Card className='text-justify bg-header text-fore'>
                     <CardBody>
                         <p>
