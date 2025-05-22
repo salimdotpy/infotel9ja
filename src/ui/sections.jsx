@@ -129,7 +129,9 @@ export const CompetitionSection = () => {
                             </Typography>
                             <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' icon={ <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" /> } />
                             <div className='mt-4'>
-                                <Button size='sm' className='bg-primary'>Follow Competition</Button>
+                                <Link to={'/competition/18th Edition - Master at Photos Contest'}>
+                                    <Button size='sm' className='bg-primary'>Follow Competition</Button>
+                                </Link>
                             </div>
                         </CardBody>
                     </Card>
@@ -730,18 +732,20 @@ export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
 export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
     return (
         <section className='py-10 bg-primary/20'>
-            <div className='container xl:w-[90%] mx-auto flex flex-col gap-5 justify-center items-center h-56'>
+            <div className='container xl:w-[90%] mx-auto flex flex-col gap-5 justify-center items-center h-56 px-4'>
                 <Typography data-aos="fade-in" variant="h2" className="text-fore text-center">{page}</Typography>
-                <Breadcrumbs className='shadow-lg bg-transparent'>
-                    <Link to="/" className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
-                        Home
-                    </Link>
-                    {links && links.map((link, key) =>
-                        <Link href={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
-                            {link.name}
+                <div className='*:!w-full'>
+                    <Breadcrumbs className='shadow-lg bg-transparent flex-wrap justify-center'>
+                        <Link to="/" className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
+                            Home
                         </Link>
-                    )}
-                </Breadcrumbs>
+                        {links && links.map((link, key) =>
+                            <Link to={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
+                                {link.name}
+                            </Link>
+                        )}
+                    </Breadcrumbs>
+                </div>
             </div>
         </section>
     )

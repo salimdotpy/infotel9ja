@@ -14,6 +14,7 @@ import Terms from "./pages/Terms";
 import ContactUs from "./pages/ContactUs";
 import ReportContestant from "./pages/ReportContestant";
 import { UseScrollTop } from "./hooks";
+import Compition from "./pages/Compition";
 
 function App() {
   const { theme } = useTheme();
@@ -44,6 +45,7 @@ function App() {
           <Route index element={<Index />} />
           <Route path="/about" element={<About />} />
           <Route path="/competitions" element={<Compitions />} />
+          <Route path="/competition/:id" element={<Compition />} />
           <Route path="/past-winners" element={<Winners />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />

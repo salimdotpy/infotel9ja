@@ -27,7 +27,7 @@ const schema = yup.object({
     reporter: yup.string().required('Please, tell us who you are'),
 })
 
-export const ReportContestantSection = () => {
+const ReportContestantSection = () => {
     const { register, handleSubmit, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
     const [loading, setLoading] = useState(false);
 
