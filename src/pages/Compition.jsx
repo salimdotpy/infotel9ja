@@ -66,15 +66,15 @@ const Sections = () => {
                                 As of today, Thursday, 22 May 2025, 01:01pm, the contestants listed below are the Top Contestants (by votes). Voting is still on. Keep voting to increase the position of your favorite contestants. The Top 3 Contestants wins the prize.
                             </Alert>
                             <Typography variant="h6">Top Contestants</Typography>
-                            <div className='flex flex-wrap gap-6 px-4 w-full mt-3'>
+                            <div className='flex flex-wrap gap-6 w-full mt-3'>
                                 {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
                                 <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                                    <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore'>
+                                    <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore px-2'>
                                         <Badge placement="top-end" overlap="circular" content={item} color="green" withBorder>
                                             <Avatar src={`/images/img${item}.jpeg`} size='xl' />
                                         </Badge>
                                         <Typography variant="h6" className="!line-clamp-2">
-                                            Salim Adekola
+                                            Contestant's Name
                                         </Typography>
                                         <Link to={'/competition/18th Edition - Master at Photos Contest'}>
                                             <Button size='sm' className='bg-primary'>Vote</Button>
@@ -85,29 +85,23 @@ const Sections = () => {
                             </div>
                         </CardBody>
                     </Card>
-                </div>
-                <div className='hidden flex-wrap gap-6 px-4 w-full'>
-                    {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back lg:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                        <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl">
-                        <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
-                        </CardHeader>
-                        <CardBody className='text-fore'>
-                            <Typography variant="h5" className="mb-2 !line-clamp-2">
-                                18th Edition - Master at Photos Contest
-                            </Typography>
-                            <Typography>Stand a chance to win the sum of {' '} 
-                                <span className='naira font-bold'>500,000</span>
-                            </Typography>
-                            <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' icon={ <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" /> } />
-                            <div className='mt-4'>
-                                <Link to={'/competition/18th Edition - Master at Photos Contest'}>
-                                    <Button size='sm' className='bg-primary'>Follow Competition</Button>
-                                </Link>
+                    <Card className='bg-header text-fore basis-full lg:basis-[46%] grow'>
+                        <CardBody>
+                            <Typography variant="h5">Winners</Typography>
+                            <div className='flex flex-wrap gap-6 w-full mt-3'>
+                                {[1,2,3,1,3,2].map((item, key) => 
+                                <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
+                                    <CardBody className='flex p-3 gap-1.5 flex-col text-fore'>
+                                        <Typography variant="h6" className="!line-clamp-2">
+                                            Contestant's Name
+                                        </Typography>
+                                        <Avatar src={`/images/img${item}.jpeg`} variant='rounded' className='!w-full !h-[150px]' />
+                                    </CardBody>
+                                </Card>
+                                )}
                             </div>
                         </CardBody>
                     </Card>
-                    )}
                 </div>
             </div>
         </section>
