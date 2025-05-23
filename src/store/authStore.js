@@ -1,30 +1,32 @@
 import { create } from 'zustand'
-import axios from 'axios'
 
-const useAuth = create((set) => ({ 
+import create from 'zustand';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
+import { doc, getDoc } from 'firebase/firestore';
+import { auth, db } from '@/utils/firebase';
+
+const useAuth = create((set) => ({
   user: null,
-  token: localStorage.getItem('token') || null,
-  login: async (email, password) => {
-    const res = await axios.post('http://127.0.0.1:5000/api/auth/login', { email, password });
-    localStorage.setItem('token', res.data.access_token);
-    set({ token: res.data.access_token });
+  role: null,
+  loading: true,
+  logout: async () => {
+    await signOut(auth);
+    set({ user: null, role: null });
   },
-  loadUser: async () => {
-    const token = localStorage.getItem('token')
-    if (token) {
-      const res = await axios.get('http://127.0.0.1:5000/api/auth/me', {
-        headers: { 
-          Authorization: `Bearer ${token}`,
-       },
-        
-      })
-      set({ user: res.data.user })
-    }
-  },
-  logout: () => {
-    localStorage.removeItem('token')
-    set({ user: null, token: null })
+  setUser: (user, role) => set({ user, role, loading: false }),
+}));
+
+onAuthStateChanged(auth, async (user) => {
+  if (user) {
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    set({
+      user,
+      role: userDoc.exists() ? userDoc.data().role : null,
+      loading: false,
+    });
+  } else {
+    set({ user: null, role: null, loading: false });
   }
-}))
+});
 
 export default useAuth;

@@ -1,6 +1,6 @@
 import { initializeApp } from "firebase/app";
-import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, getDoc, getDocs, query, where } from "firebase/firestore";
-import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail, getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateProfile } from "firebase/auth";
+import { getFirestore, collection, addDoc, deleteDoc, doc, updateDoc, getDoc, getDocs, query, where, setDoc } from "firebase/firestore";
+import { signInWithEmailAndPassword, signOut, sendPasswordResetEmail, getAuth, reauthenticateWithCredential, EmailAuthProvider, updatePassword, updateProfile, createUserWithEmailAndPassword } from "firebase/auth";
 import { getStorage, ref, uploadBytes, getDownloadURL, deleteObject } from "firebase/storage";
 
 const firebaseConfig = {
@@ -33,6 +33,27 @@ export const adminLogin = async (email, password) => {
     } else {
       await signOut(auth); // Log out if not admin
       return { success: false, message: "Access Denied: Not an Admin" };
+    }
+  } catch (error) {
+    return { success: false, message: error.message };
+  }
+};
+
+// 🔐 Admin Login
+export const CreateAdmin = async () => {
+  const admin = {
+    name: "Super Admin", username: "Salimtech", mobile: "08076738293", email: "salimdotpy@gmail.com", image: null,  created_at: new Date(), updated_at: new Date()
+  };
+  try {
+    const q = query(collection(db, "users"), where("email", "==", admin.email));
+    const snapshot = await getDocs(q);
+    if (snapshot.empty) {
+      const userCredential = await createUserWithEmailAndPassword(auth, admin.email, '123456');
+      const user = userCredential.user;
+      await setDoc(doc(db, "users", user.uid), { uid: user.uid, ...admin});
+      return { success: true, message: "Admin Created Successfully!" };
+    } else {
+      return { success: false, message: "Admin Already Exit!" };
     }
   } catch (error) {
     return { success: false, message: error.message };
