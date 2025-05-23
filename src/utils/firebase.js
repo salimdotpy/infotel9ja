@@ -42,7 +42,7 @@ export const adminLogin = async (email, password) => {
 // 🔐 Admin Login
 export const CreateAdmin = async () => {
   const admin = {
-    name: "Super Admin", username: "Salimtech", mobile: "08076738293", email: "salimdotpy@gmail.com", image: null,  created_at: new Date(), updated_at: new Date()
+    name: "Super Admin", username: "Salimtech", mobile: "08076738293", email: "salimdotpy@gmail.com", image: null,  role: 'admin', created_at: new Date(), updated_at: new Date()
   };
   try {
     const q = query(collection(db, "users"), where("email", "==", admin.email));

@@ -1,12 +1,13 @@
 import { EyeSlashIcon, EyeIcon, EnvelopeIcon, XMarkIcon, CheckIcon } from '@heroicons/react/24/solid';
 import { Input, Checkbox, Button, Typography, Dialog, DialogBody, Badge, } from "@material-tailwind/react";
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
-import { adminLogin, resetPassword } from '../../utils/firebase';
+import { CreateAdmin, adminLogin, resetPassword } from '@/utils/firebase';
+// import { CreateAdmin, adminLogin, resetPassword } from '../../utils/firebase';
 
 const schema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email field is required'),
@@ -45,7 +46,7 @@ export default function AdminLogin() {
     }
   }
   const sendMail = async () => {
-    setLoading(true); 
+    setLoading(true);
     try {
       if (!email) {
         toast.error('Invali email address');
@@ -65,6 +66,20 @@ export default function AdminLogin() {
       setEmail(null);
     }
   }
+  const Run = async () => {
+    const result = await CreateAdmin();
+    if (result.success) {
+      toast.success(result.message);
+      setSent(true);
+    } else {
+      toast.error(result.message);
+    }
+  }
+
+  useEffect(()=> {
+    Run()
+  }, [])
+
   return (
     <React.Fragment>
       <Typography variant="h4">Admin Signin</Typography>
@@ -102,7 +117,7 @@ export default function AdminLogin() {
             <Typography variant="h4" className='text-center text-fore'>
               Send Mail to Your Email?
             </Typography>
-            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: cls1[0] }} containerProps={{ className: '!min-w-0' }} className={cls1[1]} onChange={(e)=>setEmail(e.target.value)} />
+            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: cls1[0] }} containerProps={{ className: '!min-w-0' }} className={cls1[1]} onChange={(e) => setEmail(e.target.value)} />
             <Button className={`bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={loading} onClick={sendMail} fullWidth>
               Send Mail
             </Button>
