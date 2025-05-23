@@ -57,14 +57,14 @@ const RegisterSection = () => {
 
     return (
         <section id='contact' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[35%] mx-auto px-4'>
+            <div className='container xl:w-[70%] mx-auto px-4'>
                 <Card className='bg-header text-fore'>
                     <CardBody>
                         <Typography variant='h5' className='text-fore'>
-                            Fill below Form, to register for Ongoing Competition
+                            Fill below form, to register for the next Competition
                         </Typography>
                         <form method='post' className="mt-8 mb-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
-                            <div className="mb-1 flex flex-col gap-6">
+                            <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
                                 <div>
                                     <label className="text-fore">Contestant Name</label>
                                     <Input placeholder='Ex: Ojo Ade' {...register('fullname')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.fullname} />
@@ -101,6 +101,19 @@ const RegisterSection = () => {
                                     </Typography>}
                                 </div>
                                 <div>
+                                    <label>Profile Image</label>
+                                    <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.image}')`}}>
+                                        <label className='cursor-pointer'>
+                                            <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'image')} accept="image/*" className="hidden" />
+                                            <Tooltip content='Change Image' className='py-1'>
+                                                <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
+                                            </Tooltip>
+                                        <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
+                                        <small>Upload Image</small>
+                                    </div>
+                                    {errors.image && <span className="text-sm text-red-900">{errors.image.message}</span>}
+                                </div>
+                                <div>
                                     <label className="text-fore">Gender</label>
                                     <div className="border border-blue-gray-200 rounded-lg space-x-5 mt-2">
                                         <Radio label="Male" name="gender" value={'Male'} color="green" onChange={(e)=>setValue('gender', e.target.defaultValue)} />
@@ -121,19 +134,6 @@ const RegisterSection = () => {
                                     {errors.contest_category && <Typography color="red" className="mt-2 text-xs font-normal">
                                     {errors.contest_category.message}
                                     </Typography>}
-                                </div>
-                                <div className='basis-full md:basis-[46%] grow'>
-                                    <label>Profile Image</label>
-                                    <div className='relative mt-1 flex flex-col justify-center items-center min-h-32 rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.image}')`}}>
-                                        <label className='cursor-pointer'>
-                                            <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'image')} accept="image/*" className="hidden" />
-                                            <Tooltip content='Change Image' className='py-1'>
-                                                <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
-                                            </Tooltip>
-                                        <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
-                                        <small>Upload Image</small>
-                                    </div>
-                                    {errors.image && <span className="text-sm text-red-900">{errors.image.message}</span>}
                                 </div>
                             </div>
                             <div className='flex flex-row-reverse justify-between mt-6 items-center gap-5'>
