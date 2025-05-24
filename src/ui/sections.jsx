@@ -5,7 +5,6 @@ import { PhoneIcon } from '@heroicons/react/24/solid';
 import { CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
 import { getContent } from '../utils';
 import { useDidMount } from '../hooks';
-import { social_icons } from './admin/frontend';
 import { BiLogoWhatsapp } from 'react-icons/bi';
 import { links } from './header';
 import { IWOL } from '@/utils/constants';
