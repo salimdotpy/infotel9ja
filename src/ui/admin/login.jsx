@@ -7,14 +7,13 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 import { CreateAdmin, adminLogin, resetPassword } from '@/utils/firebase';
-// import { CreateAdmin, adminLogin, resetPassword } from '../../utils/firebase';
+import { IWL, IWOL } from '@/utils/constants';
 
 const schema = yup.object({
   email: yup.string().email('Enter a valid email').required('Email field is required'),
   password: yup.string().required('Password is required'),
 })
 
-const cls = ['before:content-none after:content-none', 'placeholder:opacity-100 !border focus:!border-primary/90'];
 const cls1 = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
 
 export default function AdminLogin() {
@@ -90,14 +89,14 @@ export default function AdminLogin() {
         <div className="mb-1 flex flex-col gap-6">
           <div>
             <label htmlFor="email" className="-mb-3 text-fore">Your Email</label>
-            <Input placeholder="email@mail.com" {...register('email')} className={cls[1]} labelProps={{ className: cls[0], }} error={errors.email} />
+            <Input placeholder="email@mail.com" {...register('email')} className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.email} />
             {errors.email && <Typography color="red" className="mt-2 text-xs font-normal">
               {errors.email.message}
             </Typography>}
           </div>
           <div>
             <label htmlFor="password" className="-mb-3 text-fore">Password</label>
-            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={cls[1]} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} labelProps={{ className: cls[0], }} />
+            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={IWL[1]} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} labelProps={{ className: IWL[0], }} />
             {errors.password && <Typography color="red" className="mt-2 text-xs font-normal">{errors.password.message}</Typography>}
           </div>
         </div>
@@ -117,7 +116,7 @@ export default function AdminLogin() {
             <Typography variant="h4" className='text-center text-fore'>
               Send Mail to Your Email?
             </Typography>
-            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: cls1[0] }} containerProps={{ className: '!min-w-0' }} className={cls1[1]} onChange={(e) => setEmail(e.target.value)} />
+            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: IWOL[0] }} containerProps={{ className: IWOL[2] }} className={IWOL[1]} onChange={(e) => setEmail(e.target.value)} />
             <Button className={`bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={loading} onClick={sendMail} fullWidth>
               Send Mail
             </Button>
