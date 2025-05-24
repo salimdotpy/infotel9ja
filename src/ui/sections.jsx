@@ -610,10 +610,10 @@ export const TermsSection = () => {
 export const ContactSection = () => {
 
     const contact_info = [
-        { title: 'Phone Call', desc: '+234 906 217 8092', Icon: PhoneIcon },
-        { title: 'Whatsapp', desc: '+234 906 217 8092', Icon: BiLogoWhatsapp },
+        { title: 'Phone Call', desc: '+2349062178092', Icon: PhoneIcon },
+        { title: 'Whatsapp', desc: '+2349062178092', Icon: BiLogoWhatsapp },
         { title: 'Email', desc: 'infotel9ja@gmail.com', Icon: EnvelopeIcon },
-        { title: 'Address', desc: 'Ede, Osun Sta.', Icon: MapPinIcon },
+        { title: 'Address', desc: 'Ede, Osun State.', Icon: MapPinIcon },
     ]
     return (
         <section id='contact' className='py-10' data-aos="fade-up">
