@@ -8,6 +8,7 @@ import { useDidMount } from '../hooks';
 import { BiLogoWhatsapp } from 'react-icons/bi';
 import { links } from './header';
 import { IWOL } from '@/utils/constants';
+import Slider from 'react-slick';
 
 const logo = '/images/logoIcon/logo.png'
 
@@ -747,5 +748,50 @@ export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
                 </div>
             </div>
         </section>
+    )
+}
+
+export const NewSections = () => {
+    const settings = {
+        className: "catchy",
+        infinite: true,
+        slidesToShow: 3,
+        autoplay: true,
+        speed: 2000,
+        autoplaySpeed: 2000,
+        cssEase: "linear",
+        arrows: false,
+        responsive: [
+            {
+              breakpoint: 1024,
+              settings: {
+                slidesToShow: 3,
+                slidesToScroll: 3,
+              }
+            },
+            {
+              breakpoint: 600,
+              settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                initialSlide: 2
+              }
+            },
+            {
+              breakpoint: 480,
+              settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+              }
+            }
+          ]
+    };
+    return (
+        <div>
+            <section className='py-10'>
+                <div className='container xl:w-[90%] mx-auto px-4'>
+                </div>
+            </section>
+        </div>
     )
 }
