@@ -790,6 +790,13 @@ export const NewSections = () => {
         <div>
             <section className='py-10'>
                 <div className='container xl:w-[90%] mx-auto px-4'>
+                    <Slider {...settings}>
+                        {[1,2,3,4,2,3,4,1,4,3,2,1,3,4].map((item, key) => 
+                        <div key={key} className='p-5'>
+                            <image src={`/images/img${item}.jpeg`} alt={'image-' + item} className='w-full h-[200px]' />
+                        </div>
+                        )}
+                    </Slider>
                 </div>
             </section>
         </div>
