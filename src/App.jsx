@@ -20,6 +20,7 @@ import Compition from "./pages/Compition";
 import AdminAuthRoute from "./routers/AuthRoute";
 import AdminLogin from "./ui/admin/login";
 import Register from "./pages/Register";
+import AdminRoute from "./routers/AdminRoute";
 
 function App() {
   const { theme } = useTheme();
@@ -59,6 +60,9 @@ function App() {
         </Route>
         <Route path="/" element={<AdminAuthRoute />}>
           <Route path="/login/:role" element={<AdminLogin />} />
+        </Route>
+        <Route path="/admin" element={<AdminRoute />}>
+          <Route index element={<AdminLogin />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

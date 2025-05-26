@@ -1,6 +1,5 @@
 import { create } from 'zustand'
 
-import create from 'zustand';
 import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/utils/firebase';
@@ -16,16 +15,15 @@ const useAuth = create((set) => ({
   setUser: (user, role) => set({ user, role, loading: false }),
 }));
 
+// 👇 Persistent listener on app load
 onAuthStateChanged(auth, async (user) => {
   if (user) {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
-    set({
-      user,
-      role: userDoc.exists() ? userDoc.data().role : null,
-      loading: false,
-    });
+    const role = userDoc.exists() ? userDoc.data().role : null;
+
+    useAuthStore.getState().setUser(user, role);
   } else {
-    set({ user: null, role: null, loading: false });
+    useAuthStore.setState({ user: null, role: null, loading: false });
   }
 });
 
