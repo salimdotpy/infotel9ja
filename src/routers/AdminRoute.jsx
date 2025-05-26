@@ -1,10 +1,10 @@
 import { Navigate, Outlet } from "react-router-dom";
 import React, { useEffect, useState } from "react";
-import AdminSideBar, { AdminSideBarOverlay } from "@/ui/admin/AdminSideBar";
 import useAuth from "@/store/authStore";
 import { LoadingComponent } from "@/ui/sections";
 import { toast } from "react-toastify";
 import AdminNav from "@/ui/admin/AdminNav";
+import { AdminSideBar, AdminSideBarOverlay } from "@/ui/admin/sidebar";
 
 const AdminRoute = () => {
   const [open, setOpen] = useState(false);

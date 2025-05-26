@@ -107,7 +107,7 @@ const SideLinks = () => {
     )
 }
 
-export const Sidebar = () => {
+export const AdminSideBar = () => {
     return (
         <React.Fragment>
             <CompanyLogo />
@@ -120,7 +120,7 @@ export const Sidebar = () => {
     );
 }
 
-export const Aside = ({open, onClose}) => {
+export const AdminSideBarOverlay = ({open, onClose}) => {
     return (
       <Drawer open={open} onClose={()=>onClose(false)}>
         <CompanyLogo />
