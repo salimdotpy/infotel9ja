@@ -13,6 +13,10 @@
     content: 'N';
     @apply decoration-double line-through;
   }
+
+  .slider-container button::before {
+    @apply rounded-full border bg-white text-primary text-2xl leading-none flex items-center justify-center size-full; 
+  }
 }
 
 @layer base {

@@ -753,38 +753,13 @@ export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
 
 export const NewSections = () => {
     const settings = {
-        className: "catchy",
+        className: "slider-container px-10",
         infinite: true,
-        slidesToShow: 3,
+        slidesToShow: 1,
         autoplay: true,
-        speed: 2000,
-        autoplaySpeed: 2000,
         cssEase: "linear",
-        arrows: false,
-        responsive: [
-            {
-              breakpoint: 1024,
-              settings: {
-                slidesToShow: 3,
-                slidesToScroll: 3,
-              }
-            },
-            {
-              breakpoint: 600,
-              settings: {
-                slidesToShow: 2,
-                slidesToScroll: 2,
-                initialSlide: 2
-              }
-            },
-            {
-              breakpoint: 480,
-              settings: {
-                slidesToShow: 1,
-                slidesToScroll: 1
-              }
-            }
-          ]
+        centerMode: true,
+        centerPadding: '200px'
     };
     return (
         <div>
@@ -792,8 +767,8 @@ export const NewSections = () => {
                 <div className='container xl:w-[90%] mx-auto px-4'>
                     <Slider {...settings}>
                         {[1,2,3,4,2,3,4,1,4,3,2,1,3,4].map((item, key) => 
-                        <div key={key} className='p-5'>
-                            <image src={`/images/img${item}.jpeg`} alt={'image-' + item} className='w-full h-[200px]' />
+                        <div key={key} className='p-2'>
+                            <img src={`images/img${item}.jpeg`} alt={'image-' + item} className='w-full h-[200px]' />
                         </div>
                         )}
                     </Slider>
