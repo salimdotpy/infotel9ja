@@ -2,21 +2,18 @@ import { BellIcon, CheckCircleIcon } from '@heroicons/react/24/outline';
 import { KeyIcon, MagnifyingGlassIcon, UserIcon, XMarkIcon } from '@heroicons/react/24/solid';
 import { Badge, Card, Dialog, DialogBody, IconButton, Input, List, ListItem, Menu, MenuHandler, MenuItem, MenuList, Tooltip, Typography } from '@material-tailwind/react';
 import { BiHelpCircle, BiLastPage, BiLogOut } from 'react-icons/bi';
-import React from 'react';
+import React, { useState } from 'react';
 import { links } from './sidebar';
 import { Link, useNavigate } from 'react-router-dom';
-import { adminLogout } from '../../utils/firebase';
 import { toast } from 'react-toastify';
-import { useAuth } from '../AuthContext';
-import { useAdmin } from '../../hooks';
 import { FormSkeleton } from '../sections';
+import useAuth from '@/store/authStore';
 
 const AdminNav = ({open, onClose}) => {
-    const [openSearch, setOpenSearch] = React.useState(false);
-    const [searchLink, setSearchLink] = React.useState(getSearchLinks());
+    const [openSearch, setOpenSearch] = useState(false);
+    const [searchLink, setSearchLink] = useState(getSearchLinks());
     
     const {user, loading} = useAuth();
-    const { admin,  isLoading, error} = useAdmin(user);
     const navigate = useNavigate();
     
     const handleOpenSearch = () => {setOpenSearch(!openSearch)};
@@ -33,7 +30,7 @@ const AdminNav = ({open, onClose}) => {
     const handleLogout = async () => {
         await adminLogout();
         toast.success("You've logged out successfully!");
-        navigate("auth/admin");
+        navigate("login/admin");
     }
 
     return (
@@ -86,9 +83,9 @@ const AdminNav = ({open, onClose}) => {
                 </Menu>
                 <Menu placement='bottom-end'>
                     <MenuHandler>
-                        {!isLoading && admin ? 
+                        {!loading && user ? 
                         <IconButton className="flex shrink-0 justify-center items-center shadow size-10 bg-primary/30 text-fore rounded-full">
-                            <Typography variant="h4">{admin.name[0]}</Typography>
+                            <Typography variant="h4">{user?.name[0]}</Typography>
                         </IconButton> : 
                         <div className='animate-pulse'>
                             <div className="flex shrink-0 justify-center items-center size-10 bg-primary/20 border-primary border-dashed border-2 mx-auto shadow-md text-fore rounded-full bg-gray-300">
@@ -100,10 +97,10 @@ const AdminNav = ({open, onClose}) => {
                     <MenuList className="bg-header text-fore border-none outline-none">
                         <div className="line-clamp-2 border-none outline-none uppercase">
                             <p className="font-semibold">
-                            {!isLoading ? admin?.name : <FormSkeleton className='!p-0' size={1} />}
+                            {!loading ? user?.name : <FormSkeleton className='!p-0' size={1} />}
                             </p>
                             <p className="text-fore/75">
-                            {!isLoading ? admin?.username : <FormSkeleton className='!p-0' size={1} />}
+                            {!loading ? user?.username : <FormSkeleton className='!p-0' size={1} />}
                             </p>
                         </div>
                         <hr className='my-2 border-fore/15' />

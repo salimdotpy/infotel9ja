@@ -36,8 +36,8 @@ export const links = [
     },
 ]
 
-function SideLinks() {
-    const [open, setOpen] = React.useState(0);
+const SideLinks = () => {
+    const [open, setOpen] = useState(0);
     const currentRoute = useLocation().pathname;
 
     const handleOpen = (value) => {
@@ -107,7 +107,7 @@ function SideLinks() {
     )
 }
 
-export function Sidebar({ sitename }) {
+export const Sidebar = () => {
     return (
         <React.Fragment>
             <CompanyLogo />
@@ -120,7 +120,7 @@ export function Sidebar({ sitename }) {
     );
 }
 
-export function Aside({open, onClose}) {
+export const Aside = ({open, onClose}) => {
     return (
       <Drawer open={open} onClose={()=>onClose(false)}>
         <CompanyLogo />
@@ -133,29 +133,12 @@ export function Aside({open, onClose}) {
     )
   }
 
-function CompanyLogo() {
-    const [images, setImages] = useState(null);
-    const [seo, setSeo] = useState(null);
-    const didMount = useDidMount();
-    const fetchData = async () => {
-        const snapshot = await fetchSetting('logo_favicon.image');
-        setImages(snapshot);
-        const snapshot2 = await fetchSetting('seo.data');
-        setSeo(snapshot2);
-    };
-
-    useEffect(() => {
-        fetchData();
-        return ()=>{
-            setImages(null);
-            setSeo(null);
-        }
-    }, []);
+const CompanyLogo = () => {
     return (
         <div className="flex bg-header items-center justify-center gap-2 h-[60px] text-fore">
-            <img src={`${didMount && images ? images.logo :'/images/logoIcon/logo.png'}`} alt="company logo" className="size-12 p-1 rounded-full bg-white" />
+            <img src={`/images/logoIcon/logo.png`} alt="company logo" className="size-12 p-1 rounded-full bg-white" />
             <Typography variant="h5">
-                {didMount && seo ? seo.social_title : 'DeranMore'}
+                {'InfoTel9ja'}
             </Typography>
         </div>
     )
