@@ -24,11 +24,11 @@ export const adminLogin = async (email, password) => {
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const user = userCredential.user;
-    // return { success: true, user };
-    const adminRef = doc(db, "admins", user.uid);
-    const adminSnap = await getDoc(adminRef);
+    
+    const userDoc = await getDoc(doc(db, "users", user.uid));
+    const role = userDoc.data()?.role;
 
-    if (adminSnap.exists()) {
+    if (role === "admin") {
       return { success: true, user };
     } else {
       await signOut(auth); // Log out if not admin
