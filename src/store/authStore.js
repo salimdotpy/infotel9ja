@@ -21,9 +21,9 @@ onAuthStateChanged(auth, async (user) => {
     const userDoc = await getDoc(doc(db, 'users', user.uid));
     const role = userDoc.exists() ? userDoc.data().role : null;
 
-    useAuthStore.getState().setUser(user, role);
+    useAuth.getState().setUser(user, role);
   } else {
-    useAuthStore.setState({ user: null, role: null, loading: false });
+    useAuth.setState({ user: null, role: null, loading: false });
   }
 });
 
