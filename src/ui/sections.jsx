@@ -753,13 +753,12 @@ export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
 
 export const NewSections = () => {
     const settings = {
-        className: "slider-container px-10",
+        className: "slider-container mx-5 md:m-0",
         infinite: true,
         slidesToShow: 1,
         autoplay: true,
         cssEase: "linear",
         centerMode: true,
-        centerPadding: '200px'
     };
     return (
         <div>
