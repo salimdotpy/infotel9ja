@@ -89,14 +89,14 @@ export default function AdminLogin() {
         <div className="mb-1 flex flex-col gap-6">
           <div>
             <label htmlFor="email" className="-mb-3 text-fore">Your Email</label>
-            <Input placeholder="email@mail.com" {...register('email')} className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.email} />
+            <Input placeholder="email@mail.com" {...register('email')} className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.email} />
             {errors.email && <Typography color="red" className="mt-2 text-xs font-normal">
               {errors.email.message}
             </Typography>}
           </div>
           <div>
             <label htmlFor="password" className="-mb-3 text-fore">Password</label>
-            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={IWL[1]} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} labelProps={{ className: IWL[0], }} />
+            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={IWOL[1]} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} labelProps={{ className: IWOL[0], }} />
             {errors.password && <Typography color="red" className="mt-2 text-xs font-normal">{errors.password.message}</Typography>}
           </div>
         </div>
