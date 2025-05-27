@@ -65,7 +65,7 @@ export default function AdminLogin() {
       setEmail(null);
     }
   }
-  const Run = async () => {
+  /*const Run = async () => {
     const result = await CreateAdmin();
     if (result.success) {
       toast.success(result.message);
@@ -77,7 +77,7 @@ export default function AdminLogin() {
 
   useEffect(()=> {
     Run()
-  }, [])
+  }, [])*/
 
   return (
     <React.Fragment>

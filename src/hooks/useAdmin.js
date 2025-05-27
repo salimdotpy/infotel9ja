@@ -36,26 +36,3 @@ const useAdmin = (user) => {
 };
 
 export default useAdmin;
-
-export const useTheme = () => {
-  const [theme, setTheme] = useState(false);
-  
-  useEffect(() => {
-    if (localStorage?.getItem('theme') === 'dark') setTheme(true);
-  }, []);
-
-  useEffect(() => {
-    if (theme) {
-      document.body.classList.add('dark');
-    } else {
-      document.body.classList.remove('dark');
-    }
-    localStorage.setItem('theme', theme ? 'dark' : 'light');
-  }, [theme]);
-
-  const changeTheme = (val=false) => {
-    setTheme(val);
-  };
-
-  return { theme, changeTheme };
-};

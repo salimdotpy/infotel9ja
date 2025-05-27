@@ -8,14 +8,15 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { FormSkeleton } from '../sections';
 import useAuth from '@/store/authStore';
+import { useFetchAuthUser } from '@/hooks';
 
 const AdminNav = ({open, onClose}) => {
     const [openSearch, setOpenSearch] = useState(false);
     const [searchLink, setSearchLink] = useState(getSearchLinks());
     
-    const {user, loading} = useAuth();
+    const {user, loading, logout} = useAuth();
+    const { user: admin,  isLoading, error} = useFetchAuthUser(user);
     const navigate = useNavigate();
-    
     const handleOpenSearch = () => {setOpenSearch(!openSearch)};
     const cls = '!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90';
     
@@ -28,9 +29,9 @@ const AdminNav = ({open, onClose}) => {
     }
 
     const handleLogout = async () => {
-        await adminLogout();
+        await logout();
         toast.success("You've logged out successfully!");
-        navigate("login/admin");
+        navigate("/login/admin");
     }
 
     return (
@@ -83,9 +84,9 @@ const AdminNav = ({open, onClose}) => {
                 </Menu>
                 <Menu placement='bottom-end'>
                     <MenuHandler>
-                        {!loading && user ? 
+                        {!isLoading && admin ? 
                         <IconButton className="flex shrink-0 justify-center items-center shadow size-10 bg-primary/30 text-fore rounded-full">
-                            <Typography variant="h4">{user?.name[0]}</Typography>
+                            <Typography variant="h4">{admin.name[0]}</Typography>
                         </IconButton> : 
                         <div className='animate-pulse'>
                             <div className="flex shrink-0 justify-center items-center size-10 bg-primary/20 border-primary border-dashed border-2 mx-auto shadow-md text-fore rounded-full bg-gray-300">
@@ -97,10 +98,10 @@ const AdminNav = ({open, onClose}) => {
                     <MenuList className="bg-header text-fore border-none outline-none">
                         <div className="line-clamp-2 border-none outline-none uppercase">
                             <p className="font-semibold">
-                            {!loading ? user?.name : <FormSkeleton className='!p-0' size={1} />}
+                            {!isLoading ? admin?.name : <FormSkeleton className='!p-0' size={1} />}
                             </p>
                             <p className="text-fore/75">
-                            {!loading ? user?.username : <FormSkeleton className='!p-0' size={1} />}
+                            {!isLoading ? admin?.username : <FormSkeleton className='!p-0' size={1} />}
                             </p>
                         </div>
                         <hr className='my-2 border-fore/15' />

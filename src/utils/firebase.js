@@ -121,7 +121,7 @@ export const adminLogout = async () => {
 // 🚪 Get Admin
 export const getAdmin = async (user) => {
   try {
-    const adminRef = doc(db, "admins", user.uid);
+    const adminRef = doc(db, "users", user.uid);
     const adminSnap = await getDoc(adminRef);
 
     if (adminSnap.exists()) {

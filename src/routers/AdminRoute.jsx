@@ -8,7 +8,6 @@ import { AdminSideBar, AdminSideBarOverlay } from "@/ui/admin/sidebar";
 
 const AdminRoute = () => {
   const [open, setOpen] = useState(false);
-  // const { user, token, loadUser } = useAuth();
   const { user, loading } = useAuth();
 
   useEffect(() => {

@@ -6,6 +6,7 @@ import { auth, db } from '@/utils/firebase';
 
 const useAuth = create((set) => ({
   user: null,
+  _user: null,
   role: null,
   loading: true,
   logout: async () => {
@@ -13,6 +14,11 @@ const useAuth = create((set) => ({
     set({ user: null, role: null });
   },
   setUser: (user, role) => set({ user, role, loading: false }),
+  loadUser: async (user) => {
+    const userDoc = await getDoc(doc(db, 'users', user.uid));
+    const role = userDoc.exists() ? userDoc.data() : null;
+    set({ _user: role, loading: false});
+  }
 }));
 
 // 👇 Persistent listener on app load

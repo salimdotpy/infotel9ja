@@ -1,10 +1,8 @@
-import { ChevronDownIcon, ChevronRightIcon, CurrencyDollarIcon, EnvelopeIcon, GlobeAltIcon, HomeIcon, PhotoIcon, TvIcon } from "@heroicons/react/24/outline";
+import { ChatBubbleBottomCenterIcon, ChevronDownIcon, ChevronRightIcon, CurrencyDollarIcon, EnvelopeIcon, GiftIcon, GlobeAltIcon, HomeIcon, PaperClipIcon, PhotoIcon, ScaleIcon, SparklesIcon, TvIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionBody, AccordionHeader, Chip, Drawer, List, ListItem, ListItemPrefix, ListItemSuffix, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import data from "../sections.json";
-import { useDidMount } from "../../hooks";
-import { fetchSetting } from "../../utils";
 
 let secs = data;
 let keys = Object.entries(secs).sort();
@@ -17,10 +15,16 @@ keys.forEach(key => {
 
 export const links = [
     { name: 'Dashboard', href: '/admin', Icon: HomeIcon },
+    { name: 'User Management', head: true },
+    { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
+    { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'SETTINGS', head: true },
     { name: 'Logo & Favicon', href: '/admin/logo-favicon', Icon: PhotoIcon },
     { name: 'SEO Manager', href: '/admin/seo', Icon: GlobeAltIcon },
-    // { name: 'Email Configure', href: '/admin/email-setting', Icon: EnvelopeIcon },
+    { name: 'User Role', href: '/admin/email-setting', Icon: UsersIcon },
+    { name: 'Bonus', href: '/admin/email-setting', Icon: GiftIcon },
+    { name: 'Booster', href: '/admin/email-setting', Icon: SparklesIcon },
+    { name: 'Contest', href: '/admin/email-setting', Icon: ScaleIcon },
     { name: 'FRONTEND MANAGER', head: true },
     {
         name: 'Manage Sections', href: false, Icon: TvIcon,
@@ -34,6 +38,7 @@ export const links = [
             { name: 'Unverified Payment', href: '/admin/payment/unverified' },
         ]
     },
+    { name: 'Report', href: '/admin/email-setting', Icon: ChatBubbleBottomCenterIcon },
 ]
 
 const SideLinks = () => {

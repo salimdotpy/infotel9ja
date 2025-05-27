@@ -21,6 +21,7 @@ import AdminAuthRoute from "./routers/AuthRoute";
 import AdminLogin from "./ui/admin/login";
 import Register from "./pages/Register";
 import AdminRoute from "./routers/AdminRoute";
+import Dashboard from "./pages/Dashboard";
 
 function App() {
   const { theme } = useTheme();
@@ -62,7 +63,7 @@ function App() {
           <Route path="/login/:role" element={<AdminLogin />} />
         </Route>
         <Route path="/admin" element={<AdminRoute />}>
-          <Route index element={<AdminLogin />} />
+          <Route index element={<Dashboard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

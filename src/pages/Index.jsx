@@ -6,12 +6,12 @@ export default function Index() {
     useDocumentTitle('InfoTel9ja');
     return (
         <>
+            {/* <HeroSection /> */}
+            {/* <NewSections /> */}
             <HeroSection />
-            <NewSections />
-            {/* <HeroSection />
             <FactSection />
             <CompetitionSection />
-            <AboutSection /> */}
+            <AboutSection />
             <FooterSection />
         </>
     )
