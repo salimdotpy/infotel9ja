@@ -1,4 +1,4 @@
-import { ChatBubbleBottomCenterIcon, ChevronDownIcon, ChevronRightIcon, CurrencyDollarIcon, EnvelopeIcon, GiftIcon, GlobeAltIcon, HomeIcon, PaperClipIcon, PhotoIcon, ScaleIcon, SparklesIcon, TvIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { ChatBubbleBottomCenterIcon, ChevronDownIcon, ChevronRightIcon, Cog8ToothIcon, CurrencyDollarIcon, EnvelopeIcon, GiftIcon, GlobeAltIcon, HomeIcon, LifebuoyIcon, PaperClipIcon, PhotoIcon, ScaleIcon, SparklesIcon, TrophyIcon, TvIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionBody, AccordionHeader, Chip, Drawer, List, ListItem, ListItemPrefix, ListItemSuffix, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
@@ -15,27 +15,27 @@ keys.forEach(key => {
 
 export const links = [
     { name: 'Dashboard', href: '/admin', Icon: HomeIcon },
-    { name: 'User Management', head: true },
+    { name: 'USER MANAGEMENT', head: true },
     { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'SETTINGS', head: true },
-    { name: 'Logo & Favicon', href: '/admin/logo-favicon', Icon: PhotoIcon },
-    { name: 'SEO Manager', href: '/admin/seo', Icon: GlobeAltIcon },
-    { name: 'User Role', href: '/admin/email-setting', Icon: UsersIcon },
+    { name: 'System Settings', href: '/admin/logo-favicon', Icon: Cog8ToothIcon },
+    { name: 'Gem Booster', href: '/admin/email-setting', Icon: SparklesIcon },
+    { name: 'Sponsor Package', href: '/admin/seo', Icon: LifebuoyIcon },
+    { name: 'Leaderboard', href: '/admin/email-setting', Icon: TrophyIcon },
     { name: 'Bonus', href: '/admin/email-setting', Icon: GiftIcon },
-    { name: 'Booster', href: '/admin/email-setting', Icon: SparklesIcon },
-    { name: 'Contest', href: '/admin/email-setting', Icon: ScaleIcon },
     { name: 'FRONTEND MANAGER', head: true },
     {
         name: 'Manage Sections', href: false, Icon: TvIcon,
         menu: secs
     },
+    { name: 'OTHER', head: true },
     {
-        name: 'Manage Payment', href: false, Icon: CurrencyDollarIcon,
+        name: 'Email Manage', href: false, Icon: EnvelopeIcon,
         menu: [
-            { name: 'All Payment', href: '/admin/payment/all' },
-            { name: 'Verified Payment', href: '/admin/payment/verified' },
-            { name: 'Unverified Payment', href: '/admin/payment/unverified' },
+            { name: 'Global Template', href: '/admin/payment/all' },
+            { name: 'Email Template', href: '/admin/payment/verified' },
+            { name: 'Email Configuration', href: '/admin/payment/unverified' },
         ]
     },
     { name: 'Report', href: '/admin/email-setting', Icon: ChatBubbleBottomCenterIcon },
