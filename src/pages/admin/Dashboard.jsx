@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { Card, CardBody, Typography } from "@material-tailwind/react";
 import { CheckCircleIcon, EyeIcon, EyeSlashIcon, MinusCircleIcon } from "@heroicons/react/24/solid";
-import { showAmount } from "../ui/admin/sidebar";
+import { showAmount } from "../../ui/admin/sidebar";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
-import { useDocumentTitle } from "../hooks";
+import { useDocumentTitle } from "../../hooks";
 import useAuth from "@/store/authStore";
 
 export default function Dashboard() {

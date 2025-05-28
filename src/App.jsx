@@ -21,7 +21,7 @@ import AdminAuthRoute from "./routers/AuthRoute";
 import AdminLogin from "./ui/admin/login";
 import Register from "./pages/Register";
 import AdminRoute from "./routers/AdminRoute";
-import Dashboard from "./pages/Dashboard";
+import Dashboard from "./pages/admin/Dashboard";
 
 function App() {
   const { theme } = useTheme();
