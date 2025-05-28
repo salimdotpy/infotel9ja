@@ -64,6 +64,7 @@ function App() {
         </Route>
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<Dashboard />} />
+          <Route path="setting/system" element={<Dashboard />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

@@ -19,7 +19,7 @@ export const links = [
     { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'SETTINGS', head: true },
-    { name: 'System Settings', href: '/admin/logo-favicon', Icon: Cog8ToothIcon },
+    { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
     { name: 'Gem Booster', href: '/admin/email-setting', Icon: SparklesIcon },
     { name: 'Sponsor Package', href: '/admin/seo', Icon: LifebuoyIcon },
     { name: 'Leaderboard', href: '/admin/email-setting', Icon: TrophyIcon },
