@@ -174,4 +174,6 @@ export const ImageSchema = {
             // if (!value || value.length === 0) return true; // Allow empty files
             return value && value?.size <= 0.4 * 1024 * 1024; // 2MB limit
         }),
-  }
+}
+
+export const toggleHandler = (stateUpdater) => () => stateUpdater((prev) => !prev);

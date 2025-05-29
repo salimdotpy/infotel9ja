@@ -23,6 +23,7 @@ import Register from "./pages/Register";
 import AdminRoute from "./routers/AdminRoute";
 import Dashboard from "./pages/admin/Dashboard";
 import SystemSettings from "./pages/admin/SystemSettings";
+import BoosterSettings from "./pages/admin/BoosterSettings";
 
 function App() {
   const { theme } = useTheme();
@@ -66,6 +67,7 @@ function App() {
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<Dashboard />} />
           <Route path="setting/system" element={<SystemSettings />} />
+          <Route path="setting/booster" element={<BoosterSettings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

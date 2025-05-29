@@ -20,7 +20,7 @@ export const links = [
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
-    { name: 'Gem Booster', href: '/admin/email-setting', Icon: SparklesIcon },
+    { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
     { name: 'Sponsor Package', href: '/admin/seo', Icon: LifebuoyIcon },
     { name: 'Leaderboard', href: '/admin/email-setting', Icon: TrophyIcon },
     { name: 'Bonus', href: '/admin/email-setting', Icon: GiftIcon },
