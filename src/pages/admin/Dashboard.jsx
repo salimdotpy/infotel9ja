@@ -4,16 +4,12 @@ import { CheckCircleIcon, EyeIcon, EyeSlashIcon, MinusCircleIcon } from "@heroic
 import { showAmount } from "../../ui/admin/sidebar";
 import { CurrencyDollarIcon } from "@heroicons/react/24/solid";
 import { useDocumentTitle } from "../../hooks";
-import useAuth from "@/store/authStore";
-import { LoadingComponent } from "@/ui/sections";
 
 export default function Dashboard() {
     const [balanceShown, setBalanceShown] = React.useState(false);
     const toggleBalanceVisiblity = (value) => setBalanceShown(balanceShown === value ? 0 : value);
     useDocumentTitle('Dashboard - InfoTel9ja');
-    const { loading } = useAuth();
     
-    if (loading) return <LoadingComponent />;
     return (
         <>
             <div className="flex gap-5 flex-wrap *:flex-1 *:basis-full md:*:basis-1/4 mb-10 text-fore">

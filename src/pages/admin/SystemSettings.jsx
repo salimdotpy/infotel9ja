@@ -1,14 +1,43 @@
-import { useDocumentTitle } from "@/hooks";
-import useAuth from "@/store/authStore";
-import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
-import { Card, CardBody, Typography } from "@material-tailwind/react";
+import { useDocumentTitle, useFileHandler } from "@/hooks";
+import { BreadCrumbs } from "@/ui/sections";
+import { ImageSchema } from "@/utils";
+import { IWL } from "@/utils/constants";
+import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { Button, Card, CardBody, Input, Textarea, Tooltip, Typography } from "@material-tailwind/react";
 import React, { useState } from "react";
+import * as yup from "yup";
+import { useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { toast } from "react-toastify";
+
+const schema = yup.object({
+  siteTitle: yup.string().trim().required('Site Title is required'),
+  siteColor: yup.string().trim().required('Site Title is required'),
+  metaKeyword: yup.string().trim().required('Meta Keyword is required'),
+  metaDescription: yup.string().trim().required('Meta Description is required'),
+  socialTitle: yup.string().trim().required('Social Title is required'),
+  socialDescription: yup.string().trim().required('Social Description is required'),
+  logo: ImageSchema.image_input,
+  favicon: ImageSchema.image_input,
+  seo: ImageSchema.image_input,
+})
 
 const SystemSettings = () => {
   useDocumentTitle("System Setting - InfoTel9ja");
-  const { loading } = useAuth();
+  const { handleSubmit, setValue, clearErrors, register, formState: { errors }, } = useForm({ resolver: yupResolver(schema) })
+  const [loading, setLoading] = useState(false);
+  const { imgFiles, isFileLoading, onFileChange } = useFileHandler({ images: {}, setValue, clearErrors });
 
-  if (loading) return <LoadingComponent />;
+  const onSubmit = async (formData) => {
+    setLoading(true);
+    try {
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+    }
+  }
+
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore">
@@ -22,10 +51,95 @@ const SystemSettings = () => {
 
       <Card className="bg-header text-fore">
         <CardBody>
-          <form className="mb-2 text-fore">
-            <div className="mb-1 flex flex-wrap gap-6 max-w-xl">
-
+          <Typography variant="h6" className="mb-4 text-fore">
+            General Settings
+          </Typography>
+          <form className="mb-2 text-fore" method="post" onSubmit={handleSubmit(onSubmit)}>
+            <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
+              <div>
+                <Input label="Site Title" {...register('siteTitle')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.siteTitle} />
+                {errors.siteTitle && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.siteTitle.message}
+                  </Typography>}
+              </div>
+              <div>
+                <Input type="color" label="Site Color" {...register('siteColor')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.siteColor} />
+                {errors.siteColor && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.siteColor.message}
+                  </Typography>}
+              </div>
+              <div>
+                <Input label="Meta Keyworks" {...register('metaKeyword')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.metaKeyword} />
+                {errors.metaKeyword && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.metaKeyword.message}
+                  </Typography>}
+              </div>
+              <div>
+                <Input label="Social Title" {...register('socialTitle')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.socialTitle} />
+                {errors.socialTitle && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.socialTitle.message}
+                  </Typography>}
+              </div>
+              <div>
+                <Textarea label="Meta Description" {...register('metaDescription')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.metaDescription} />
+                {errors.metaDescription && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.metaDescription.message}
+                  </Typography>}
+              </div>
+              <div>
+                <Textarea label="Social Description" {...register('socialDescription')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.socialDescription} />
+                {errors.socialDescription && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.socialDescription.message}
+                  </Typography>}
+              </div>
+              <div className="flex flex-wrap gap-6 *:basis-[30%] *:grow">
+                <Typography variant="h6" className="text-fore !basis-full">
+                  Site Images
+                </Typography>
+                <div>
+                  <label>Logo</label>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.logo}')`}}>
+                    <label className='cursor-pointer'>
+                      <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'logo')} accept="image/*" className="hidden" />
+                      <Tooltip content='Change Image' className='py-1 text-xs'>
+                        <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
+                      </Tooltip>
+                      <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
+                    <small>Upload Image</small>
+                  </div>
+                  {errors.logo && <span className="text-sm text-red-900">{errors.logo.message}</span>}
+                </div>
+                <div>
+                  <label>Favicon</label>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.favicon}')`}}>
+                    <label className='cursor-pointer'>
+                      <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'favicon')} accept="image/*" className="hidden" />
+                      <Tooltip content='Change Image' className='py-1 text-xs'>
+                        <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
+                      </Tooltip>
+                      <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
+                    <small>Upload Image</small>
+                  </div>
+                  {errors.favicon && <span className="text-sm text-red-900">{errors.favicon.message}</span>}
+                </div>
+                <div>
+                  <label>Social Image</label>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.seo}')`}}>
+                    <label className='cursor-pointer'>
+                      <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'seo')} accept="image/*" className="hidden" />
+                      <Tooltip content='Change Image' className='py-1 text-xs'>
+                        <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
+                      </Tooltip>
+                      <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
+                    <small>Upload Image</small>
+                  </div>
+                  {errors.seo && <span className="text-sm text-red-900">{errors.seo.message}</span>}
+                </div>
+              </div>
             </div>
+            <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} fullWidth>
+              Update
+            </Button>
           </form>
         </CardBody>
       </Card>
