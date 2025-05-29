@@ -23,8 +23,8 @@ const DEFAULT_MESSAGES = {
   CONFIRM_DELETE: "Are you sure to delete this item? Once deleted cannot be undone.",
 };
 
-const BoosterSettings = () => {
-  useDocumentTitle("Booter Setting - InfoTel9ja");
+const SponsorSettings = () => {
+  useDocumentTitle("Sponsor Setting - InfoTel9ja");
   const defaultData = [
     {id: 1, name: 'Pro', price: 4000, vote: 4, description: ''},
     {id: 2, name: 'Pro2', price: 3000, vote: 4, description: ''},
@@ -99,18 +99,18 @@ const BoosterSettings = () => {
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore">
-        Gem Booster Setting
+        Sponsor Setting
       </Typography>
       <BreadCrumbs
         separator="/"
         className="my-3 bg-header"
-        links={[{ name: "Gem Booster", href: "/admin/setting/booster" }]}
+        links={[{ name: "Sponsor", href: "/admin/setting/sponsor" }]}
       />
 
       <Card className="bg-header text-fore mt-10">
         <CardHeader floated={false} shadow={false} className="rounded-none bg-header text-fore">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <Typography variant="h6">Gem Booster Table</Typography>
+            <Typography variant="h6">Sponsor Table</Typography>
             <div className="flex w-full shrink-0 gap-2 md:w-max">
               <Button variant="outlined" size="sm" className="border-primary text-fore" onClick={() => { setModalData({ price: 100, vote: 1 }); toggleModal(1) }}>Add New</Button>
             </div>
@@ -190,16 +190,16 @@ const BoosterSettings = () => {
                         </Typography>
                       </td>
                       <td className={classes}>
-                          <Tooltip content="Edit">
-                          <IconButton color="blue" size="sm" variant="outlined" className="mr-2" onClick={() => { setModalData({ ...record }); toggleModal(2) }}>
-                            <PencilIcon className="size-4" />
-                          </IconButton>
-                          </Tooltip>
-                          <Tooltip content="Delete">
-                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
-                            <TrashIcon className="size-4" />
-                          </IconButton>
-                          </Tooltip>
+                        <Tooltip content="Edit">
+                        <IconButton color="blue" size="sm" variant="outlined" className="mr-2" onClick={() => { setModalData({ ...record }); toggleModal(2) }}>
+                          <PencilIcon className="size-4" />
+                        </IconButton>
+                        </Tooltip>
+                        <Tooltip content="Delete">
+                        <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
+                          <TrashIcon className="size-4" />
+                        </IconButton>
+                        </Tooltip>
                       </td>
                     </tr>
                   )
@@ -242,7 +242,7 @@ const BoosterSettings = () => {
   );
 };
 
-export default BoosterSettings;
+export default SponsorSettings;
 
 const AddModal = ({ open, handler, data }) => {
   const [loading, setLoading] = useState(false);
@@ -274,7 +274,7 @@ const AddModal = ({ open, handler, data }) => {
       <DialogBody className="text-fore">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
         <Card color="transparent" shadow={false} className='w-full text-fore'>
-          <Typography variant="h5">Add New Booster</Typography>
+          <Typography variant="h5">Add New Sponsor</Typography>
           <hr className="w-full my-3" />
           <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
@@ -348,7 +348,7 @@ const EditModal = ({ open, handler, data }) => {
       <DialogBody className="text-fore">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
         {data ? (<Card color="transparent" shadow={false} className='w-full text-fore'>
-          <Typography variant="h5">Update Gem Booster</Typography>
+          <Typography variant="h5">Update Sponsor</Typography>
           <hr className="w-full my-3" />
           <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
             <input type="hidden" {...register('id')} defaultValue={data?.id} />
