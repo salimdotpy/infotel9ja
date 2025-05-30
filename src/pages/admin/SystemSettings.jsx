@@ -1,6 +1,6 @@
 import { useDocumentTitle, useFileHandler } from "@/hooks";
 import { BreadCrumbs } from "@/ui/sections";
-import { ImageSchema } from "@/utils";
+import { hexToRgb, ImageSchema } from "@/utils";
 import { IWL } from "@/utils/constants";
 import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Button, Card, CardBody, Input, Textarea, Tooltip, Typography } from "@material-tailwind/react";
@@ -29,6 +29,10 @@ const SystemSettings = () => {
   const { imgFiles, isFileLoading, onFileChange } = useFileHandler({ images: {}, setValue, clearErrors });
 
   const onSubmit = async (formData) => {
+    formData.siteColor = hexToRgb(formData.siteColor);
+    document.body.style.setProperty('--color-primary', formData.siteColor);
+    console.log(formData);
+    
     setLoading(true);
     try {
     } catch (error) {
@@ -63,7 +67,7 @@ const SystemSettings = () => {
                   </Typography>}
               </div>
               <div>
-                <Input type="color" label="Site Color" {...register('siteColor')} size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.siteColor} />
+                <Input type="color" label="Site Color" {...register('siteColor')} size='lg' className={IWL[1] + ' !px-1.5 !py-1'} labelProps={{ className: IWL[0], }} error={errors.siteColor} />
                 {errors.siteColor && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.siteColor.message}
                   </Typography>}
