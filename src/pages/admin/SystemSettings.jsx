@@ -1,5 +1,5 @@
 import { useDocumentTitle, useFileHandler } from "@/hooks";
-import { BreadCrumbs } from "@/ui/sections";
+import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
 import { hexToRgb, ImageSchema } from "@/utils";
 import { IWL } from "@/utils/constants";
 import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
@@ -51,6 +51,7 @@ const SystemSettings = () => {
   }
 
   const fetchData = async () => {
+      setLoading(true);
       const snapshot = await fetchSetting('system.data'); 
       snapshot.siteColor = hexToRgb(snapshot?.siteColor, false)
       setData(snapshot);
@@ -59,16 +60,18 @@ const SystemSettings = () => {
           return setImgFiles((prev) => {return {...prev, [key]: val}})
         }
         return setValue(key, val)
-      })
+      });
+      setLoading(false);
   };
 
   useEffect(() => {
       fetchData();
   }, []);
 
+  if(loading && !data) return <LoadingComponent />
   return (
     <React.Fragment>
-      <Seo data={{...data, siteTitle: "System Setting - InfoTel9ja"}} />
+      <Seo data={{...data, siteTitle: "System Setting - InfoTel9ja", logo: data?.seo}} />
       <Typography variant="h5" className="mb-4 text-fore text-wrap break-words !w-full">
         System Setting
       </Typography>

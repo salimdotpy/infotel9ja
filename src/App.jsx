@@ -3,7 +3,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { LoadingComponent, NotFound } from "./ui/sections";
 import { ToastContainer } from "react-toastify";
 import Index from "./pages/Index";
@@ -25,21 +25,11 @@ import Dashboard from "./pages/admin/Dashboard";
 import SystemSettings from "./pages/admin/SystemSettings";
 import BoosterSettings from "./pages/admin/BoosterSettings";
 import SponsorSettings from "./pages/admin/SponsorSettings";
-import { fetchSetting } from "./utils/settings";
-import { hexToRgb } from "./utils";
 
 function App() {
   const { theme } = useTheme();
-  const [data, setData] = useState(null);
-  const fetchData = async () => {
-      const snapshot = await fetchSetting('system.data'); 
-      snapshot.siteColor = hexToRgb(snapshot?.siteColor, false)
-      setData(snapshot);
-  };
 
   useEffect(() => {
-    fetchData();
-
     AOS.init({
       duration: 1000,
       easing: 'ease-in-out',
@@ -55,20 +45,6 @@ function App() {
       document.body.classList.remove('dark');
     }
   }, [theme]);
-
-  if (data) {
-    // Check if an existing manifest tag is present, remove it
-    let iconTag = document.querySelector("link[rel='icon']"); //rel="icon"
-    if (iconTag) document.head.removeChild(iconTag);
-
-    // Create a new manifest <link> tag
-    iconTag = document.createElement("link");
-    iconTag.rel = "icon";
-    iconTag.href = data.favicon;
-
-    // Append to <head>
-    document.head.appendChild(iconTag);
-  }
 
   return (
     <BrowserRouter>

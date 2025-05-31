@@ -2,10 +2,12 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const Seo = ({ data = {}, url = window.location.href }) => {
+    console.log(data);
+    
     return (
         <Helmet>
             {/* Basic Meta */}
-            <title>{data?.siteTitle || "InfoTel9ja"}</title>
+            <title>{data?.siteTitle || "InfoTel9ja Global Network Presents: Osun State Contest"}</title>
             <meta name="theme-color" content={data?.siteColor || "#00C600"} />
             <meta name="description" content={data?.metaDescription || "Join the Osun State Influential Personalities and Football Diehard Fans Contest, celebrating community engagement and social interaction in Osun State."} />
             <meta name="keywords" content={data?.metaKeyword || "Osun State contest, influential personalities, football diehard fans, community engagement, social interaction, Osun State events, football fan contest, influencer recognition"} />
@@ -31,7 +33,7 @@ const Seo = ({ data = {}, url = window.location.href }) => {
             <meta name="twitter:image:alt" content="logo" />
 
             {/* Favicon fallback (optional) */}
-            <link rel="icon" href="/favicon.ico" />
+            <link rel="icon" type="image/svg+xml" href={data?.logo || "https://infotel9ja.vercel.app/images/logoIcon/favicon.png"} />
         </Helmet>
     );
 };
