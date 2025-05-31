@@ -342,14 +342,14 @@ export const AboutsSection = () => {
                         {about_page.reg_process.content.map((p, key) => {
                             if (key === 1) {
                                 return (
-                                    <>
-                                    <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                                    <div key={key}>
+                                    <li className='text-fore/80 my-4 ml-5'>{p}</li>
                                     <ul className='list-disc m-auto'>
-                                    {about_page.reg_process.reg_details.map((detail, key) =>
-                                        <li key={key} className='text-fore/80 my-4 ml-10'>{detail}</li>
+                                    {about_page.reg_process.reg_details.map((detail, k) =>
+                                        <li key={k} className='text-fore/80 my-4 ml-10'>{detail}</li>
                                     )}
                                     </ul>
-                                    </>
+                                    </div>
                                 )
                             } else {
                                 return <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>

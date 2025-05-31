@@ -1,12 +1,12 @@
 import React from "react";
 import { AboutsSection, FooterSection, HeroBreaCrumbs } from "../ui/sections";
-import { useDocumentTitle } from "../hooks";
+import MetaInfo from "@/ui/MetaInfo";
 
 export default function About() {
-    useDocumentTitle('About us - InfoTel9ja');
     return (
         <>
-            <HeroBreaCrumbs links={[{name: 'About Us', href: 'about'}]} />
+            <MetaInfo siteTitle="About us - InfoTel9ja" />
+            <HeroBreaCrumbs links={[{ name: 'About Us', href: 'about' }]} />
             <AboutsSection />
             <FooterSection />
         </>

@@ -1,13 +1,13 @@
 import React from "react";
 import { AboutSection, CompetitionSection, FactSection, FooterSection, HeroSection, NewSections } from "../ui/sections";
-import { useDocumentTitle } from "@/hooks";
+import MetaInfo from "@/ui/MetaInfo";
 
 export default function Index() {
-    useDocumentTitle('InfoTel9ja');
     return (
         <>
             {/* <HeroSection /> */}
             {/* <NewSections /> */}
+            <MetaInfo socialTitle="adeola" />
             <HeroSection />
             <FactSection />
             <CompetitionSection />

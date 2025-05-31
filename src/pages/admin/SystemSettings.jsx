@@ -10,7 +10,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { fetchSetting, updateSetting } from "@/utils/settings";
-import Seo from "@/ui/Seo";
+import Seo from "@/ui/MetaInfo";
 
 const schema = yup.object({
   siteTitle: yup.string().trim().required('Site Title is required'),
