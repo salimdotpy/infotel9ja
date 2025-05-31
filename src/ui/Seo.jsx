@@ -2,7 +2,6 @@ import React from 'react';
 import { Helmet } from 'react-helmet';
 
 const Seo = ({ data = {}, url = window.location.href }) => {
-    console.log(data);
     
     return (
         <Helmet>

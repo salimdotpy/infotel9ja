@@ -28,6 +28,7 @@ const SystemSettings = () => {
   const { handleSubmit, setValue, clearErrors, register, formState: { errors }, } = useForm({ resolver: yupResolver(schema) })
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
+  const [seoData, setSeoData] = useState({});
   const { imgFiles, isFileLoading, onFileChange, setImgFiles } = useFileHandler({ setValue, clearErrors });
 
   const onSubmit = async (formData) => {
@@ -66,12 +67,21 @@ const SystemSettings = () => {
 
   useEffect(() => {
       fetchData();
+      setSeoData({
+      siteTitle: "Home Page - InfoTel9ja",
+      metaDescription: "Welcome to InfoTel9ja's homepage!",
+      metaKeyword: "info, tel, 9ja, homepage",
+      socialTitle: "Welcome to InfoTel9ja!",
+      socialDescription: "Explore our competitions and news.",
+      seo: "/images/social.jpg",
+      siteColor: "#123456",
+    });
   }, []);
 
-  if(loading && !data) return <LoadingComponent />
+  if(loading && !seoData) return <LoadingComponent />
   return (
     <React.Fragment>
-      <Seo data={{...data, siteTitle: "System Setting - InfoTel9ja", logo: data?.seo}} />
+      <Seo data={{siteTitle: "Home Page - InfoTel9ja", ...seoData}} />
       <Typography variant="h5" className="mb-4 text-fore text-wrap break-words !w-full">
         System Setting
       </Typography>
