@@ -13,7 +13,7 @@ const Seo = ({ data = {}, url = window.location.href }) => {
 
             {/* Open Graph (Facebook, LinkedIn) */}
             <meta property="og:type" content="website" />
-            <meta property="og:title" content={data?.socialTitle || "Celebrate Osun's Finest: Influencers & Football Fans Unite!"} />
+            <meta property="og:title" content={data?.siteTitle || "Celebrate Osun's Finest: Influencers & Football Fans Unite!"} />
             <meta property="og:description" content={data?.socialDescription || "Join the Osun State Influential Personalities and Football Diehard Fans Contest, celebrating community engagement and social interaction in Osun State."} />
             <meta property="og:image" content={data?.seo || "https://infotel9ja.vercel.app/images/img4.jpeg"} />
             <meta property="og:image:width" content="800" />
