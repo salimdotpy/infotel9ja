@@ -4,11 +4,12 @@ import { hexToRgb, ImageSchema } from "@/utils";
 import { IWL } from "@/utils/constants";
 import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
 import { Button, Card, CardBody, Input, Textarea, Tooltip, Typography } from "@material-tailwind/react";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
+import { fetchSetting, updateSetting } from "@/utils/settings";
 
 const schema = yup.object({
   siteTitle: yup.string().trim().required('Site Title is required'),
@@ -26,15 +27,22 @@ const SystemSettings = () => {
   useDocumentTitle("System Setting - InfoTel9ja");
   const { handleSubmit, setValue, clearErrors, register, formState: { errors }, } = useForm({ resolver: yupResolver(schema) })
   const [loading, setLoading] = useState(false);
-  const { imgFiles, isFileLoading, onFileChange } = useFileHandler({ images: {}, setValue, clearErrors });
+  const [data, setData] = useState(null);
+  const { imgFiles, isFileLoading, onFileChange, setImgFiles } = useFileHandler({ setValue, clearErrors });
 
   const onSubmit = async (formData) => {
-    formData.siteColor = hexToRgb(formData.siteColor);
-    document.body.style.setProperty('--color-primary', formData.siteColor);
-    console.log(formData);
-    
     setLoading(true);
     try {
+      formData.siteColor = hexToRgb(formData.siteColor);
+      formData.seo = imgFiles?.seo; formData.logo = imgFiles?.logo; formData.favicon = imgFiles?.favicon;
+      document.body.style.setProperty('--color-primary', formData.siteColor);
+      const response = await updateSetting(formData, 'system.data');
+      if (response.message) {
+          toast.success(response.message);
+      } else {
+          toast.error(response.error)
+      }
+      await fetchData();
     } catch (error) {
       toast.error(error.message);
     } finally {
@@ -42,16 +50,28 @@ const SystemSettings = () => {
     }
   }
 
+  const fetchData = async () => {
+      const snapshot = await fetchSetting('system.data'); 
+      snapshot.siteColor = hexToRgb(snapshot?.siteColor, false)
+      setData(snapshot);
+      Object.entries(snapshot).map(([key, val]) => {
+        if(['logo', 'favicon', 'seo'].includes(key)){
+          return setImgFiles((prev) => {return {...prev, [key]: val}})
+        }
+        return setValue(key, val)
+      })
+  };
+
+  useEffect(() => {
+      fetchData();
+  }, []);
+
   return (
     <React.Fragment>
-      <Typography variant="h5" className="mb-4 text-fore">
+      <Typography variant="h5" className="mb-4 text-fore text-wrap break-words !w-full">
         System Setting
       </Typography>
-      <BreadCrumbs
-        separator="/"
-        className="my-3 bg-header"
-        links={[{ name: "System Setting", href: "/admin/logo-favicon" }]}
-      />
+      <BreadCrumbs separator="/" className="my-3 bg-header" links={[{ name: "System Setting", href: "/admin/setting/system" }]} />
 
       <Card className="bg-header text-fore">
         <CardBody>
@@ -102,7 +122,7 @@ const SystemSettings = () => {
                 </Typography>
                 <div>
                   <label>Logo</label>
-                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.logo}')`}}>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden ![background-size:_100%_100%] !bg-no-repeat' style={{background: `url('${imgFiles?.logo}')`}}>
                     <label className='cursor-pointer'>
                       <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'logo')} accept="image/*" className="hidden" />
                       <Tooltip content='Change Image' className='py-1 text-xs'>
@@ -115,7 +135,7 @@ const SystemSettings = () => {
                 </div>
                 <div>
                   <label>Favicon</label>
-                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.favicon}')`}}>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden ![background-size:_100%_100%] !bg-no-repeat' style={{background: `url('${imgFiles?.favicon || data?.favicon}')`}}>
                     <label className='cursor-pointer'>
                       <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'favicon')} accept="image/*" className="hidden" />
                       <Tooltip content='Change Image' className='py-1 text-xs'>
@@ -128,7 +148,7 @@ const SystemSettings = () => {
                 </div>
                 <div>
                   <label>Social Image</label>
-                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.seo}')`}}>
+                  <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden ![background-size:_100%_100%] !bg-no-repeat' style={{background: `url('${imgFiles?.seo || data?.seo}')`}}>
                     <label className='cursor-pointer'>
                       <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'seo')} accept="image/*" className="hidden" />
                       <Tooltip content='Change Image' className='py-1 text-xs'>
@@ -141,8 +161,8 @@ const SystemSettings = () => {
                 </div>
               </div>
             </div>
-            <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} fullWidth>
-              Update
+            <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={loading} fullWidth>
+                Update
             </Button>
           </form>
         </CardBody>

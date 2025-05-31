@@ -1,0 +1,41 @@
+import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { addDoc, collection, db } from "./firebase";
+import { keyToTitle } from ".";
+
+const settingsCol = collection(db, "settings");
+
+export async function fetchSetting(data_key = 'general') {
+    try {
+        const q = query(settingsCol, where("data_keys", "==", data_key));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            const doc = snapshot.docs[0];
+            return JSON.parse(doc.data().data_values);
+        } else {
+            return null;
+        }
+    } catch (error) {
+        return null;
+    }
+}
+
+export async function updateSetting(form, data_key = 'general') {
+    try {
+        const settingsCol = collection(db, "settings");
+        const q = query(settingsCol, where("data_keys", "==", data_key));
+        const snapshot = await getDocs(q);
+        const data = JSON.stringify(form);
+        const date = new Date().toISOString();
+        if (!snapshot.empty) {
+            const docu = snapshot.docs[0];
+            await updateDoc(doc(db, "settings", docu.id), { data_values: data, updated_at: date });
+        } else {
+            await addDoc(settingsCol, { data_keys: data_key, data_values: data, created_at: date, updated_at: date });
+        }
+        const tle = keyToTitle(data_key);
+        return { message: `${tle.split('.')?.[0]} setting updated successfully!` };
+
+    } catch (error) {
+        return { error: error.message };
+    }
+}

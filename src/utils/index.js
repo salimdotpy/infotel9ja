@@ -166,23 +166,26 @@ export const getContent = async (data_keys, singleQuery = false, limitValue = nu
 export const ImageSchema = {
     image_input: yup.mixed()
         .test("fileType", "Only JPG, PNG, or GIF is image format allowed", (value) => {
-            // if (!value || value.length === 0) return true; // Allow empty files
+            if (!value || value.length === 0) return true; // Allow empty files
             const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
             return value && allowedTypes.includes(value?.type);
         })
         .test("fileSize", "File size must be less than 1.5MB", (value) => {
-            // if (!value || value.length === 0) return true; // Allow empty files
-            return value && value?.size <= 0.4 * 1024 * 1024; // 2MB limit
+            if (!value || value.length === 0) return true; // Allow empty files
+            return value && value?.size <= 1 * 1024 * 1024; // 2MB limit
         }),
 }
 
 export const toggleHandler = (stateUpdater) => () => stateUpdater((prev) => !prev);
 
-export const hexToRgb = (hex) => {
-    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex)
-    if (result) {
-        console.log(result, `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`);
-        
-      return `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`;
+export const hexToRgb = (val, hex = true) => {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(val)
+    if (hex) {
+        return `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`;
+    } else {
+        const rst = val.split(' ').map((item) => {
+            return parseInt(item) > 10 ? parseInt(item).toString(16) : `0${parseInt(item).toString(16)}`;
+        });
+        return `#${rst.join('')}`;
     }
-  }
+}

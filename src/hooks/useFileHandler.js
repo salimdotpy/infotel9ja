@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
-const useFileHandler = ({ images = {},  setValue, clearErrors}) => {
-  const [imgFiles, setImgFiles] = useState(images);
+const useFileHandler = ({ setValue, clearErrors }) => {
+  const [imgFiles, setImgFiles] = useState(null);
   const [isFileLoading, setFileLoading] = useState(false);
 
   const onFileChange = (e, fieldName) => {
@@ -21,7 +21,7 @@ const useFileHandler = ({ images = {},  setValue, clearErrors}) => {
     clearErrors(fieldName);
     setFileLoading(false);
   };
-  return { imgFiles, isFileLoading, onFileChange };
+  return { imgFiles, isFileLoading, onFileChange, setImgFiles };
 };
 
 export default useFileHandler;
