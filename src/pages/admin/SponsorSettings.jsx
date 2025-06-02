@@ -1,14 +1,15 @@
-import { useDocumentTitle, useFileHandler } from "@/hooks";
 import { BreadCrumbs } from "@/ui/sections";
-import { ImageSchema, keyToTitle, toggleHandler } from "@/utils";
+import { getContent, keyToTitle, toggleHandler } from "@/utils";
 import { IWL } from "@/utils/constants";
-import { CloudArrowUpIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, DialogBody, IconButton, Input, Option, Select, Textarea, Tooltip, Typography } from "@material-tailwind/react";
 import React, { useEffect, useMemo, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
+import MetaInfo from "@/ui/MetaInfo";
+import { editSetting, removeSettings } from "@/utils/settings";
 
 const schema = yup.object({
   name: yup.string().trim().required('Booster Name is required'),
@@ -24,15 +25,8 @@ const DEFAULT_MESSAGES = {
 };
 
 const SponsorSettings = () => {
-  useDocumentTitle("Sponsor Setting - InfoTel9ja");
-  const defaultData = [
-    {id: 1, name: 'Pro', price: 4000, vote: 4, description: ''},
-    {id: 2, name: 'Pro2', price: 3000, vote: 4, description: ''},
-  ];
-  const [data, setData] = useState(defaultData);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  // =========================================================
-
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
@@ -44,7 +38,7 @@ const SponsorSettings = () => {
 
   const filteredRows = useMemo(() => {
     return t_rows.filter((row) => {
-      return Object.values(row).some((value) => {
+      return Object.values(row?.data_values).some((value) => {
         return String(value).toLowerCase().includes(searchQuery.toLowerCase())
       }
       );
@@ -53,8 +47,8 @@ const SponsorSettings = () => {
   const sortedRows = useMemo(() => {
     if (!sortConfig.key) return filteredRows;
     const sortedData = [...filteredRows].sort((a, b) => {
-      if (a?.[sortConfig.key] < b?.[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-      if (a?.[sortConfig.key] > b?.[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
+      if (a?.data_values?.[sortConfig.key] < b?.data_values?.[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
+      if (a?.data_values?.[sortConfig.key] > b?.data_values?.[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
     });
     return sortedData;
@@ -93,11 +87,21 @@ const SponsorSettings = () => {
   const showingEnd = Math.min(showingStart + rowsPerPage - 1, sortedRows.length);
 
   const toggleModal = (value) => setOpenModal(openModal === value ? 0 : value);
-
-  // =========================================================
+  const myHandler = async () => {
+    setLoading(true);
+    const doc = await getContent('sponsor.element', 'settings')
+    if (doc) {
+      setData(doc);
+    }
+    setLoading(false);
+  }
+  useEffect(() => {
+    myHandler();
+  }, [])
 
   return (
     <React.Fragment>
+      <MetaInfo siteTitle="Sponsor Setting - InfoTel9ja" />
       <Typography variant="h5" className="mb-4 text-fore">
         Sponsor Setting
       </Typography>
@@ -171,34 +175,34 @@ const SponsorSettings = () => {
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.name}
+                          {record?.data_values?.name}
+                        </Typography>
+                      </td>
+                      <td className={classes}>
+                        <Typography variant="small" className="font-normal text-fore naira">
+                          {record?.data_values?.price}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.price}
+                          {record?.data_values?.vote}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.vote}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
-                        <Typography variant="small" className="font-normal text-fore">
-                          {record?.description}
+                          {record?.data_values?.description}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Tooltip content="Edit">
-                        <IconButton color="blue" size="sm" variant="outlined" className="mr-2" onClick={() => { setModalData({ ...record }); toggleModal(2) }}>
-                          <PencilIcon className="size-4" />
-                        </IconButton>
+                          <IconButton color="blue" size="sm" variant="outlined" className="mr-2" onClick={() => { setModalData({ ...record }); toggleModal(2) }}>
+                            <PencilIcon className="size-4" />
+                          </IconButton>
                         </Tooltip>
                         <Tooltip content="Delete">
-                        <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
-                          <TrashIcon className="size-4" />
-                        </IconButton>
+                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
+                            <TrashIcon className="size-4" />
+                          </IconButton>
                         </Tooltip>
                       </td>
                     </tr>
@@ -229,15 +233,15 @@ const SponsorSettings = () => {
                 {page + 1}
               </Button>
             ))}
-            <Button size="sm" disabled={currentPage === totalPages} onClick={() => handlePageChange(currentPage + 1)} className="disabled:!pointer-events-auto disabled:cursor-not-allowed">
+            <Button size="sm" disabled={currentPage >= totalPages} onClick={() => handlePageChange(currentPage + 1)} className="disabled:!pointer-events-auto disabled:cursor-not-allowed">
               Next
             </Button>
           </div>
         </CardFooter>
       </Card>
-      <AddModal open={openModal === 1} handler={() => toggleModal(1)} data={modalData} />
-      <EditModal open={openModal === 2} handler={() => toggleModal(2)} data={modalData} />
-      <DeleteModal open={openModal === 3} handler={() => toggleModal(3)} data={modalData} />
+      <AddModal open={openModal === 1} handler={() => { toggleModal(1); myHandler() }} data={modalData} />
+      <EditModal open={openModal === 2} handler={() => { toggleModal(2); myHandler() }} data={modalData} />
+      <DeleteModal open={openModal === 3} handler={() => { toggleModal(3); myHandler() }} data={modalData} />
     </React.Fragment>
   );
 };
@@ -251,18 +255,23 @@ const AddModal = ({ open, handler, data }) => {
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ ...data });
+      reset({ key: 'sponsor', type: "element", ...data });
     }
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      const response = await frontContent(formData);
-      response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload()
+      const response = await editSetting(formData);
+      console.log(formData);
+
+      if (response.message) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.error)
+      }
     } catch (error) {
-      toast.error(`Submission failed. ${error}`);
+      toast.error(error.message);
     } finally {
       setLoading(false);
       handler();
@@ -274,9 +283,9 @@ const AddModal = ({ open, handler, data }) => {
       <DialogBody className="text-fore">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
         <Card color="transparent" shadow={false} className='w-full text-fore'>
-          <Typography variant="h5">Add New Sponsor</Typography>
+          <Typography variant="h5">Add New Booster</Typography>
           <hr className="w-full my-3" />
-          <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
                 <Input {...register('name')} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
@@ -325,16 +334,15 @@ const EditModal = ({ open, handler, data }) => {
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ ...data });
+      reset({ key: 'sponsor', type: "element", id: data?.id, ...data?.data_values, });
     }
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      // const response = await frontContent(formData);
-      // response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload();
+      const response = await editSetting(formData);
+      response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
       toast.error(`Submission failed. ${error}`);
     } finally {
@@ -348,31 +356,31 @@ const EditModal = ({ open, handler, data }) => {
       <DialogBody className="text-fore">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
         {data ? (<Card color="transparent" shadow={false} className='w-full text-fore'>
-          <Typography variant="h5">Update Sponsor</Typography>
+          <Typography variant="h5">Update Gem Booster</Typography>
           <hr className="w-full my-3" />
           <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
             <input type="hidden" {...register('id')} defaultValue={data?.id} />
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
-                <Input {...register('name')} defaultValue={data?.name} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
+                <Input {...register('name')} defaultValue={data?.data_values?.name} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
                 {errors.name && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.name.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('price')} defaultValue={data?.price} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
+                <Input type="number" {...register('price')} defaultValue={data?.data_values?.price} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
                 {errors.price && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.price.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('vote')} defaultValue={data?.vote} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
+                <Input type="number" {...register('vote')} defaultValue={data?.data_values?.vote} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
                 {errors.vote && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.vote.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Textarea {...register('description')} defaultValue={data?.description} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
+                <Textarea {...register('description')} defaultValue={data?.data_values?.description} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
                 {errors.description && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.description.message}
                 </Typography>}
@@ -396,8 +404,6 @@ const EditModal = ({ open, handler, data }) => {
 }
 
 const DeleteModal = ({ open, handler, data }) => {
-  const { id } = data || {};
-
   const schema = yup.object({});
   const [loading, setLoading] = useState(false);
 
@@ -405,17 +411,16 @@ const DeleteModal = ({ open, handler, data }) => {
 
   // Reset form values whenever `data` changes
   useEffect(() => {
-    if (data && id) {
-      reset({ id: id, });
+    if (data) {
+      reset({ id: data.id, });
     }
-  }, [data, reset, id]);
+  }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      // const response = await removeElement(formData);
-      // response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload();
+      const response = await removeSettings(formData);
+      response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
       toast.error(`Deletion failed. ${error}`);
     } finally {
@@ -428,12 +433,12 @@ const DeleteModal = ({ open, handler, data }) => {
     <Dialog open={open} handler={handler} size="sm" className='bg-header'>
       <DialogBody className="grid place-items-center gap-4 md:p-16 relative text-fore" size="sm">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
-        {id ? (
+        {data?.id ? (
           <Card color="transparent" shadow={false} className='w-full max-w-[500px] text-fore'>
             <Typography variant="h4">Confirmation</Typography>
             <Typography className="mt-1 font-normal">{DEFAULT_MESSAGES.CONFIRM_DELETE}</Typography>
             <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
-              <input type="hidden" {...register('id')} defaultValue={id} />
+              <input type="hidden" {...register('id')} defaultValue={data?.id} />
               <div className="flex items-center justify-end mt-6 gap-3">
                 <Button type="button" onClick={handler} color="red" size="sm" variant="outlined">
                   Close

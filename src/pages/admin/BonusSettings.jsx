@@ -8,13 +8,13 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { editSetting, removeSettings } from "@/utils/settings";
 import MetaInfo from "@/ui/MetaInfo";
+import { editSetting, removeSettings } from "@/utils/settings";
 
 const schema = yup.object({
-  name: yup.string().trim().required('Booster Name is required'),
-  price: yup.number().required('Enter Booster Price'),
-  vote: yup.string().trim().required('Increment vote is required'),
+  name: yup.string().trim().required('Bonus Name is required'),
+  vote: yup.number().required('Target vote is required'),
+  bonus: yup.number().required('Enter number of vote to given as bonus'),
   description: yup.string().trim().required('Description is required'),
 })
 
@@ -24,7 +24,7 @@ const DEFAULT_MESSAGES = {
   CONFIRM_DELETE: "Are you sure to delete this item? Once deleted cannot be undone.",
 };
 
-const BoosterSettings = () => {
+const BonusSettings = () => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -89,7 +89,7 @@ const BoosterSettings = () => {
   const toggleModal = (value) => setOpenModal(openModal === value ? 0 : value);
   const myHandler = async () => {
     setLoading(true);
-    const doc = await getContent('booster.element', 'settings')
+    const doc = await getContent('bonus.element', 'settings')
     if (doc) {
       setData(doc);
     }
@@ -101,22 +101,22 @@ const BoosterSettings = () => {
 
   return (
     <React.Fragment>
-      <MetaInfo siteTitle="Booter Setting - InfoTel9ja" />
+      <MetaInfo siteTitle="Bonus Setting - InfoTel9ja" />
       <Typography variant="h5" className="mb-4 text-fore">
-        Gem Booster Setting
+        Bonus Setting
       </Typography>
       <BreadCrumbs
         separator="/"
         className="my-3 bg-header"
-        links={[{ name: "Gem Booster", href: "/admin/setting/booster" }]}
+        links={[{ name: "Bonus", href: "/admin/setting/bonus" }]}
       />
 
       <Card className="bg-header text-fore mt-10">
         <CardHeader floated={false} shadow={false} className="rounded-none bg-header text-fore">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
-            <Typography variant="h6">Gem Booster Table</Typography>
+            <Typography variant="h6">Bonus Table</Typography>
             <div className="flex w-full shrink-0 gap-2 md:w-max">
-              <Button variant="outlined" size="sm" className="border-primary text-fore" onClick={() => { setModalData({ price: 100, vote: 1 }); toggleModal(1) }}>Add New</Button>
+              <Button variant="outlined" size="sm" className="border-primary text-fore" onClick={() => { setModalData({ description: 'Not applicable', vote: 1 }); toggleModal(1) }}>Add New</Button>
             </div>
           </div>
         </CardHeader>
@@ -148,7 +148,7 @@ const BoosterSettings = () => {
                       SN
                     </Typography>
                   </th>
-                  {['name', 'price', 'vote', 'description'].map((field, key) => (
+                  {['name', 'vote', 'bonus'].map((field, key) => (
                     <th key={key} className="border-b bg-primary/20 p-4 cursor-pointer" onClick={() => handleSort(field)}>
                       <Typography variant="small" className="font-bold text-fore  leading-none opacity-70">
                         {keyToTitle(field)}
@@ -179,18 +179,13 @@ const BoosterSettings = () => {
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal text-fore naira">
-                          {record?.data_values?.price}
-                        </Typography>
-                      </td>
-                      <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
                           {record?.data_values?.vote}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.data_values?.description}
+                          {record?.data_values?.bonus}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -246,7 +241,7 @@ const BoosterSettings = () => {
   );
 };
 
-export default BoosterSettings;
+export default BonusSettings;
 
 const AddModal = ({ open, handler, data }) => {
   const [loading, setLoading] = useState(false);
@@ -255,7 +250,7 @@ const AddModal = ({ open, handler, data }) => {
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ key: 'booster', type: "element", ...data });
+      reset({ key: 'bonus', type: "element", ...data });
     }
   }, [data, reset]);
 
@@ -263,8 +258,6 @@ const AddModal = ({ open, handler, data }) => {
     setLoading(true);
     try {
       const response = await editSetting(formData);
-      console.log(formData);
-
       if (response.message) {
         toast.success(response.message);
       } else {
@@ -288,21 +281,21 @@ const AddModal = ({ open, handler, data }) => {
           <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
-                <Input {...register('name')} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
+                <Input {...register('name')} label='Bonus Name: Ex (Daily)' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
                 {errors.name && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.name.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('price')} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
-                {errors.price && <Typography color="red" className="mt-2 text-xs font-normal">
-                  {errors.price.message}
+                <Input type="number" {...register('vote')} label='Target Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
+                {errors.vote && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.vote.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('vote')} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
-                {errors.vote && <Typography color="red" className="mt-2 text-xs font-normal">
-                  {errors.vote.message}
+                <Input type="number" {...register('bonus')} label='Bonus Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.bonus} />
+                {errors.bonus && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.bonus.message}
                 </Typography>}
               </div>
               <div className="basis-full">
@@ -334,7 +327,7 @@ const EditModal = ({ open, handler, data }) => {
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ key: 'booster', type: "element", id: data?.id, ...data?.data_values, });
+      reset({ key: 'bonus', type: "element", id: data?.id, ...data?.data_values, });
     }
   }, [data, reset]);
 
@@ -362,25 +355,25 @@ const EditModal = ({ open, handler, data }) => {
             <input type="hidden" {...register('id')} defaultValue={data?.id} />
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
-                <Input {...register('name')} defaultValue={data?.data_values?.name} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
+                <Input {...register('name')} label='Bonus Name: Ex (Daily)' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
                 {errors.name && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.name.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('price')} defaultValue={data?.data_values?.price} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
-                {errors.price && <Typography color="red" className="mt-2 text-xs font-normal">
-                  {errors.price.message}
-                </Typography>}
-              </div>
-              <div className="basis-full">
-                <Input type="number" {...register('vote')} defaultValue={data?.data_values?.vote} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
+                <Input type="number" {...register('vote')} label='Target Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
                 {errors.vote && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.vote.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Textarea {...register('description')} defaultValue={data?.data_values?.description} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
+                <Input type="number" {...register('bonus')} label='Bonus Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.bonus} />
+                {errors.bonus && <Typography color="red" className="mt-2 text-xs font-normal">
+                  {errors.bonus.message}
+                </Typography>}
+              </div>
+              <div className="basis-full">
+                <Textarea {...register('description')} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
                 {errors.description && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.description.message}
                 </Typography>}

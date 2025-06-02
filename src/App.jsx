@@ -25,6 +25,8 @@ import Dashboard from "./pages/admin/Dashboard";
 import SystemSettings from "./pages/admin/SystemSettings";
 import BoosterSettings from "./pages/admin/BoosterSettings";
 import SponsorSettings from "./pages/admin/SponsorSettings";
+import LeaderboardSettings from "./pages/admin/LeaderboardSettings";
+import BonusSettings from "./pages/admin/BonusSettings";
 
 function App() {
   const { theme } = useTheme();
@@ -70,6 +72,8 @@ function App() {
           <Route path="setting/system" element={<SystemSettings />} />
           <Route path="setting/booster" element={<BoosterSettings />} />
           <Route path="setting/sponsor" element={<SponsorSettings />} />
+          <Route path="setting/leaderboard" element={<LeaderboardSettings />} />
+          <Route path="setting/bonus" element={<BonusSettings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

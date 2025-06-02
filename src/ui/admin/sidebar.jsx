@@ -22,8 +22,8 @@ export const links = [
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
     { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
     { name: 'Sponsor Package', href: '/admin/setting/sponsor', Icon: LifebuoyIcon },
-    { name: 'Leaderboard', href: '/admin/email-setting', Icon: TrophyIcon },
-    { name: 'Bonus', href: '/admin/email-setting', Icon: GiftIcon },
+    { name: 'Leaderboard', href: '/admin/setting/leaderboard', Icon: TrophyIcon },
+    { name: 'Bonus', href: '/admin/setting/bonus', Icon: GiftIcon },
     { name: 'FRONTEND MANAGER', head: true },
     {
         name: 'Manage Sections', href: false, Icon: TvIcon,
