@@ -18,7 +18,7 @@ export function LoadingComponent() {
 
     useEffect(() => {
         setLoading(true);
-        const timeout = setTimeout(() => setLoading(false), 3000); // Simulated loading time
+        const timeout = setTimeout(() => setLoading(false), 2000); // Simulated loading time
         return () => clearTimeout(timeout);
     }, []);
     return (

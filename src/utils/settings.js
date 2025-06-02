@@ -1,6 +1,6 @@
-import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { addDoc, collection, db } from "./firebase";
-import { keyToTitle } from ".";
+import { except_, keyToTitle } from ".";
 
 const settingsCol = collection(db, "settings");
 
@@ -21,7 +21,6 @@ export async function fetchSetting(data_key = 'general') {
 
 export async function updateSetting(form, data_key = 'general') {
     try {
-        const settingsCol = collection(db, "settings");
         const q = query(settingsCol, where("data_keys", "==", data_key));
         const snapshot = await getDocs(q);
         const data = JSON.stringify(form);
@@ -36,6 +35,45 @@ export async function updateSetting(form, data_key = 'general') {
         return { message: `${tle.split('.')?.[0]} setting updated successfully!` };
 
     } catch (error) {
+        return { error: error.message };
+    }
+}
+
+export async function editSetting(req) {
+    const { key, id, type, ...rest } = req;
+    if (!type) return null;
+
+    const inputContentValue = {};
+    for (const [keyName, input] of Object.entries(rest)) {
+        if (except_(keyName, ['key', 'type', 'id'])) {
+            inputContentValue[keyName] = input;
+        }
+    }
+
+    const date = new Date().toISOString();
+    const dataKey = `${key}.${type}`;
+    const dataValues = JSON.stringify(inputContentValue);
+
+    try {
+        if (id) {
+            // ✅ Update by exact Firestore document ID
+            await updateDoc(doc(db, "settings", id), {
+                data_values: dataValues,
+                updated_at: date,
+            });
+        } else {
+            // ✅ Always add a new document if no ID
+            await addDoc(settingsCol, {
+                data_keys: dataKey,
+                data_values: dataValues,
+                created_at: date,
+                updated_at: date,
+            });
+        }
+
+        return { message: 'Content has been updated.' };
+    } catch (error) {
+        console.error(error);
         return { error: error.message };
     }
 }

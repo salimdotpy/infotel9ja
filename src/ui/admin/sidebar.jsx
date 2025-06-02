@@ -126,6 +126,10 @@ export const AdminSideBar = () => {
 }
 
 export const AdminSideBarOverlay = ({open, onClose}) => {
+    const currentRoute = useLocation().pathname;
+    useEffect(()=>{
+        onClose(false)
+    }, [currentRoute])
     return (
       <Drawer open={open} onClose={()=>onClose(false)}>
         <CompanyLogo />

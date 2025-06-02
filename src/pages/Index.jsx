@@ -7,7 +7,7 @@ export default function Index() {
         <>
             {/* <HeroSection /> */}
             {/* <NewSections /> */}
-            <MetaInfo socialTitle="adeola" favicon="https://infotel9ja.vercel.app/images/img4.jpeg" />
+            <MetaInfo/>
             <HeroSection />
             <FactSection />
             <CompetitionSection />

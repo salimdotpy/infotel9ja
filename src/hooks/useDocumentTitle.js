@@ -5,7 +5,7 @@ const useDocumentTitle = (title) => {
     if (title) {
       document.title = title;
     } else {
-      document.title = 'DeranMore';
+      document.title = 'InfoTel9ja';
     }
   }, [title]);
 };

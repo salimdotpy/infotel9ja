@@ -1,6 +1,6 @@
-import { useDocumentTitle, useFileHandler } from "@/hooks";
-import { BreadCrumbs } from "@/ui/sections";
-import { ImageSchema, keyToTitle, toggleHandler } from "@/utils";
+import { useDocumentTitle, useFileHandler, useSettings } from "@/hooks";
+import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
+import { getContent, ImageSchema, keyToTitle, toggleHandler } from "@/utils";
 import { IWL } from "@/utils/constants";
 import { CloudArrowUpIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, DialogBody, IconButton, Input, Option, Select, Textarea, Tooltip, Typography } from "@material-tailwind/react";
@@ -9,6 +9,7 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
+import { editSetting, updateSetting } from "@/utils/settings";
 
 const schema = yup.object({
   name: yup.string().trim().required('Booster Name is required'),
@@ -29,7 +30,7 @@ const BoosterSettings = () => {
     {id: 1, name: 'Pro', price: 4000, vote: 4, description: ''},
     {id: 2, name: 'Pro2', price: 3000, vote: 4, description: ''},
   ];
-  const [data, setData] = useState(defaultData);
+  const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   // =========================================================
 
@@ -44,7 +45,7 @@ const BoosterSettings = () => {
 
   const filteredRows = useMemo(() => {
     return t_rows.filter((row) => {
-      return Object.values(row).some((value) => {
+      return Object.values(row?.data_values).some((value) =>{        
         return String(value).toLowerCase().includes(searchQuery.toLowerCase())
       }
       );
@@ -53,8 +54,8 @@ const BoosterSettings = () => {
   const sortedRows = useMemo(() => {
     if (!sortConfig.key) return filteredRows;
     const sortedData = [...filteredRows].sort((a, b) => {
-      if (a?.[sortConfig.key] < b?.[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
-      if (a?.[sortConfig.key] > b?.[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
+      if (a?.data_values?.[sortConfig.key] < b?.data_values?.[sortConfig.key]) return sortConfig.direction === "asc" ? -1 : 1;
+      if (a?.data_values?.[sortConfig.key] > b?.data_values?.[sortConfig.key]) return sortConfig.direction === "asc" ? 1 : -1;
       return 0;
     });
     return sortedData;
@@ -93,9 +94,18 @@ const BoosterSettings = () => {
   const showingEnd = Math.min(showingStart + rowsPerPage - 1, sortedRows.length);
 
   const toggleModal = (value) => setOpenModal(openModal === value ? 0 : value);
-
-  // =========================================================
-
+  const myHandler = async () => {
+    setLoading(true);
+    const doc = await getContent('booster.element', 'settings')
+    if (doc) {
+      setData(doc);
+    }
+    setLoading(false);
+  }
+  useEffect(() => {
+    myHandler();
+  }, [])
+  
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore">
@@ -171,22 +181,22 @@ const BoosterSettings = () => {
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.name}
+                          {record?.data_values?.name}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.price}
+                          {record?.data_values?.price}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.vote}
+                          {record?.data_values?.vote}
                         </Typography>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.description}
+                          {record?.data_values?.description}
                         </Typography>
                       </td>
                       <td className={classes}>
@@ -235,9 +245,9 @@ const BoosterSettings = () => {
           </div>
         </CardFooter>
       </Card>
-      <AddModal open={openModal === 1} handler={() => toggleModal(1)} data={modalData} />
-      <EditModal open={openModal === 2} handler={() => toggleModal(2)} data={modalData} />
-      <DeleteModal open={openModal === 3} handler={() => toggleModal(3)} data={modalData} />
+      <AddModal open={openModal === 1} handler={() =>{toggleModal(1); myHandler()}} data={modalData} />
+      <EditModal open={openModal === 2} handler={() => {toggleModal(2); myHandler()}} data={modalData} />
+      <DeleteModal open={openModal === 3} handler={() => {toggleModal(3); myHandler()}} data={modalData} />
     </React.Fragment>
   );
 };
@@ -251,23 +261,28 @@ const AddModal = ({ open, handler, data }) => {
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ ...data });
+      reset({ key: 'booster', type: "element", ...data });
     }
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
-    setLoading(true);
-    try {
-      const response = await frontContent(formData);
-      response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload()
-    } catch (error) {
-      toast.error(`Submission failed. ${error}`);
-    } finally {
-      setLoading(false);
-      handler();
+      setLoading(true);
+      try {
+        const response = await editSetting(formData);
+        console.log(formData);
+        
+        if (response.message) {
+            toast.success(response.message);
+        } else {
+            toast.error(response.error)
+        }
+      } catch (error) {
+        toast.error(error.message);
+      } finally {
+        setLoading(false);
+        handler();
+      }
     }
-  }
 
   return (
     <Dialog open={open} handler={handler} size="md" className='bg-header'>
@@ -276,7 +291,7 @@ const AddModal = ({ open, handler, data }) => {
         <Card color="transparent" shadow={false} className='w-full text-fore'>
           <Typography variant="h5">Add New Booster</Typography>
           <hr className="w-full my-3" />
-          <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
+          <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)} autoComplete="off">
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
                 <Input {...register('name')} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
@@ -321,20 +336,21 @@ const AddModal = ({ open, handler, data }) => {
 const EditModal = ({ open, handler, data }) => {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors }, } = useForm({ resolver: yupResolver(schema), });
-
+  
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
-      reset({ ...data });
+      reset({ key: 'booster', type: "element", id: data?.id, ...data?.data_values, });
     }
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
+    console.log(formData);
+    
     try {
-      // const response = await frontContent(formData);
-      // response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload();
+      const response = await editSetting(formData);
+      response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
       toast.error(`Submission failed. ${error}`);
     } finally {
@@ -354,25 +370,25 @@ const EditModal = ({ open, handler, data }) => {
             <input type="hidden" {...register('id')} defaultValue={data?.id} />
             <div className="mb-1 flex flex-col gap-6 px-2 pt-3 w-full max-h-[60vh] overflow-y-auto">
               <div className="basis-full">
-                <Input {...register('name')} defaultValue={data?.name} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
+                <Input {...register('name')} defaultValue={data?.data_values?.name} label='Booster Name' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.name} />
                 {errors.name && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.name.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('price')} defaultValue={data?.price} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
+                <Input type="number" {...register('price')} defaultValue={data?.data_values?.price} label='Price' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.price} />
                 {errors.price && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.price.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Input type="number" {...register('vote')} defaultValue={data?.vote} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
+                <Input type="number" {...register('vote')} defaultValue={data?.data_values?.vote} label='Increment Vote' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.vote} />
                 {errors.vote && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.vote.message}
                 </Typography>}
               </div>
               <div className="basis-full">
-                <Textarea {...register('description')} defaultValue={data?.description} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
+                <Textarea {...register('description')} defaultValue={data?.data_values?.description} label='Description' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} error={errors.description} />
                 {errors.description && <Typography color="red" className="mt-2 text-xs font-normal">
                   {errors.description.message}
                 </Typography>}

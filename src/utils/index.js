@@ -126,20 +126,13 @@ export const getPageSections = async (arr = false) => {
     return sections;
 };
 
-export const getContent = async (data_keys, singleQuery = false, limitValue = null, orderById = false) => {
+export const getContent = async (data_keys, doc='settings', singleQuery = false, limitValue = null, orderById = false) => {
     let content = false;
 
     try {
-        const frontendsRef = collection(db, "frontends"); // Firestore collection reference
+        const docRef = collection(db, doc); // Firestore collection reference
 
-        let q = query(frontendsRef, where("data_keys", "==", data_keys)); // Base query
-        /*
-        if (!orderById) {
-          q = query(frontendsRef, where("data_keys", "==", data_keys)); // No ordering
-        } else {
-          q = query(frontendsRef, where("data_keys", "==", data_keys), orderBy("id", "desc"));
-        }
-        */
+        let q = query(docRef, where("data_keys", "==", data_keys)); // Base query
 
         if (limitValue) {
             q = query(q, limit(Number(limitValue))); // Apply limit if provided
@@ -184,8 +177,16 @@ export const hexToRgb = (val, hex = true) => {
         return `${parseInt(result[1], 16)} ${parseInt(result[2], 16)} ${parseInt(result[3], 16)}`;
     } else {
         const rst = val.split(' ').map((item) => {
-            return parseInt(item) > 10 ? parseInt(item).toString(16) : `0${parseInt(item).toString(16)}`;
+            return parseInt(item) > 9 ? parseInt(item).toString(16) : `0${parseInt(item).toString(16)}`;
         });
         return `#${rst.join('')}`;
     }
+}
+
+export const except_ = (key, arrs = []) => {
+    for (const arr of arrs) {
+        if (key.startsWith(arr) && key !== 'keywords')
+        return false;
+    }
+    return true;
 }
