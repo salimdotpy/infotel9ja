@@ -77,3 +77,13 @@ export async function editSetting(req) {
         return { error: error.message };
     }
 }
+
+export async function removeSettings(req, col='settings') {
+    const id = req.id;
+    try {
+        await deleteDoc(doc(db, col, id));
+        return { message: 'Content has been removed.' };
+    } catch (error) {
+        return { error: 'Content not found.' };
+    }
+}

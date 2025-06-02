@@ -1,15 +1,15 @@
-import { useDocumentTitle, useFileHandler, useSettings } from "@/hooks";
-import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
-import { getContent, ImageSchema, keyToTitle, toggleHandler } from "@/utils";
+import { useDocumentTitle } from "@/hooks";
+import { BreadCrumbs } from "@/ui/sections";
+import { getContent, keyToTitle, toggleHandler } from "@/utils";
 import { IWL } from "@/utils/constants";
-import { CloudArrowUpIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { Button, Card, CardBody, CardFooter, CardHeader, Dialog, DialogBody, IconButton, Input, Option, Select, Textarea, Tooltip, Typography } from "@material-tailwind/react";
 import React, { useEffect, useMemo, useState } from "react";
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { editSetting, updateSetting } from "@/utils/settings";
+import { editSetting, removeSettings } from "@/utils/settings";
 
 const schema = yup.object({
   name: yup.string().trim().required('Booster Name is required'),
@@ -26,14 +26,8 @@ const DEFAULT_MESSAGES = {
 
 const BoosterSettings = () => {
   useDocumentTitle("Booter Setting - InfoTel9ja");
-  const defaultData = [
-    {id: 1, name: 'Pro', price: 4000, vote: 4, description: ''},
-    {id: 2, name: 'Pro2', price: 3000, vote: 4, description: ''},
-  ];
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
-  // =========================================================
-
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
@@ -45,7 +39,7 @@ const BoosterSettings = () => {
 
   const filteredRows = useMemo(() => {
     return t_rows.filter((row) => {
-      return Object.values(row?.data_values).some((value) =>{        
+      return Object.values(row?.data_values).some((value) => {
         return String(value).toLowerCase().includes(searchQuery.toLowerCase())
       }
       );
@@ -105,7 +99,7 @@ const BoosterSettings = () => {
   useEffect(() => {
     myHandler();
   }, [])
-  
+
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore">
@@ -200,16 +194,16 @@ const BoosterSettings = () => {
                         </Typography>
                       </td>
                       <td className={classes}>
-                          <Tooltip content="Edit">
+                        <Tooltip content="Edit">
                           <IconButton color="blue" size="sm" variant="outlined" className="mr-2" onClick={() => { setModalData({ ...record }); toggleModal(2) }}>
                             <PencilIcon className="size-4" />
                           </IconButton>
-                          </Tooltip>
-                          <Tooltip content="Delete">
+                        </Tooltip>
+                        <Tooltip content="Delete">
                           <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
                             <TrashIcon className="size-4" />
                           </IconButton>
-                          </Tooltip>
+                        </Tooltip>
                       </td>
                     </tr>
                   )
@@ -245,9 +239,9 @@ const BoosterSettings = () => {
           </div>
         </CardFooter>
       </Card>
-      <AddModal open={openModal === 1} handler={() =>{toggleModal(1); myHandler()}} data={modalData} />
-      <EditModal open={openModal === 2} handler={() => {toggleModal(2); myHandler()}} data={modalData} />
-      <DeleteModal open={openModal === 3} handler={() => {toggleModal(3); myHandler()}} data={modalData} />
+      <AddModal open={openModal === 1} handler={() => { toggleModal(1); myHandler() }} data={modalData} />
+      <EditModal open={openModal === 2} handler={() => { toggleModal(2); myHandler() }} data={modalData} />
+      <DeleteModal open={openModal === 3} handler={() => { toggleModal(3); myHandler() }} data={modalData} />
     </React.Fragment>
   );
 };
@@ -266,23 +260,23 @@ const AddModal = ({ open, handler, data }) => {
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
-      setLoading(true);
-      try {
-        const response = await editSetting(formData);
-        console.log(formData);
-        
-        if (response.message) {
-            toast.success(response.message);
-        } else {
-            toast.error(response.error)
-        }
-      } catch (error) {
-        toast.error(error.message);
-      } finally {
-        setLoading(false);
-        handler();
+    setLoading(true);
+    try {
+      const response = await editSetting(formData);
+      console.log(formData);
+
+      if (response.message) {
+        toast.success(response.message);
+      } else {
+        toast.error(response.error)
       }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+      handler();
     }
+  }
 
   return (
     <Dialog open={open} handler={handler} size="md" className='bg-header'>
@@ -336,7 +330,7 @@ const AddModal = ({ open, handler, data }) => {
 const EditModal = ({ open, handler, data }) => {
   const [loading, setLoading] = useState(false);
   const { register, handleSubmit, setValue, reset, clearErrors, formState: { errors }, } = useForm({ resolver: yupResolver(schema), });
-  
+
   // Reset form values whenever `data` changes
   useEffect(() => {
     if (data) {
@@ -346,8 +340,6 @@ const EditModal = ({ open, handler, data }) => {
 
   const onSubmit = async (formData) => {
     setLoading(true);
-    console.log(formData);
-    
     try {
       const response = await editSetting(formData);
       response.message ? toast.success(response.message) : toast.error(response.error);
@@ -412,8 +404,6 @@ const EditModal = ({ open, handler, data }) => {
 }
 
 const DeleteModal = ({ open, handler, data }) => {
-  const { id } = data || {};
-
   const schema = yup.object({});
   const [loading, setLoading] = useState(false);
 
@@ -421,17 +411,16 @@ const DeleteModal = ({ open, handler, data }) => {
 
   // Reset form values whenever `data` changes
   useEffect(() => {
-    if (data && id) {
-      reset({ id: id, });
+    if (data) {
+      reset({ id: data.id, });
     }
-  }, [data, reset, id]);
+  }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      // const response = await removeElement(formData);
-      // response.message ? toast.success(response.message) : toast.error(response.error);
-      window.location.reload();
+      const response = await removeSettings(formData);
+      response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
       toast.error(`Deletion failed. ${error}`);
     } finally {
@@ -444,12 +433,12 @@ const DeleteModal = ({ open, handler, data }) => {
     <Dialog open={open} handler={handler} size="sm" className='bg-header'>
       <DialogBody className="grid place-items-center gap-4 md:p-16 relative text-fore" size="sm">
         <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
-        {id ? (
+        {data?.id ? (
           <Card color="transparent" shadow={false} className='w-full max-w-[500px] text-fore'>
             <Typography variant="h4">Confirmation</Typography>
             <Typography className="mt-1 font-normal">{DEFAULT_MESSAGES.CONFIRM_DELETE}</Typography>
             <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
-              <input type="hidden" {...register('id')} defaultValue={id} />
+              <input type="hidden" {...register('id')} defaultValue={data?.id} />
               <div className="flex items-center justify-end mt-6 gap-3">
                 <Button type="button" onClick={handler} color="red" size="sm" variant="outlined">
                   Close
