@@ -1,8 +1,9 @@
-import { ChatBubbleBottomCenterIcon, ChevronDownIcon, ChevronRightIcon, Cog8ToothIcon, CurrencyDollarIcon, EnvelopeIcon, GiftIcon, GlobeAltIcon, HomeIcon, LifebuoyIcon, PaperClipIcon, PhotoIcon, ScaleIcon, SparklesIcon, TrophyIcon, TvIcon, UsersIcon } from "@heroicons/react/24/outline";
+import { ChartBarIcon, ChatBubbleBottomCenterIcon, ChevronDownIcon, ChevronRightIcon, Cog8ToothIcon, CurrencyDollarIcon, EnvelopeIcon, GiftIcon, GlobeAltIcon, HomeIcon, LifebuoyIcon, NumberedListIcon, PaperClipIcon, PhotoIcon, ScaleIcon, SparklesIcon, TrophyIcon, TvIcon, UsersIcon } from "@heroicons/react/24/outline";
 import { Accordion, AccordionBody, AccordionHeader, Chip, Drawer, List, ListItem, ListItemPrefix, ListItemSuffix, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import data from "../sections.json";
+import { FcSportsMode } from "react-icons/fc";
 
 let secs = data;
 let keys = Object.entries(secs).sort();
@@ -18,6 +19,9 @@ export const links = [
     { name: 'USER MANAGEMENT', head: true },
     { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
+    { name: 'CONTEST MANAGEMENT', head: true },
+    { name: 'Add Contest', href: '/admin', Icon: ChartBarIcon },
+    { name: 'Contests', href: '/admin', Icon: NumberedListIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
     { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
