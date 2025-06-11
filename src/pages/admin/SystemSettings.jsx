@@ -10,7 +10,6 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
 import { fetchSetting, updateSetting } from "@/utils/settings";
-import MetaInfo from "@/ui/MetaInfo";
 
 const schema = yup.object({
   siteTitle: yup.string().trim().required('Site Title is required'),
@@ -25,6 +24,8 @@ const schema = yup.object({
 })
 
 const SystemSettings = () => {
+  useDocumentTitle("System Settings - InfoTel9ja");
+
   const { handleSubmit, setValue, clearErrors, register, formState: { errors }, } = useForm({ resolver: yupResolver(schema) })
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
@@ -71,7 +72,6 @@ const SystemSettings = () => {
   if(loading && !data) return <LoadingComponent />
   return (
     <React.Fragment>
-      <MetaInfo {...data} />
       <Typography variant="h5" className="mb-4 text-fore text-wrap break-words !w-full">
         System Setting
       </Typography>

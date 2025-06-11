@@ -8,8 +8,8 @@ import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import MetaInfo from "@/ui/MetaInfo";
 import { editSetting, removeSettings } from "@/utils/settings";
+import { useDocumentTitle } from "@/hooks";
 
 const schema = yup.object({
   name: yup.string().trim().required('Booster Name is required'),
@@ -25,6 +25,8 @@ const DEFAULT_MESSAGES = {
 };
 
 const SponsorSettings = () => {
+  useDocumentTitle("Sponsor Settings - InfoTel9ja");
+
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [openModal, setOpenModal] = useState(false);
@@ -101,7 +103,6 @@ const SponsorSettings = () => {
 
   return (
     <React.Fragment>
-      <MetaInfo siteTitle="Sponsor Setting - InfoTel9ja" />
       <Typography variant="h5" className="mb-4 text-fore">
         Sponsor Setting
       </Typography>

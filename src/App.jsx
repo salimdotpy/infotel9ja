@@ -15,7 +15,7 @@ import Winners from "./pages/Winners";
 import Terms from "./pages/Terms";
 import ContactUs from "./pages/ContactUs";
 import ReportContestant from "./pages/ReportContestant";
-import { UseScrollTop } from "./hooks";
+import { UseScrollTop, useSettings } from "./hooks";
 import Compition from "./pages/Compition";
 import AdminAuthRoute from "./routers/AuthRoute";
 import AdminLogin from "./ui/admin/login";
@@ -27,9 +27,12 @@ import BoosterSettings from "./pages/admin/BoosterSettings";
 import SponsorSettings from "./pages/admin/SponsorSettings";
 import LeaderboardSettings from "./pages/admin/LeaderboardSettings";
 import BonusSettings from "./pages/admin/BonusSettings";
+import AddContest from "./pages/admin/AddContest";
+import { hexToRgb } from "./utils";
 
 function App() {
   const { theme } = useTheme();
+  const { settings, isLoading, error } = useSettings();
 
   useEffect(() => {
     AOS.init({
@@ -47,6 +50,23 @@ function App() {
       document.body.classList.remove('dark');
     }
   }, [theme]);
+
+  if (!isLoading && settings) {
+    document.body.style.setProperty('--color-primary', hexToRgb(settings?.siteColor));
+    // Check if an existing manifest tag is present, remove it
+    let iconTag = document.querySelector("link[rel='icon']"); //rel="icon"
+    if (iconTag) {
+      document.head.removeChild(iconTag);
+    }
+
+    // Create a new manifest <link> tag
+    iconTag = document.createElement("link");
+    iconTag.rel = "icon";
+    iconTag.href = settings?.favicon;
+
+    // Append to <head>
+    document.head.appendChild(iconTag);
+  }
 
   return (
     <BrowserRouter>
@@ -69,6 +89,7 @@ function App() {
         </Route>
         <Route path="/admin" element={<AdminRoute />}>
           <Route index element={<Dashboard />} />
+          <Route path="contest/add" element={<AddContest />} />
           <Route path="setting/system" element={<SystemSettings />} />
           <Route path="setting/booster" element={<BoosterSettings />} />
           <Route path="setting/sponsor" element={<SponsorSettings />} />

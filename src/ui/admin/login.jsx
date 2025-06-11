@@ -14,8 +14,6 @@ const schema = yup.object({
   password: yup.string().required('Password is required'),
 })
 
-const cls1 = ['!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90', 'text-fore focus:border-primary/90 placeholder:opacity-100'];
-
 export default function AdminLogin() {
   const [open, setOpen] = useState(false);
   const [sent, setSent] = useState(false);
@@ -88,15 +86,15 @@ export default function AdminLogin() {
       <form method='post' className="mt-8 mb-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
         <div className="mb-1 flex flex-col gap-6">
           <div>
-            <label htmlFor="email" className="-mb-3 text-fore">Your Email</label>
-            <Input placeholder="email@mail.com" {...register('email')} className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.email} />
+            <label htmlFor="email">Your Email</label>
+            <Input placeholder="email@mail.com" {...register('email')} className={IWOL[1]} labelProps={{ className: IWOL[0], }} containerProps={{className: IWOL[2]}} error={errors.email} />
             {errors.email && <Typography color="red" className="mt-2 text-xs font-normal">
               {errors.email.message}
             </Typography>}
           </div>
           <div>
-            <label htmlFor="password" className="-mb-3 text-fore">Password</label>
-            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={IWOL[1]} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} labelProps={{ className: IWOL[0], }} />
+            <label htmlFor="password">Password</label>
+            <Input type={passwordShown ? "text" : "password"} {...register('password')} placeholder="Enter password" className={IWOL[1]} labelProps={{ className: IWOL[0], }} containerProps={{className: IWOL[2]}} icon={<i onClick={togglePasswordVisiblity}>{passwordShown ? (<EyeIcon className="h-5 w-5" />) : (<EyeSlashIcon className="h-5 w-5" />)}</i>} />
             {errors.password && <Typography color="red" className="mt-2 text-xs font-normal">{errors.password.message}</Typography>}
           </div>
         </div>
@@ -110,13 +108,13 @@ export default function AdminLogin() {
       </form>
       <Dialog open={open} handler={handleOpen} size="sm">
         {!sent ? (
-          <DialogBody divider className="grid place-items-center gap-5 md:p-16 relative border-0 bg-header">
+          <DialogBody divider className="grid place-items-center gap-5 md:p-16 relative border-0 bg-header rounded-lg">
             <XMarkIcon className="mr-3 h-5 w-5 absolute top-3 right-0" onClick={handleOpen} />
             <EnvelopeIcon className='size-16 text-fore' />
             <Typography variant="h4" className='text-center text-fore'>
               Send Mail to Your Email?
             </Typography>
-            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: IWOL[0] }} containerProps={{ className: IWOL[2] }} className={IWOL[1]} onChange={(e) => setEmail(e.target.value)} />
+            <Input type="email" name='email' label='Enter Email' size='lg' labelProps={{ className: IWL[0] }} containerProps={{ className: IWL[2] }} className={IWL[1]} onChange={(e) => setEmail(e.target.value)} />
             <Button className={`bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={loading} onClick={sendMail} fullWidth>
               Send Mail
             </Button>

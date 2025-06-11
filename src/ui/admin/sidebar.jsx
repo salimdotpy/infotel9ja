@@ -20,7 +20,7 @@ export const links = [
     { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'CONTEST MANAGEMENT', head: true },
-    { name: 'Add Contest', href: '/admin', Icon: ChartBarIcon },
+    { name: 'Add Contest', href: '/admin/contest/add', Icon: ChartBarIcon },
     { name: 'Contests', href: '/admin', Icon: NumberedListIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },

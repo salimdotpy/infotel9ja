@@ -1,4 +1,5 @@
 import * as yup from "yup";
+import dayjs from 'dayjs';
 
 import sections_json from "../ui/sections.json";
 import { doc, limit, orderBy, query, where } from "firebase/firestore";
@@ -168,6 +169,16 @@ export const ImageSchema = {
             return value && value?.size <= 1 * 1024 * 1024; // 2MB limit
         }),
 }
+
+export const dateRangeSchema = yup
+    .array()
+    .of(yup.string().required())
+    .length(2, 'Must provide start and end dates')
+    .test('start-before-end', 'Start date must be before or equal to end date', function (value) {
+        const [start, end] = value || [];
+        if (!start || !end) return true; // Already handled by required
+        return dayjs(start, 'D/M/YYYY').isSameOrBefore(dayjs(end, 'D/M/YYYY'));
+    });
 
 export const toggleHandler = (stateUpdater) => () => stateUpdater((prev) => !prev);
 

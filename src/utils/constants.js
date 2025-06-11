@@ -1,7 +1,7 @@
 export const IWOL = [
     'before:content-none after:content-none', 
-    'placeholder:opacity-100 !border focus:!border-primary/90 !border-t-blue-gray-200 mt-2',
-    '!min-w-0'
+    'placeholder:opacity-100 !border focus:!border-primary/90 !border-t-blue-gray-200',
+    '!min-w-0 mt-2'
 ];
 export const IWL = [
     '!text-fore peer-focus:pl-0 peer-focus:before:!border-primary/90 peer-focus:after:!border-primary/90',
