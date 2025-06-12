@@ -86,3 +86,14 @@ export async function removeSettings(req, col='settings') {
         return { error: 'Content not found.' };
     }
 }
+
+export async function updateStatus(req) {
+    const { docRef, id, key, val, title} = req;
+    const date = new Date().toISOString();
+    try {
+        await updateDoc(doc(db, docRef, id), { [key]: val, updated_at: date,});
+        return { message: `${title} has been updated.` };
+    } catch (error) {
+        return { error: error.message };
+    }
+}

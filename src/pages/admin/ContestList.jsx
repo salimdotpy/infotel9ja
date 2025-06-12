@@ -1,7 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import useContestStore from "@/store/contestStore";
 import { useDocumentTitle } from "@/hooks";
-import { Typography, Card, CardBody, CardHeader, Button, Select, Input, Tooltip, IconButton, CardFooter, Option, Avatar, Chip, Dialog, DialogBody } from "@material-tailwind/react";
+import { Typography, Card, CardBody, CardHeader, Button, Select, Input, Tooltip, IconButton, CardFooter, Option, Avatar, Chip, Dialog, DialogBody, Switch } from "@material-tailwind/react";
 import { BreadCrumbs } from "@/ui/sections";
 import ContestForm from "@/ui/admin/ContestForm";
 import { MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
@@ -14,6 +14,7 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { toast } from "react-toastify";
+import { updateStatus } from "@/utils/settings";
 
 const ContestList = () => {
   useDocumentTitle("Contests List - InfoTel9ja");
@@ -88,7 +89,7 @@ const ContestList = () => {
     return await createContestWithBooster(formData);
   };
   
-  const fieldsName = {contestImage: 'Image', contestName: 'Name', contestCategory: 'Category',  regDate: 'Duration'}
+  const fieldsName = {contestImage: 'Image', contestName: 'Name', contestCategory: 'Category',  regDate: 'Duration',  status: 'Status'}
 
   return (
     <>
@@ -186,10 +187,8 @@ const ContestList = () => {
                           <Chip icon={<MdHowToVote className="size-4" />} color="red" value={`${dateDiff(record?.votingDate)} day(s)`} variant="ghost" />
                         </Tooltip>
                       </td>
-                      <td className={classes+' hidden'}>
-                        <Typography variant="small" className="font-normal text-fore">
-                          {formatDate(record?.created_at)}
-                        </Typography>
+                      <td className={classes}>
+                          <Switch color="blue" defaultChecked onChange={(e)=>switchControl('contests', record?.id, 'status', e.target.checked)} />
                       </td>
                       <td className={classes}>
                         <Tooltip content="Edit">
@@ -298,3 +297,14 @@ const DeleteModal = ({ open, handler, data }) => {
     </Dialog>
   )
 }
+
+export const switchControl = async(docRef, id, key, val, title = 'Status') => {
+  val = val === true ? 1 : 0;
+  try {
+    const result = await updateStatus({docRef, id, key, val, title});
+    if (result?.message) toast.success(result.message);
+    else if (result?.error) toast.error(result.error);
+  } catch (err) {
+    toast.error(err.message);
+  }
+};
