@@ -21,7 +21,7 @@ export const links = [
     { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
     { name: 'CONTEST MANAGEMENT', head: true },
     { name: 'Add Contest', href: '/admin/contest/add', Icon: ChartBarIcon },
-    { name: 'Contests', href: '/admin', Icon: NumberedListIcon },
+    { name: 'Contests List', href: '/admin/contest/list', Icon: NumberedListIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
     { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
