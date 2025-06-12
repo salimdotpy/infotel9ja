@@ -73,7 +73,6 @@ export async function editSetting(req) {
 
         return { message: 'Content has been updated.' };
     } catch (error) {
-        console.error(error);
         return { error: error.message };
     }
 }

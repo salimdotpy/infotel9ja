@@ -13,11 +13,11 @@ const useFileHandler = ({ setValue, clearErrors }) => {
           setImgFiles((prev) => ({
                 ...prev,
                 [fieldName]: reader.result,
-            }));
+              }));
+          setValue(fieldName, reader.result);
         };
         reader.readAsDataURL(file);
     }
-    setValue(fieldName, file);
     clearErrors(fieldName);
     setFileLoading(false);
   };

@@ -1,9 +1,12 @@
 import * as yup from "yup";
 import dayjs from 'dayjs';
+import isSameOrBefore from 'dayjs/plugin/isSameOrBefore';
 
 import sections_json from "../ui/sections.json";
 import { doc, limit, orderBy, query, where } from "firebase/firestore";
 import { addDoc, collection, db, getDocs, updateDoc } from "./firebase";
+
+dayjs.extend(isSameOrBefore);
 
 export async function fetchSetting(data_key = 'general') {
     try {
@@ -160,19 +163,19 @@ export const getContent = async (data_keys, doc='settings', singleQuery = false,
 export const ImageSchema = {
     image_input: yup.mixed()
         .test("fileType", "Only JPG, PNG, or GIF is image format allowed", (value) => {
-            if (!value || value.length === 0) return true; // Allow empty files
+            if (!value || value.length === 0 || value.includes('data:image/')) return true; // Allow empty files
             const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
             return value && allowedTypes.includes(value?.type);
         })
         .test("fileSize", "File size must be less than 1.5MB", (value) => {
-            if (!value || value.length === 0) return true; // Allow empty files
+            if (!value || value.length === 0 || value.includes('data:image/')) return true; // Allow empty files
             return value && value?.size <= 1 * 1024 * 1024; // 2MB limit
         }),
 }
 
 export const dateRangeSchema = yup
     .array()
-    .of(yup.string().required())
+    .of(yup.string().required('Must provide start and end dates'))
     .length(2, 'Must provide start and end dates')
     .test('start-before-end', 'Start date must be before or equal to end date', function (value) {
         const [start, end] = value || [];
