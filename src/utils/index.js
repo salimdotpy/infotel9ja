@@ -112,6 +112,13 @@ export function formatDate(date) {
     return `${date.toLocaleString('en-US', { month: 'short' })} ${date.getDate()}${getOrdinal(date.getDate())}, ${date.getFullYear()} ${date.toLocaleTimeString('en-US', { hour12: true })}`;
 }
 
+export function dateDiff(dates = [], use='day') {
+    dates = typeof(dates) === 'string' ? JSON.parse(dates) : dates;
+    const date1 = dayjs(dates[0]);
+    const date2 = dayjs(dates[1]);
+    return date2.diff(date1, use);
+}
+
 export function getOrdinal(n) {
     if (n > 10 && n < 14) return 'th';
     switch (n % 10) {

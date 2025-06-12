@@ -1,5 +1,5 @@
 // ContestForm.jsx
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { Button, Typography, Input, Select, Option, IconButton, Card, CardBody } from "@material-tailwind/react";
@@ -82,6 +82,10 @@ const ContestForm = ({ onSubmit, initialValues = {}, mode = "create" }) => {
         }
     };
 
+    useEffect(()=>{
+        initialValues?.contestImage && setImgFiles({contestImage: initialValues?.contestImage})
+    }, [])
+
     return (
         <form onSubmit={handleSubmit(submitHandler)} className="mb-2 text-fore">
             <Typography variant="h6" className="mb-4 text-fore">Contest Information</Typography>
@@ -93,7 +97,7 @@ const ContestForm = ({ onSubmit, initialValues = {}, mode = "create" }) => {
                     </Typography>}
                 </div>
                 <div>
-                    <Select menuProps={{ className: 'max-h-40 md:max-h-40 bg-header text-fore' }} label="Contest Category" size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.contestCategory} onChange={(val) => { setValue("contestCategory", val); clearErrors('contestCategory') }}>
+                    <Select value={initialValues?.contestCategory} menuProps={{ className: 'max-h-40 md:max-h-40 bg-header text-fore' }} label="Contest Category" size='lg' className={IWL[1]} labelProps={{ className: IWL[0], }} error={errors.contestCategory} onChange={(val) => { setValue("contestCategory", val); clearErrors('contestCategory') }}>
                         <Option value="Influential Personalities">Influential Personalities</Option>
                         <Option value="Football Diehard Fans">Football Diehard Fans</Option>
                     </Select>
@@ -122,7 +126,7 @@ const ContestForm = ({ onSubmit, initialValues = {}, mode = "create" }) => {
                     </span>}
                 </div>
                 <div className="!basis-full">
-                    <Wysiwsg defaultValue="Terms and Conditions" onChange={(val) => {
+                    <Wysiwsg defaultValue={initialValues?.tnc || "Terms and Conditions"} onChange={(val) => {
                         setValue('tnc', val); clearErrors('tnc');
                     }} />
                     {errors.tnc && <Typography color="red" className="mt-2 text-xs font-normal">
@@ -199,7 +203,7 @@ const ContestForm = ({ onSubmit, initialValues = {}, mode = "create" }) => {
                         </Button>
                     </div>
                     <div>
-                        <Wysiwsg defaultValue="Additional Price" className="min-h-[100px] md:min-h-[70px]" onChange={(val) => { setValue('additionalPrice', val) }} />
+                        <Wysiwsg defaultValue={initialValues?.additionalPrice || "Additional Price"} className="min-h-[100px] md:min-h-[70px]" onChange={(val) => { setValue('additionalPrice', val) }} />
                         {errors.additionalPrice && <Typography color="red" className="mt-2 text-xs font-normal">
                             {errors.additionalPrice.message}
                         </Typography>}

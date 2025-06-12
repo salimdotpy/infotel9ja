@@ -6,6 +6,43 @@ import { db } from '@/utils/firebase';
 const useContestStore = create((set, get) => ({
     contests: [],
     loading: false,
+    fetchContestWithBoosterById: async (contestId) => {
+        try {
+            // Fetch contest data
+            const contestDoc = await getDoc(doc(db, 'contests', contestId));
+            if (!contestDoc.exists()) {
+                return { error: "Contest not found" };
+            }
+
+            const contestData = contestDoc.data();
+
+            // Fetch related boosters
+            const boosterQuery = query(collection(db, 'boosters'), where('contestId', '==', contestId));
+            const boosterSnap = await getDocs(boosterQuery);
+            const boosters = boosterSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+
+            // Parse stringified fields if needed
+            const parseIfJson = (field) => {
+                try {
+                    return JSON.parse(field);
+                } catch (e) {
+                    return field;
+                }
+            };
+
+            return {
+                id: contestDoc.id,
+                ...contestData,
+                boosterPackages: boosters,
+                bonusPackages: parseIfJson(contestData.bonusPackages),
+                winnersPrice: parseIfJson(contestData.winnersPrice),
+                regDate: parseIfJson(contestData.regDate),
+                votingDate: parseIfJson(contestData.votingDate),
+            };
+        } catch (error) {
+            return { error: error.message };
+        }
+    },
 
     // Fetch all contests with their boosters
     fetchContestWithBooster: async () => {
@@ -18,13 +55,13 @@ const useContestStore = create((set, get) => ({
 
         const ContestWithBooster = contests.map(contest => ({
             ...contest,
-            boosters: boosters.filter(booster => booster.contestId === contest.id),
+            boosterPackages: boosters.filter(booster => booster.contestId === contest.id),
         }));
 
         set({ contests: ContestWithBooster, loading: false });
     },
 
-    // Create contest and one booster
+    // Create contest and boosters
     createContestWithBooster: async (form) => {
         const boosterArray = form.boosterPackages;
         delete form.boosterPackages;
@@ -47,13 +84,57 @@ const useContestStore = create((set, get) => ({
         }
     },
 
-    // Update contest and a booster together
-    updateContestWithBooster: async (contestId, updatedUser, boosterId, updatedPost) => {
+    updateContestWithBooster: async (form) => {
         const batch = writeBatch(db);
-        batch.update(doc(db, 'contests', contestId), updatedUser);
-        batch.update(doc(db, 'boosters', boosterId), updatedPost);
-        await batch.commit();
-        get().fetchUsersWithPosts();
+        const date = new Date().toISOString();
+        const boosterArray = form.boosterPackages; delete form.boosterPackages;
+        const contestId = form.id; delete form.id;
+        form.bonusPackages = JSON.stringify(form.bonusPackages);
+        form.winnersPrice = JSON.stringify(form.winnersPrice);
+        form.votingDate = JSON.stringify(form.votingDate);
+        form.regDate = JSON.stringify(form.regDate);
+
+        try {
+            // Step 1: Prepare contest update
+            batch.update(doc(db, 'contests', contestId), {...form, updated_at: date});
+
+            // Step 2: Fetch current boosters from Firestore
+            const existingBoosterSnap = await getDocs(query(collection(db, 'boosters'), where('contestId', '==', contestId)));
+            const existingBoostersMap = {};
+            existingBoosterSnap.forEach(docSnap => {
+                existingBoostersMap[docSnap.id] = docSnap.data();
+            });
+
+            const updatedBoosterIds = new Set();
+
+            // Step 3: Handle booster updates and additions
+            for (const booster of boosterArray) {
+                if (booster.id && existingBoostersMap[booster.id]) {
+                    // Booster exists → update it
+                    batch.update(doc(db, 'boosters', booster.id), { ...booster, contestId, updated_at: date, });
+                    updatedBoosterIds.add(booster.id);
+                } else {
+                    // New booster → create it
+                    const newBoosterRef = doc(collection(db, 'boosters'));
+                    batch.set(newBoosterRef, { ...booster, contestId, created_at: date, updated_at: date, });
+                }
+            }
+
+            // Step 4: Delete boosters that were removed
+            for (const existingId of Object.keys(existingBoostersMap)) {
+                if (!updatedBoosterIds.has(existingId)) {
+                    batch.delete(doc(db, 'boosters', existingId));
+                }
+            }
+
+            // Step 5: Commit and refresh
+            await batch.commit();
+            get().fetchContestWithBooster();
+
+            return { message: "Contest updated successfully." };
+        } catch (error) {
+            return { error: error.message };
+        }
     },
 
     // Delete contest and all their boosters
@@ -67,50 +148,8 @@ const useContestStore = create((set, get) => ({
         await Promise.all(deletePromises);
 
         await deleteDoc(doc(db, 'contests', contestId));
-        get().fetchUsersWithPosts();
+        get().fetchContestWithBooster();
     },
 }));
 
 export default useContestStore;
-
-
-
-// ==================================================================================
-let a = {
-    "boosterPackages": [
-        {
-            "name": "Booster",
-            "price": 50,
-            "vote": 1
-        }
-    ],
-    "bonusPackages": [
-        {
-            "name": "Bonus",
-            "price": 50,
-            "paidVote": 1,
-            "bonusVote": 2
-        }
-    ],
-    "winnersPrice": [
-        {
-            "from": 1,
-            "to": 1,
-            "price": 50
-        }
-    ],
-    "votingDate": [
-        "2025-06-08T11:07",
-        "2025-06-23T11:07"
-    ],
-    "regDate": [
-        "2025-06-01T11:07",
-        "2025-06-08T11:07"
-    ],
-    "tnc": "Terms and Conditions",
-    "contestImage": "",
-    "minVote": 2,
-    "votePrice": 50,
-    "contestCategory": "Influential Personalities",
-    "contestName": "aaa"
-}

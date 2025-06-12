@@ -30,6 +30,7 @@ import BonusSettings from "./pages/admin/BonusSettings";
 import AddContest from "./pages/admin/AddContest";
 import { hexToRgb } from "./utils";
 import ContestList from "./pages/admin/ContestList";
+import EditContest from "./pages/admin/EditContest";
 
 function App() {
   const { theme } = useTheme();
@@ -92,6 +93,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="contest/add" element={<AddContest />} />
           <Route path="contest/list" element={<ContestList />} />
+          <Route path="contest/edit/:id" element={<EditContest />} />
           <Route path="setting/system" element={<SystemSettings />} />
           <Route path="setting/booster" element={<BoosterSettings />} />
           <Route path="setting/sponsor" element={<SponsorSettings />} />

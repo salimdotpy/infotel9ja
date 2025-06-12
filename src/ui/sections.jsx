@@ -721,7 +721,7 @@ export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
                 Dashboard
             </Link>
             {links && links.map((link, key) =>
-                <Link href={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
+                <Link to={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
                     {link.name}
                 </Link>
             )}
