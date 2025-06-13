@@ -57,5 +57,15 @@ body {
 } */
 
 .rsw-editor .rsw-toolbar {
-  flex-wrap: wrap!important;
+  flex-wrap: wrap !important;
+}
+
+
+.rsw-editor ol {
+  list-style-type: decimal;
+  padding-left: 40px; /* Adjust based on browser default */
+}
+.rsw-editor ul {
+  list-style-type: initial;
+  padding-left: 40px; /* Adjust based on browser default */
 }

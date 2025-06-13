@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
-import { Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip,  Input, Textarea, Typography } from '@material-tailwind/react';
+import { Alert, Avatar, Breadcrumbs, Button, Card, CardBody, CardHeader, Chip, Input, Textarea, Typography } from '@material-tailwind/react';
 import { Link, useLocation } from 'react-router-dom';
 import { PhoneIcon } from '@heroicons/react/24/solid';
 import { CubeIcon, EnvelopeIcon, FaceFrownIcon, MagnifyingGlassIcon, MapPinIcon } from '@heroicons/react/24/outline';
-import { getContent } from '../utils';
+import { dateDiff, getContent, showAmount } from '../utils';
 import { useDidMount } from '../hooks';
 import { BiLogoWhatsapp } from 'react-icons/bi';
 import { links } from './header';
-import { IWOL } from '@/utils/constants';
 import Slider from 'react-slick';
+import useContestStore from '@/store/contestStore';
+import { ImagePlacehoderSkeleton } from './ImagePlacehoderSkeleton';
 
 const logo = '/images/logoIcon/logo.png'
 
@@ -32,7 +33,7 @@ export function LoadingComponent() {
     )
 }
 
-export function FormSkeleton({ size = 5, className = ''}) {
+export function FormSkeleton({ size = 5, className = '' }) {
     return (
         <div className={`max-w-full animate-pulse p-5 space-y-5 ${className}`}>
             {Array(size).fill(null).map((_, key) =>
@@ -50,10 +51,10 @@ export const HeroSection = () => {
             <div className='absolute flex w-full h-screen md:h-[80vh] from-black/70 via-black/70 to-black/70 bg-gradient-to-b'>
                 <div className='container m-auto text-white px-4 md:px-0 text-center'>
                     <Typography variant='h1' className="text-3xl md:text-4xl lg:text-5xl lg:!leading-[1.4] font-normal" data-aos="fade-left" data-aos-delay={100}>
-                        Osun State Influencers:<br/>Vote, Engage, and Celebrate!
+                        Osun State Influencers:<br />Vote, Engage, and Celebrate!
                     </Typography>
                     <Typography className='mt-3 mb-7 text-sm md:text-lg lg:text-2xl text-white' data-aos="fade-right" data-aos-delay={200}>
-                    Our mission is to identify and reward the most influential personalities and football diehard <br/>fans in Osun State, while promoting community engagement and social interaction.
+                        Our mission is to identify and reward the most influential personalities and football diehard <br />fans in Osun State, while promoting community engagement and social interaction.
                     </Typography>
                     <Link to="/about" data-aos="fade-up" data-aos-delay={300}>
                         <Button className="rounded-full border-white hover:border-primary border-2 bg-transparent hover:bg-primary">
@@ -67,7 +68,7 @@ export const HeroSection = () => {
 };
 
 export const FactSection = () => {
-    
+
     return (
         <section id='fact' className='py-10'>
             <div className='container xl:w-[90%] mx-auto'>
@@ -106,36 +107,52 @@ export const FactSection = () => {
 };
 
 export const CompetitionSection = () => {
+    const { loading, contests, fetchContestWithBooster } = useContestStore();
+    const today = new Date();
+    useEffect(() => {
+        fetchContestWithBooster();
+    }, []);
     return (
-        <section id='competition' className='py-10 bg-header'>
+        <section id='contests' className='py-10 bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-center'>
                     <h3 className='font-bold text-2xl'>
-                        Competitions
+                        Contests
                     </h3>
                 </div>
                 <div className='flex flex-wrap gap-6 p-4 w-full'>
-                    {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back lg:flex-row'  data-aos="fade-up" data-aos-delay={`${key}00`}>
-                        <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl">
-                        <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
-                        </CardHeader>
-                        <CardBody className='text-fore'>
-                            <Typography variant="h5" className="mb-2 !line-clamp-2">
-                                18th Edition - Master at Photos Contest
-                            </Typography>
-                            <Typography>Stand a chance to win the sum of {' '} 
-                                <span className='naira font-bold'>500,000</span>
-                            </Typography>
-                            <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize inline-flex' icon={ <span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-green-900 content-['']" /> } />
-                            <div className='mt-4'>
-                                <Link to={'/competition/18th Edition - Master at Photos Contest'}>
-                                    <Button size='sm' className='bg-primary'>Follow Competition</Button>
-                                </Link>
-                            </div>
-                        </CardBody>
+                    {!loading ? contests.map((contest, key) =>
+                        <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back lg:flex-row' data-aos="fade-up" data-aos-delay={`${key}00`}>
+                            <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl">
+                                <img src={contest.contestImage} alt="card-image" className='h-full w-full' />
+                            </CardHeader>
+                            <CardBody className='text-fore'>
+                                <Typography variant="h5" className="mb-2 !line-clamp-2">{contest.contestName}</Typography>
+                                <Typography>Stand a chance to win the sum of {' '}
+                                    <span className='naira font-bold'>{showAmount(contest.winnersPrice?.[0]?.price || 0)}</span>
+                                </Typography>
+                                {dateDiff([today, contest.votingDate[1]]) > 1 ?
+                                <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize text-primary inline-flex' icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-primary content-['']" />} /> :
+                                <Chip value="Closed" size='sm' color='red' variant='ghost' className='capitalize inline-flex' icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />  
+                            }
+                                <div className='flex gap-2 mt-5'>
+                                    <Link to={`/contest/${contest.id}`}>
+                                        <Button size='sm' className='bg-primary capitalize'>Explore</Button>
+                                    </Link>
+                                    {dateDiff([today, contest.votingDate[1]]) > 1 &&
+                                    <Link to={`/contest/${contest.id}`}>
+                                        <Button size='sm' variant='outlined' color='blue' className='capitalize px-3'>Or be Contestant</Button>
+                                    </Link>
+                                    }
+                                </div>
+                            </CardBody>
+                        </Card>
+                    ) : [...Array(2).fill(null)].map((demo, key) => 
+                    <Card key={key} className='basis-full sm:basis-[46%] lg:basis-[46%] bg-back' data-aos="fade-up" data-aos-delay={`${key}00`}>
+                        <ImagePlacehoderSkeleton />
                     </Card>
-                    )}
+                    )
+                    }
                 </div>
             </div>
         </section>
@@ -151,40 +168,40 @@ export const WinnersSection = () => {
                         18th Edition - Master at Photos Contest
                     </h3>
                     <p>
-                    These are the winners of recently concluded 18th Edition - Master at Photos Contest[Completed]
+                        These are the winners of recently concluded 18th Edition - Master at Photos Contest[Completed]
                     </p>
                 </div>
                 <div className='flex flex-col gap-6 p-4 w-full'>
-                    {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
-                    <Card key={key} className='flex-row flex-wrap gap-5 basis-full bg-back p-4'>
-                        <Card className='basis-full lg:basis-2/3 bg-header lg:flex-row'  data-aos="fade-right" data-aos-delay={`100`}>
-                            <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl relative">
-                            <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
-                            <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary shadow-2xl mb-5 absolute right-3 -bottom-2 block md:hidden' />
-                            </CardHeader>
-                            <CardBody className='text-fore'>
-                                <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary mb-5 hidden md:block' />
-                                <Typography variant="h5" className="mb-2 !line-clamp-2">
-                                    Selim Adekola (SalimTech)
-                                </Typography>
-                                <p className=''>We say a big congratulations to{' '} 
-                                    <span className='font-bold'>Selim Adekola (SalimTech)</span>{' '}
-                                    for emerging as the <span className='font-bold'>2nd Runner Up</span>
-                                    {' '}of the 18th Edition - Master at Photos Contest[Completed]
-                                </p>
-                            </CardBody>
+                    {[1, 2, 3, 1, 3, 2, 1, 3, 2, 1, 3, 2].map((item, key) =>
+                        <Card key={key} className='flex-row flex-wrap gap-5 basis-full bg-back p-4'>
+                            <Card className='basis-full lg:basis-2/3 bg-header lg:flex-row' data-aos="fade-right" data-aos-delay={`100`}>
+                                <CardHeader floated={false} className="m-0 lg:w-2/5 h-[200px] lg:h-auto shrink-0 rounded-b-none lg:rounded-r-none lg:rounded-bl-xl relative">
+                                    <img src={`/images/img${item}.jpeg`} alt="card-image" className='h-full w-full' />
+                                    <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary shadow-2xl mb-5 absolute right-3 -bottom-2 block md:hidden' />
+                                </CardHeader>
+                                <CardBody className='text-fore'>
+                                    <Avatar src={`/images/img${item}.jpeg`} alt='profile-img' size='lg' className='p-1 ring ring-primary mb-5 hidden md:block' />
+                                    <Typography variant="h5" className="mb-2 !line-clamp-2">
+                                        Selim Adekola (SalimTech)
+                                    </Typography>
+                                    <p className=''>We say a big congratulations to{' '}
+                                        <span className='font-bold'>Selim Adekola (SalimTech)</span>{' '}
+                                        for emerging as the <span className='font-bold'>2nd Runner Up</span>
+                                        {' '}of the 18th Edition - Master at Photos Contest[Completed]
+                                    </p>
+                                </CardBody>
+                            </Card>
+                            <Card className='flex-col-reverse basis-full sm:basis-[46%] lg:basis-1/4 bg-header grow' data-aos="fade-left" data-aos-delay={`100`}>
+                                <CardHeader floated={false} className="m-0 h-[200px] rounded-t-none">
+                                    <img src={`/images/img4.jpeg`} alt="card-image" className='h-full w-full' />
+                                </CardHeader>
+                                <CardBody className='text-fore py-3'>
+                                    <p className=''>Here is the reciept of transfer we made to{' '}
+                                        <span className='font-bold'>Selim Adekola (SalimTech)</span>
+                                    </p>
+                                </CardBody>
+                            </Card>
                         </Card>
-                        <Card className='flex-col-reverse basis-full sm:basis-[46%] lg:basis-1/4 bg-header grow'  data-aos="fade-left" data-aos-delay={`100`}>
-                            <CardHeader floated={false} className="m-0 h-[200px] rounded-t-none">
-                            <img src={`/images/img4.jpeg`} alt="card-image" className='h-full w-full' />
-                            </CardHeader>
-                            <CardBody className='text-fore py-3'>
-                                <p className=''>Here is the reciept of transfer we made to{' '} 
-                                    <span className='font-bold'>Selim Adekola (SalimTech)</span>
-                                </p>
-                            </CardBody>
-                        </Card>
-                    </Card>
                     )}
                 </div>
             </div>
@@ -193,7 +210,7 @@ export const WinnersSection = () => {
 }
 
 export const AboutSection = () => {
-    
+
     return (
         <section id='about' className='py-10'>
             <div className='container xl:w-[90%] mx-auto'>
@@ -235,7 +252,7 @@ export const ServiceSection = () => {
 
     useEffect(() => {
         fetchData();
-        return ()=>{
+        return () => {
             setContent(null);
             setElements(null);
         }
@@ -256,22 +273,22 @@ export const ServiceSection = () => {
                     {elements ? elements.map((service, key) => {
                         const ServiceIcon = social_icons[service.data_values.icon];
                         const sub_services = service.data_values.description.split('\n').map((sub_, i) =>
-                        <p key={i}>&rArr; {sub_}</p>
-                    );
-                    return (
-                        <div key={key} className='text-fore mb-8 w-full md:flex-1 lg:w-1/3 md:w-1/2 group' data-aos="fade-up" data-aos-delay={`${key}00`}>
-                            <div className='float-left flex justify-center items-center size-14 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
-                                <ServiceIcon className='size-6' />
-                            </div>
-                            <Typography variant='h6' className='ml-20'>
-                                {service.data_values.title}
-                            </Typography>
-                            <Typography as={'div'} className='ml-20'>
-                                {sub_services}
-                            </Typography>
-                        </div>)
-                    }) : 
-                    <FormSkeleton className='!p-0 w-full' />
+                            <p key={i}>&rArr; {sub_}</p>
+                        );
+                        return (
+                            <div key={key} className='text-fore mb-8 w-full md:flex-1 lg:w-1/3 md:w-1/2 group' data-aos="fade-up" data-aos-delay={`${key}00`}>
+                                <div className='float-left flex justify-center items-center size-14 border border-primary bg-primary rounded-full text-header group-hover:bg-header group-hover:text-primary transition-colors duration-1000'>
+                                    <ServiceIcon className='size-6' />
+                                </div>
+                                <Typography variant='h6' className='ml-20'>
+                                    {service.data_values.title}
+                                </Typography>
+                                <Typography as={'div'} className='ml-20'>
+                                    {sub_services}
+                                </Typography>
+                            </div>)
+                    }) :
+                        <FormSkeleton className='!p-0 w-full' />
                     }
                 </div>
             </div>
@@ -308,191 +325,191 @@ export const AboutsSection = () => {
             ]
         }
     }
- 
+
     return (
         <>
-        <section id='intro' className='py-10 bg-header' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.intro.title}</h3>
-                    {about_page.intro.content.map((p, key) =>
-                    <p key={key} className='text-fore/80 my-4'>{p}</p>
-                    )}
-                    <p className='text-fore/80 my-4'>{about_page.intro.bottom}</p>
-                </div>
-            </div>
-        </section>
-        <section id='contest-category' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.contest_category.title}</h3>
-                    <ol className='list-[auto] m-auto'>
-                        {about_page.contest_category.content.map((p, key) =>
-                        <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+            <section id='intro' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{about_page.intro.title}</h3>
+                        {about_page.intro.content.map((p, key) =>
+                            <p key={key} className='text-fore/80 my-4'>{p}</p>
                         )}
-                    </ol>
+                        <p className='text-fore/80 my-4'>{about_page.intro.bottom}</p>
+                    </div>
                 </div>
-            </div>
-        </section>
-        <section id='registration-process' className='py-10 bg-header' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>{about_page.reg_process.title}</h3>
-                    <ol className='list-[auto] m-auto'>
-                        {about_page.reg_process.content.map((p, key) => {
-                            if (key === 1) {
-                                return (
-                                    <div key={key}>
-                                    <li className='text-fore/80 my-4 ml-5'>{p}</li>
-                                    <ul className='list-disc m-auto'>
-                                    {about_page.reg_process.reg_details.map((detail, k) =>
-                                        <li key={k} className='text-fore/80 my-4 ml-10'>{detail}</li>
-                                    )}
-                                    </ul>
-                                    </div>
-                                )
-                            } else {
-                                return <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
-                            }
-                        }
-                        )}
-                    </ol>
-                </div>
-            </div>
-        </section>
-        <section id='voting-process' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>Voting Process</h3>
-                    <ol className='list-[auto] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            After successful registration, your landing page will be created with your details and voting links.
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>You will have 30 minutes to activate your welcome bonus votes by paying <span className='naira font-bold'>200</span>, after declaring the contest opened.</li>
-                        <li className='text-fore/80 my-4 ml-5'>Once activated, you will receive <span className='font-bold'>10 VOTES</span> instead of the 4 you paid for.</li>
-                        <li className='text-fore/80 my-4 ml-5'>Each vote costs <span className='naira font-bold'>50</span>.</li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-        <section id='contest-rules' className='py-10 bg-header' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>Contest Rules</h3>
-                    <ol className='list-[auto] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Each contestant must generate at least <span className='font-bold'>500 VOTES</span> to be eligible for the leaderboard.
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>Multiple votes are allowed.</li>
-                        <li className='text-fore/80 my-4 ml-5'>The contestant with the most votes wins.</li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-        <section id='referral' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>Referral Program</h3>
-                    <ol className='list-[auto] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Share your referral link with prospective contestants and {' '} 
-                            <span className='font-bold'>earn referral bonuses of 2 votes on each referral</span>.
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>
-                        Refer at least <span className="font-bold">10 CONTESTANTS</span> and earn <span className="font-bold">25 votes, as well become a coach of your team and stand to earn 5% of the total votes of your team every week, though this is subject to meeting  up the weekly targets. Please note that your own votes do not count for your team but your own coach for the team weekly target, however, it will count for your as individual weekly target, be guided accordingly</span>
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Refer the maximum of <span className="font-bold">25 CONTESTANTS</span> and earn all bonuses in 2 above plus 5% of all the funds gathered by your team at the end ofthe contest.
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-        <section id='duration' className='py-10 bg-header' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>Duration</h3>
-                    <ol className='list-[auto] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Registration: <span className='font-bold'>4 WEEKS</span>.
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Contest Duration: <span className='font-bold'>20 WEEKS</span>.
-                        </li>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            Prizes will be awarded at the end of the <span className='font-bold'>25th WEEK</span> in a grand party.
-                        </li>
-                    </ol>
-                </div>
-            </div>
-        </section>
-        <section id='prizes' className='py-10' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <h3 className='font-bold text-2xl'>Prizes</h3>
-                    <ol className='list-[auto] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            The Osun State 10 Most Influential Personalities of the Year 2025 (Men and Women Category)
-                        </li>
-                        <ul className='list-disc m-auto'>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                1ST PRIZE: <span className='naira'>500,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                2ND PRIZE: <span className='naira'>250,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                3RD PRIZE: <span className='naira'>100,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
-                            </li>
-                        </ul>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            The Osun State 10 Most Football Diehard Fans of the Year 2025
-                        </li>
-                        <ul className='list-disc m-auto'>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                1ST PRIZE: <span className='naira'>500,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                2ND PRIZE: <span className='naira'>250,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                3RD PRIZE: <span className='naira'>100,000</span>
-                            </li>
-                            <li className='text-fore/80 my-4 ml-10 font-bold'>
-                                4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
-                            </li>
-                        </ul>
-                    </ol>
-                    <h6 className='font-bold text-xl mt-8'>Additional Prize for the 1st Prize Winner under Osun State most football diehard fans contest:</h6>
-                    <ul className='list-[square] m-auto'>
-                        <li className='text-fore/80 my-4 ml-5'>
-                            A customized football kit of their favorite football club, including:
-                        </li>
+            </section>
+            <section id='contest-category' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{about_page.contest_category.title}</h3>
                         <ol className='list-[auto] m-auto'>
-                            <li className='text-fore/80 my-4 ml-10'>Jersey (customized)</li>
-                            <li className='text-fore/80 my-4 ml-10'>Muffler</li>
-                            <li className='text-fore/80 my-4 ml-10'>Socks</li>
-                            <li className='text-fore/80 my-4 ml-10'>Banner or towel</li>
-                            <li className='text-fore/80 my-4 ml-10'>Lapel pins</li>
-                            <li className='text-fore/80 my-4 ml-10'>One professional soccer ball</li>
+                            {about_page.contest_category.content.map((p, key) =>
+                                <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                            )}
                         </ol>
-                    </ul>
+                    </div>
                 </div>
-            </div>
-        </section>
-        <section id='prizes' className='py-10 bg-header' data-aos="fade-up">
-            <div className='container xl:w-[90%] mx-auto'>
-                <div className='p-4 text-justify'>
-                    <Alert color='red' variant='ghost'>
-                        <h3 className='font-bold text-2xl mb-3'>DISCLAIMER:</h3>
-                        InfoTel9ja Global Network reserves the right to modify or cancel the contest at any time without prior notice. Let us be guided accordingly.
-                    </Alert>
+            </section>
+            <section id='registration-process' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>{about_page.reg_process.title}</h3>
+                        <ol className='list-[auto] m-auto'>
+                            {about_page.reg_process.content.map((p, key) => {
+                                if (key === 1) {
+                                    return (
+                                        <div key={key}>
+                                            <li className='text-fore/80 my-4 ml-5'>{p}</li>
+                                            <ul className='list-disc m-auto'>
+                                                {about_page.reg_process.reg_details.map((detail, k) =>
+                                                    <li key={k} className='text-fore/80 my-4 ml-10'>{detail}</li>
+                                                )}
+                                            </ul>
+                                        </div>
+                                    )
+                                } else {
+                                    return <li key={key} className='text-fore/80 my-4 ml-5'>{p}</li>
+                                }
+                            }
+                            )}
+                        </ol>
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
+            <section id='voting-process' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>Voting Process</h3>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                After successful registration, your landing page will be created with your details and voting links.
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>You will have 30 minutes to activate your welcome bonus votes by paying <span className='naira font-bold'>200</span>, after declaring the contest opened.</li>
+                            <li className='text-fore/80 my-4 ml-5'>Once activated, you will receive <span className='font-bold'>10 VOTES</span> instead of the 4 you paid for.</li>
+                            <li className='text-fore/80 my-4 ml-5'>Each vote costs <span className='naira font-bold'>50</span>.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <section id='contest-rules' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>Contest Rules</h3>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Each contestant must generate at least <span className='font-bold'>500 VOTES</span> to be eligible for the leaderboard.
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>Multiple votes are allowed.</li>
+                            <li className='text-fore/80 my-4 ml-5'>The contestant with the most votes wins.</li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <section id='referral' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>Referral Program</h3>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Share your referral link with prospective contestants and {' '}
+                                <span className='font-bold'>earn referral bonuses of 2 votes on each referral</span>.
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Refer at least <span className="font-bold">10 CONTESTANTS</span> and earn <span className="font-bold">25 votes, as well become a coach of your team and stand to earn 5% of the total votes of your team every week, though this is subject to meeting  up the weekly targets. Please note that your own votes do not count for your team but your own coach for the team weekly target, however, it will count for your as individual weekly target, be guided accordingly</span>
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Refer the maximum of <span className="font-bold">25 CONTESTANTS</span> and earn all bonuses in 2 above plus 5% of all the funds gathered by your team at the end ofthe contest.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <section id='duration' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>Duration</h3>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Registration: <span className='font-bold'>4 WEEKS</span>.
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Contest Duration: <span className='font-bold'>20 WEEKS</span>.
+                            </li>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                Prizes will be awarded at the end of the <span className='font-bold'>25th WEEK</span> in a grand party.
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </section>
+            <section id='prizes' className='py-10' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <h3 className='font-bold text-2xl'>Prizes</h3>
+                        <ol className='list-[auto] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                The Osun State 10 Most Influential Personalities of the Year 2025 (Men and Women Category)
+                            </li>
+                            <ul className='list-disc m-auto'>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    1ST PRIZE: <span className='naira'>500,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    2ND PRIZE: <span className='naira'>250,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    3RD PRIZE: <span className='naira'>100,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
+                                </li>
+                            </ul>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                The Osun State 10 Most Football Diehard Fans of the Year 2025
+                            </li>
+                            <ul className='list-disc m-auto'>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    1ST PRIZE: <span className='naira'>500,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    2ND PRIZE: <span className='naira'>250,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    3RD PRIZE: <span className='naira'>100,000</span>
+                                </li>
+                                <li className='text-fore/80 my-4 ml-10 font-bold'>
+                                    4TH-10TH PRIZES: <span className='naira'>50,000 (EACH)</span>
+                                </li>
+                            </ul>
+                        </ol>
+                        <h6 className='font-bold text-xl mt-8'>Additional Prize for the 1st Prize Winner under Osun State most football diehard fans contest:</h6>
+                        <ul className='list-[square] m-auto'>
+                            <li className='text-fore/80 my-4 ml-5'>
+                                A customized football kit of their favorite football club, including:
+                            </li>
+                            <ol className='list-[auto] m-auto'>
+                                <li className='text-fore/80 my-4 ml-10'>Jersey (customized)</li>
+                                <li className='text-fore/80 my-4 ml-10'>Muffler</li>
+                                <li className='text-fore/80 my-4 ml-10'>Socks</li>
+                                <li className='text-fore/80 my-4 ml-10'>Banner or towel</li>
+                                <li className='text-fore/80 my-4 ml-10'>Lapel pins</li>
+                                <li className='text-fore/80 my-4 ml-10'>One professional soccer ball</li>
+                            </ol>
+                        </ul>
+                    </div>
+                </div>
+            </section>
+            <section id='prizes' className='py-10 bg-header' data-aos="fade-up">
+                <div className='container xl:w-[90%] mx-auto'>
+                    <div className='p-4 text-justify'>
+                        <Alert color='red' variant='ghost'>
+                            <h3 className='font-bold text-2xl mb-3'>DISCLAIMER:</h3>
+                            InfoTel9ja Global Network reserves the right to modify or cancel the contest at any time without prior notice. Let us be guided accordingly.
+                        </Alert>
+                    </div>
+                </div>
+            </section>
         </>
     );
 };
@@ -621,7 +638,7 @@ export const ContactSection = () => {
             <div className='container xl:w-[90%] mx-auto'>
                 <div className='p-4 text-justify'>
                     <p>
-                    InfoTel9ja Global Network proudly presents the Osun State Influential Personalities and Football Diehard Fans Contest, a groundbreaking initiative designed to recognize and reward the most impactful individuals in Osun State. This contest aims to identify influential personalities and passionate football fans who embody the spirit of community engagement and social interaction.
+                        InfoTel9ja Global Network proudly presents the Osun State Influential Personalities and Football Diehard Fans Contest, a groundbreaking initiative designed to recognize and reward the most impactful individuals in Osun State. This contest aims to identify influential personalities and passionate football fans who embody the spirit of community engagement and social interaction.
                     </p>
                 </div>
                 <div className='flex flex-wrap gap-5 px-4 w-full'>
@@ -648,7 +665,12 @@ export const ContactSection = () => {
 
 export const FooterSection = () => {
     const useful_links = links.filter((link) => !['Home'].includes(link.name));
-    useful_links.push({name: 'Reports a Contestant', href: '/report-contestant'})
+    useful_links.push({ name: 'Reports a Contestant', href: '/report-contestant' })
+    
+    const { loading, contests, fetchContestWithBooster } = useContestStore();
+    useEffect(() => {
+        fetchContestWithBooster();
+    }, []);
     return (
         <section id='footer' className='pt-10 pb-5  bg-header'>
             <div className='container xl:w-[90%] mx-auto'>
@@ -664,14 +686,14 @@ export const FooterSection = () => {
                     </div>
                     <div className='basis-full md:basis-[30%] grow'>
                         <h3 className='font-bold text-2xl font-[tahoma] md:text-center'>
-                            Competitions
+                            Contests
                         </h3>
                         <div className='flex flex-col gap-3 md:items-end lg:items-center p-0 mt-4'>
-                            {Array(8).fill(1).map((item, key) => 
-                            <Link to={'/'} key={key} className="hover:text-primary">
-                                18th Edition - Master at Photos Contest
-                            </Link>
-                            )}
+                            {!loading && contests ? contests.map(({id, contestName}, key) =>
+                                <Link to={`/contest/${id}`} key={key} className="hover:text-primary">
+                                    {contestName}
+                                </Link>
+                            ) : <FormSkeleton className='w-full' />}
                         </div>
                     </div>
                     <div className='basis-full md:basis-[30%] grow'>
@@ -679,10 +701,10 @@ export const FooterSection = () => {
                             Useful Links
                         </h3>
                         <div className='flex flex-col gap-3 lg:items-end p-0 mt-4'>
-                            {useful_links.map((link, key) => 
-                            <Link to={link.href} key={key} className='hover:text-primary lg:justify-end'>
-                                {link.name}
-                            </Link>
+                            {useful_links.map((link, key) =>
+                                <Link to={link.href} key={key} className='hover:text-primary lg:justify-end'>
+                                    {link.name}
+                                </Link>
                             )}
                         </div>
                     </div>
@@ -729,7 +751,7 @@ export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
     )
 }
 
-export const HeroBreaCrumbs = ({ page='About Us', links = [] }) => {
+export const HeroBreaCrumbs = ({ page = 'About Us', links = [] }) => {
     return (
         <section className='py-10 bg-primary/20'>
             <div className='container xl:w-[90%] mx-auto flex flex-col gap-5 justify-center items-center h-56 px-4'>
@@ -765,10 +787,10 @@ export const NewSections = () => {
             <section className='py-10'>
                 <div className='container xl:w-[90%] mx-auto px-4'>
                     <Slider {...settings}>
-                        {[1,2,3,4,2,3,4,1,4,3,2,1,3,4].map((item, key) => 
-                        <div key={key} className='p-2'>
-                            <img src={`images/img${item}.jpeg`} alt={'image-' + item} className='w-full h-[200px]' />
-                        </div>
+                        {[1, 2, 3, 4, 2, 3, 4, 1, 4, 3, 2, 1, 3, 4].map((item, key) =>
+                            <div key={key} className='p-2'>
+                                <img src={`images/img${item}.jpeg`} alt={'image-' + item} className='w-full h-[200px]' />
+                            </div>
                         )}
                     </Slider>
                 </div>

@@ -2,6 +2,7 @@
 import { create } from 'zustand';
 import { collection, addDoc, getDoc, getDocs, doc, deleteDoc, updateDoc, writeBatch, query, where } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
+import { parseIfJson } from '@/utils';
 
 const useContestStore = create((set, get) => ({
     contests: [],
@@ -20,15 +21,6 @@ const useContestStore = create((set, get) => ({
             const boosterQuery = query(collection(db, 'boosters'), where('contestId', '==', contestId));
             const boosterSnap = await getDocs(boosterQuery);
             const boosters = boosterSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            // Parse stringified fields if needed
-            const parseIfJson = (field) => {
-                try {
-                    return JSON.parse(field);
-                } catch (e) {
-                    return field;
-                }
-            };
 
             return {
                 id: contestDoc.id,
@@ -55,6 +47,10 @@ const useContestStore = create((set, get) => ({
 
         const ContestWithBooster = contests.map(contest => ({
             ...contest,
+            bonusPackages: parseIfJson(contest.bonusPackages),
+            winnersPrice: parseIfJson(contest.winnersPrice),
+            regDate: parseIfJson(contest.regDate),
+            votingDate: parseIfJson(contest.votingDate),
             boosterPackages: boosters.filter(booster => booster.contestId === contest.id),
         }));
 

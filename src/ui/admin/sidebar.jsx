@@ -3,7 +3,6 @@ import { Accordion, AccordionBody, AccordionHeader, Chip, Drawer, List, ListItem
 import React, { useEffect, useState } from "react";
 import { Link, useLocation } from "react-router-dom";
 import data from "../sections.json";
-import { FcSportsMode } from "react-icons/fc";
 
 let secs = data;
 let keys = Object.entries(secs).sort();
@@ -24,10 +23,10 @@ export const links = [
     { name: 'Contests List', href: '/admin/contest/list', Icon: NumberedListIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
-    { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
+    // { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
     { name: 'Sponsor Package', href: '/admin/setting/sponsor', Icon: LifebuoyIcon },
-    { name: 'Leaderboard', href: '/admin/setting/leaderboard', Icon: TrophyIcon },
-    { name: 'Bonus', href: '/admin/setting/bonus', Icon: GiftIcon },
+    // { name: 'Leaderboard', href: '/admin/setting/leaderboard', Icon: TrophyIcon },
+    // { name: 'Bonus', href: '/admin/setting/bonus', Icon: GiftIcon },
     { name: 'FRONTEND MANAGER', head: true },
     {
         name: 'Manage Sections', href: false, Icon: TvIcon,
@@ -156,15 +155,3 @@ const CompanyLogo = () => {
         </div>
     )
 }
-
-export const showAmount = (amount, decimals = 2, exceptZeros = false) => {
-    let formatted = new Intl.NumberFormat('en-US', {
-        minimumFractionDigits: decimals,
-        maximumFractionDigits: decimals,
-    }).format(amount);
-    if (exceptZeros) {
-        const parts = formatted.split('.');
-        if (parts[1] && parseInt(parts[1]) === 0) formatted = parts[0];
-    }
-    return formatted;
-};

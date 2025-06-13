@@ -7,7 +7,7 @@ import ToggleTheme from './ToggleTheme';
 export const links = [
     { name: 'Home', href: '/' },
     { name: 'About', href: '/about' },
-    { name: 'Competitions', href: '/competitions' },
+    { name: 'Contests', href: '/contests' },
     { name: 'Past Winners', href: '/past-winners' },
     { name: 'Terms and Conditions', href: '/terms' },
     { name: 'Contact', href: '/contact' },

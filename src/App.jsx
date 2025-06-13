@@ -78,8 +78,8 @@ function App() {
         <Route path="/" element={<PublicRoute />}>
           <Route index element={<Index />} />
           <Route path="/about" element={<About />} />
-          <Route path="/competitions" element={<Compitions />} />
-          <Route path="/competition/:id" element={<Compition />} />
+          <Route path="/contests" element={<Compitions />} />
+          <Route path="/contest/:id" element={<Compition />} />
           <Route path="/past-winners" element={<Winners />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />

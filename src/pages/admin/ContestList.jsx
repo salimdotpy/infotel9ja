@@ -2,11 +2,10 @@ import React, { useEffect, useMemo, useState } from "react";
 import useContestStore from "@/store/contestStore";
 import { useDocumentTitle } from "@/hooks";
 import { Typography, Card, CardBody, CardHeader, Button, Select, Input, Tooltip, IconButton, CardFooter, Option, Avatar, Chip, Dialog, DialogBody, Switch } from "@material-tailwind/react";
-import { BreadCrumbs } from "@/ui/sections";
-import ContestForm from "@/ui/admin/ContestForm";
+import { BreadCrumbs, FormSkeleton } from "@/ui/sections";
 import { MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IWL, IWOL } from "@/utils/constants";
-import { dateDiff, formatDate, keyToTitle } from "@/utils";
+import { dateDiff, keyToTitle } from "@/utils";
 import { Link } from "react-router-dom";
 import { PencilSquareIcon } from "@heroicons/react/24/solid";
 import { MdHowToVote } from "react-icons/md";
@@ -209,9 +208,11 @@ const ContestList = () => {
                 }) :
                   <tr>
                     <td className='p-4' colSpan="100%">
-                      <Typography variant="small" className="font-normal text-fore">
-                        No rocord found
-                      </Typography>
+                      {loading ?
+                        <FormSkeleton className='!p-0' size={5} />
+                        : <Typography variant="small" className="font-normal text-fore">
+                          No rocord found
+                        </Typography>}
                     </td>
                   </tr>
                 }

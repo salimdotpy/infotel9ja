@@ -211,3 +211,28 @@ export const except_ = (key, arrs = []) => {
     }
     return true;
 }
+
+// Utility to truncate a string
+export const shortDescription = (string, length = 120) =>
+  string.length > length ? string.substring(0, length) + '...' : string;
+
+export const showAmount = (amount, decimals = 2, exceptZeros = false) => {
+    let formatted = new Intl.NumberFormat('en-US', {
+        minimumFractionDigits: decimals,
+        maximumFractionDigits: decimals,
+    }).format(amount);
+    if (exceptZeros) {
+        const parts = formatted.split('.');
+        if (parts[1] && parseInt(parts[1]) === 0) formatted = parts[0];
+    }
+    return formatted;
+};
+
+// Parse stringified fields if needed
+export const parseIfJson = (field) => {
+    try {
+        return JSON.parse(field);
+    } catch (e) {
+        return field;
+    }
+};
