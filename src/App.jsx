@@ -84,7 +84,7 @@ function App() {
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />
           <Route path="/report-contestant" element={<ReportContestant />} />
-          <Route path="/signup" element={<Register />} />
+          <Route path="/register/:id/:referral?" element={<Register />} />
         </Route>
         <Route path="/" element={<AdminAuthRoute />}>
           <Route path="/login/:role" element={<AdminLogin />} />

@@ -140,7 +140,7 @@ export const CompetitionSection = () => {
                                         <Button size='sm' className='bg-primary capitalize'>Explore</Button>
                                     </Link>
                                     {dateDiff([today, contest.votingDate[1]]) > 1 &&
-                                    <Link to={`/contest/${contest.id}`}>
+                                    <Link to={`/register/${contest.id}`}>
                                         <Button size='sm' variant='outlined' color='blue' className='capitalize px-3'>Or be Contestant</Button>
                                     </Link>
                                     }

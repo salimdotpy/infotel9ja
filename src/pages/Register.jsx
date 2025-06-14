@@ -1,57 +1,84 @@
-import React, { useState } from "react";
-import { FooterSection, HeroBreaCrumbs } from "../ui/sections";
+import React, { useEffect, useState } from "react";
+import { FooterSection, FormSkeleton, HeroBreaCrumbs } from "../ui/sections";
 import { useDocumentTitle, useFileHandler } from "../hooks";
-import { Button, Card, CardBody, Input, Option, Radio, Select, Textarea, Tooltip, Typography } from "@material-tailwind/react";
-import { IWOL } from "@/utils/constants";
+import { Button, Card, CardBody, Input, Option, Radio, Select, Textarea, Typography } from "@material-tailwind/react";
+import { IWOL, SOO } from "@/utils/constants";
 
 import * as yup from "yup";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { toast } from "react-toastify";
-import { ImageSchema } from "@/utils";
-import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
+import { dateDiff, ImageSchema } from "@/utils";
+import { SearchableSelect } from "@/ui/SearchableSelect";
+import ImageUploader from "@/ui/ImageUploader";
+import { useNavigate, useParams } from "react-router-dom";
+import useContestStore from "@/store/contestStore";
+import useContestantStore from "@/store/contestantStore";
 
 export default function Register() {
-    useDocumentTitle('Sign up - InfoTel9ja');
+    useDocumentTitle('Registration Page - InfoTel9ja');
     return (
         <>
-            <HeroBreaCrumbs page="Contestant Registration Page" links={[{name: 'Sign up', href: 'register'}]} />
+            <HeroBreaCrumbs page="Contestant Registration Page" links={[{name: 'Register', href: 'register'}]} />
             <RegisterSection />
             <FooterSection />
         </>
     )
 }
 
+const today = new Date();
+
 const schema = yup.object({
     fullname: yup.string().trim().required('Fullname is required').matches(/^[a-zA-Z ]+[a-zA-Z0-9]+$/, "Must be alphanumeric only").max(80, "The name is too long"),
     mobile: yup.string().trim().required('Phone number is required').min(11, "Invalid phone number").max(11, "Invalid phone number"),
     email: yup.string().email('Invalid email').trim().required('Email is required').max(40, "Is too long"),
-    dob: yup.date().required('Date of Birth is required'),
+    dob: yup.date().typeError('Please enter a valid date of birth').max(today, 'Date of birth cannot be in the future').required('Date of Birth is required'),
+    referral: yup.string().optional(),
+    state: yup.string().required('State of Origin is required'),
     address: yup.string().required('Address is required'),
     gender: yup.string().required('Gender is required'),
-    contest_category: yup.string().required('Contest Category is required'),
-    image: ImageSchema.image_input
+    team: yup.string().optional(),
+    image: ImageSchema.image_input.required('Choose Image Please')
   })
 
 const RegisterSection = () => {
     const { handleSubmit, setValue, register, clearErrors, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
+    const { imgFiles, isFileLoading, onFileChange, setImgFiles } = useFileHandler({ setValue, clearErrors });
+    const [contest, setContest] = useState(null);
     const [loading, setLoading] = useState(false);
-    const {imgFiles, isFileLoading, onFileChange} = useFileHandler({setValue: setValue, clearErrors: clearErrors, images: {}});
+    const { fetchContestWithBoosterById } = useContestStore();
+    const { createContestant } = useContestantStore();
+    const { id } = useParams();
+    const navigate = useNavigate();
+    
+    useEffect(() => {
+        setLoading(true);
+        const fetchData = async () => {
+            const data = await fetchContestWithBoosterById(id);
+            if (data?.error) {
+                toast.error(data?.error);
+                navigate("/");
+            } else if (dateDiff([today, data.votingDate[1]]) < 1) {
+                toast.error(`Registration has closed for ${data.contestName}`);
+                navigate("/");
+            }
+            setContest(data);
+        };
+        fetchData();
+        setLoading(false);
+    }, [id]);
 
     const onSubmit = async (formData) => {
         setLoading(true);
+        formData.contestId = id;
         try {
-        //   const result = await adminLogin(formData.email, formData.password);
-        //   if (result.success) {
-        //     navigate("/admin");
-        //     toast.success("You've successfully logged in.");
-        //   } else {
-        //     toast.error(result.message);
-        //   }
-        } catch (error) {
-          toast.error(error.message);
+            const result = await createContestant(formData);
+            if (result?.message) toast.success(result.message);
+            else if (result?.error) toast.error(result.error);
+        } catch (err) {
+            toast.error(err.message);
         } finally {
-          setLoading(false);
+            setLoading(false);
         }
       }
 
@@ -60,8 +87,9 @@ const RegisterSection = () => {
             <div className='container xl:w-[70%] mx-auto px-4'>
                 <Card className='bg-header text-fore'>
                     <CardBody>
-                        <Typography variant='h5' className='text-fore'>
-                            Fill below form, to register for the next Competition
+                        <Typography variant='h4' className='text-fore font-[tahoma]'>
+                            {!loading && contest ? `Register for (${contest.contestName})` :
+                            <FormSkeleton size={1} />}
                         </Typography>
                         <form method='post' className="mt-8 mb-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
@@ -74,14 +102,14 @@ const RegisterSection = () => {
                                 </div>
                                 <div>
                                     <label className="text-fore">Phone Number</label>
-                                    <Input placeholder='Ex: 08012345678' {...register('mobile')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.mobile} />
+                                    <Input type="tel" placeholder='Ex: 08012345678' {...register('mobile')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.mobile} />
                                     {errors.mobile && <Typography color="red" className="mt-2 text-xs font-normal">
                                     {errors.mobile.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Email Address</label>
-                                    <Input placeholder='Ex: example@website.com' {...register('email')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.email} />
+                                    <Input type="email" placeholder='Ex: example@website.com' {...register('email')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.email} />
                                     {errors.email && <Typography color="red" className="mt-2 text-xs font-normal">
                                     {errors.email.message}
                                     </Typography>}
@@ -94,6 +122,20 @@ const RegisterSection = () => {
                                     </Typography>}
                                 </div>
                                 <div>
+                                    <label className="text-fore">Referral Code</label>
+                                    <Input placeholder='(Optional)' {...register('referral')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.referral} />
+                                    {errors.referral && <Typography color="red" className="mt-2 text-xs font-normal">
+                                    {errors.referral.message}
+                                    </Typography>}
+                                </div>
+                                <div>
+                                    <label className="text-fore">State Of Origin</label>
+                                    <SearchableSelect name="sate" options={SOO} className="h-[150px]" onSelect={(val)=>{setValue("state", val); clearErrors('state')}} />
+                                    {errors.state && <Typography color="red" className="mt-2 text-xs font-normal">
+                                    {errors.state.message}
+                                    </Typography>}
+                                </div>
+                                <div>
                                     <label className="text-fore">Address</label>
                                     <Textarea placeholder='Enter your full address' {...register('address')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.address} />
                                     {errors.address && <Typography color="red" className="mt-2 text-xs font-normal">
@@ -102,37 +144,26 @@ const RegisterSection = () => {
                                 </div>
                                 <div>
                                     <label>Profile Image</label>
-                                    <div className='relative mt-1 flex flex-col justify-center items-center min-h-[105px] rounded border-2 border-dashed p-0.5 overflow-hidden !bg-cover' style={{background: `url('${imgFiles?.image}')`}}>
-                                        <label className='cursor-pointer'>
-                                            <input type="file" disabled={isFileLoading} onChange={(e) => onFileChange(e, 'image')} accept="image/*" className="hidden" />
-                                            <Tooltip content='Change Image' className='py-1'>
-                                                <PencilIcon className='size-8 hover:bg-primary transition-all duration-500 hover:text-white bg-back text-fore border p-1.5 rounded absolute right-1 top-1' />
-                                            </Tooltip>
-                                        <CloudArrowUpIcon className='size-10 text-fore/70' /></label>
-                                        <small>Upload Image</small>
-                                    </div>
-                                    {errors.image && <span className="text-sm text-red-900">{errors.image.message}</span>}
+                                    <ImageUploader name='image' className='rounded-lg !bg-clip-padding' preview={imgFiles?.image} isFileLoading={isFileLoading} onFileChange={onFileChange} />
+                                    {errors.image && <span className="text-sm text-red-900 mt-3 block">
+                                        {errors.image.message}
+                                    </span>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Gender</label>
-                                    <div className="border border-blue-gray-200 rounded-lg space-x-5 mt-2">
-                                        <Radio label="Male" name="gender" value={'Male'} color="green" onChange={(e)=>setValue('gender', e.target.defaultValue)} />
-                                        <Radio label="Female" name="gender" value={'Female'} color="green" onChange={(e)=>setValue('gender', e.target.defaultValue)} />
+                                    <div className="border border-blue-gray-200 rounded-lg space-x-5">
+                                        <Radio label="Male" name="gender" labelProps={{className: 'text-fore'}} value={'Male'} color="green" onChange={(e)=>{setValue('gender', e.target.defaultValue); clearErrors('gender')}} />
+                                        <Radio label="Female" name="gender" labelProps={{className: 'text-fore'}} value={'Female'} color="green" onChange={(e)=>{setValue('gender', e.target.defaultValue); clearErrors('gender')}} />
                                     </div>
                                     {errors.gender && <Typography color="red" className="mt-2 text-xs font-normal">
                                     {errors.gender.message}
                                     </Typography>}
                                 </div>
-                                <div>
-                                    <label className="text-fore">Contest Category</label>
-                                    <div className="mt-2">
-                                        <Select size='lg' className={IWOL[1] + '!mt-0'} labelProps={{ className: IWOL[0], }} onChange={(val)=>setValue('contest_category', val)}>
-                                            <Option value="Most Influential Personalities">Most Influential Personalities</Option>
-                                            <Option value="Most Football Diehard Fans">Most Football Diehard Fans</Option>
-                                        </Select>
-                                    </div>
-                                    {errors.contest_category && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.contest_category.message}
+                                <div hidden={!contest?.contestCategory?.includes('Football')}>
+                                    <label className="text-fore">Football Team</label>
+                                    <SearchableSelect name="team" options={SOO} className="h-[150px]" onSelect={(val)=>{setValue("team", val); clearErrors('team')}} />
+                                    {errors.team && <Typography color="red" className="mt-2 text-xs font-normal">
+                                    {errors.team.message}
                                     </Typography>}
                                 </div>
                             </div>

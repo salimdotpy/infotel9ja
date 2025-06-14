@@ -1,6 +1,6 @@
 export const IWOL = [
     'before:content-none after:content-none', 
-    'placeholder:opacity-100 !border focus:!border-primary/90 !border-t-blue-gray-200',
+    'placeholder:opacity-100 !border focus:!border-primary/90 !border-t-blue-gray-200 !text-fore',
     '!min-w-0 mt-2'
 ];
 export const IWL = [
@@ -8,3 +8,43 @@ export const IWL = [
     'text-fore focus:border-primary/90 placeholder:opacity-100',
     '!min-w-0'
 ];
+
+export const SOO = [
+    "Abia",
+    "Adamawa",
+    "Akwa Ibom",
+    "Anambra",
+    "Bauchi",
+    "Bayelsa",
+    "Benue",
+    "Borno",
+    "Cross River",
+    "Delta",
+    "Ebonyi",
+    "Edo",
+    "Ekiti",
+    "Enugu",
+    "FCT - Abuja",
+    "Gombe",
+    "Imo",
+    "Jigawa",
+    "Kaduna",
+    "Kano",
+    "Katsina",
+    "Kebbi",
+    "Kogi",
+    "Kwara",
+    "Lagos",
+    "Nasarawa",
+    "Niger",
+    "Ogun",
+    "Ondo",
+    "Osun",
+    "Oyo",
+    "Plateau",
+    "Rivers",
+    "Sokoto",
+    "Taraba",
+    "Yobe",
+    "Zamfara"
+]
