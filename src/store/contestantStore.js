@@ -37,10 +37,13 @@ const useContestantStore = create((set, get) => ({
         }
     },
 
-    notContestant: async (field, value) => {
+    notContestant: async (field, value, fetch = false) => {
         try {
             const q = query(collection(db, 'contestants'), where(field, '==', value));
             const snapshot = await getDocs(q);
+            if (fetch) {
+                return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+            }
             return !snapshot.empty;
         } catch (error) {
             return false;

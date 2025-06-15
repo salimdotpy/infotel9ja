@@ -1,4 +1,5 @@
 import { useDocumentTitle } from '@/hooks';
+import useContestantStore from '@/store/contestantStore';
 import useContestStore from '@/store/contestStore';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { InformationCircleIcon } from '@heroicons/react/24/outline';
@@ -13,6 +14,7 @@ const Compition = () => {
     const [contest, setContest] = useState(null);
     const [loading, setLoading] = useState(false);
     const { fetchContestWithBoosterById } = useContestStore();
+    const { notContestant } = useContestantStore();
     const { id } = useParams();
     const navigate = useNavigate();
     
@@ -20,10 +22,17 @@ const Compition = () => {
         setLoading(true);
         const fetchData = async () => {
             const data = await fetchContestWithBoosterById(id);
+            let contestants = await notContestant('contestId', id, true);
+            contestants = contestants?.sort((a, b) => {
+                if (a?.votes < b?.votes) return -1;
+                if (a?.votes > b?.votes) return 1;
+                return 0;
+            });
             if (data?.error) {
                 toast.error(data?.error);
                 navigate("/contests");
             }
+            data.contestants = contestants || [];
             setContest(data);
         };
         fetchData();
@@ -61,18 +70,32 @@ const Sections = ({ data = {}}) => {
                                 {data?.contestName}
                             </Typography>
                             <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{__html: data?.tnc}} />
-
                         </CardBody>
                     </Card>
                     <Card className='bg-header text-fore basis-full lg:basis-[46%] grow'>
                         <CardBody>
                             <Typography variant="h5">Contestants</Typography>
-                            <Alert icon={<InformationCircleIcon className='size-10' />} variant='ghost' color='yellow' className='text-justify my-3'>
+                            <Alert icon={<InformationCircleIcon className='size-6' />} variant='ghost' color='yellow' className='text-justify my-3 last:*:!mr-3'>
                                 As of today, Thursday, 22 May 2025, 01:01pm, the contestants listed below are the Top Contestants (by votes). Voting is still on. Keep voting to increase the position of your favorite contestants. The Top 3 Contestants wins the prize.
                             </Alert>
                             <Typography variant="h6">Top Contestants</Typography>
                             <div className='flex flex-wrap gap-6 w-full mt-3'>
-                                {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
+                                {data.contestants ? data.contestants.map((contestant, key) => 
+                                <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
+                                    <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore px-2'>
+                                        <Badge placement="top-end" overlap="circular" content={contestant?.votes || 0} color="green" withBorder>
+                                            <Avatar src={contestant?.image} size='xl' />
+                                        </Badge>
+                                        <Typography variant="h6" className="!line-clamp-2">
+                                            {contestant?.fullname}
+                                        </Typography>
+                                        <Link to={'/competition/18th Edition - Master at Photos Contest'}>
+                                            <Button size='sm' className='bg-primary'>Vote</Button>
+                                        </Link>
+                                    </CardBody>
+                                </Card>
+                                ) : <></>}
+                                {/* {[1,2,3,1,3,2,1,3,2,1,3,2].map((item, key) => 
                                 <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
                                     <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore px-2'>
                                         <Badge placement="top-end" overlap="circular" content={item} color="green" withBorder>
@@ -86,11 +109,11 @@ const Sections = ({ data = {}}) => {
                                         </Link>
                                     </CardBody>
                                 </Card>
-                                )}
+                                )} */}
                             </div>
                         </CardBody>
                     </Card>
-                    <Card className='bg-header text-fore basis-full lg:basis-[46%] grow'>
+                    <Card className='bg-header text-fore basis-full lg:basis-[46%] grow hidden'>
                         <CardBody>
                             <Typography variant="h5">Winners</Typography>
                             <div className='flex flex-wrap gap-6 w-full mt-3'>

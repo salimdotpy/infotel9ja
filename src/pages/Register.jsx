@@ -42,7 +42,7 @@ const schema = yup.object({
   })
 
 const RegisterSection = () => {
-    const { handleSubmit, setValue, register, clearErrors, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
+    const { handleSubmit, setValue, register, clearErrors, reset, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
     const { imgFiles, isFileLoading, onFileChange, setImgFiles } = useFileHandler({ setValue, clearErrors });
     const [contest, setContest] = useState(null);
     const [loading, setLoading] = useState(false);
@@ -79,6 +79,7 @@ const RegisterSection = () => {
             toast.error(err.message);
         } finally {
             setLoading(false);
+            reset()
         }
       }
 
@@ -168,7 +169,7 @@ const RegisterSection = () => {
                                 </div>
                             </div>
                             <div className='flex flex-row-reverse justify-between mt-6 items-center gap-5'>
-                                <Button type="submit" className={` bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed`}>
+                                <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center sticky bottom-5`} loading={loading}>
                                     Submit
                                 </Button>
                                 <Button type="reset" className={`bg-fore text-header disabled:!pointer-events-auto disabled:cursor-not-allowed`}>
