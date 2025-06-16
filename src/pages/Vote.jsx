@@ -3,7 +3,7 @@ import useContestantStore from '@/store/contestantStore';
 import useContestStore from '@/store/contestStore';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { IWOL } from '@/utils/constants';
-import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon, StarIcon } from '@heroicons/react/24/outline';
+import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon, SparklesIcon, StarIcon } from '@heroicons/react/24/outline';
 import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
@@ -69,7 +69,7 @@ const Sections = ({ data = {}}) => {
                     <CardBody className='flex flex-wrap gap-5 *:grow *:basis-[45%]'>
                         <Avatar src={data?.image || '/images/img4.jpeg'} alt={data?.fullname} variant='rounded' className='h-[300px]' />
                         <div>
-                            <Typography variant="h5" className="mb-4">{data?.fullname}</Typography>
+                            <Typography variant="h5" className="mb-4">{data?.fullname} ({data?.role || 'Contestant'})</Typography>
                             <labe>Total Gem(s) Aquire:</labe> <br />
                             <div className='flex items-center jus'>
                                 <Typography variant="h3">{data?.votes || 0}</Typography>
@@ -128,7 +128,7 @@ const Sections = ({ data = {}}) => {
                                     </ListItemPrefix>
                                     <div>
                                         <Typography variant='h6'>{item.name}</Typography>
-                                        <p>Pay ₦{item.price} for {item.paidVote} votes and get {item.bonusVote} votes</p>
+                                        <p>Pay <span className='font-bold'>₦{item.price}</span> for <span className='font-bold'>{item.paidVote} votes</span> and get <span className='font-bold'>{item.bonusVote} votes as bonus</span></p>
                                     </div>
                                     <ListItemSuffix>
                                         <Button size='sm' className='bg-primary'>Pay Now</Button>
@@ -140,23 +140,21 @@ const Sections = ({ data = {}}) => {
                     </Card>
                     <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
                         <CardBody>
-                            <Typography variant="h5" className="mb-4">Welcome Bonus Packages</Typography>
-                            <Alert variant='ghost' color='yellow' className='mb-4'>
-                                <span className='font-bold'>Note:</span>
-                                <span> To activate your voting page, you need to buy one of the Packages</span>
-                            </Alert>
+                            <Typography variant="h5" className="mb-4">Gems Booster Bonus Packages</Typography>
                             <List className='p-0'>
-                                {data.contest.bonusPackages.map((item, k) => 
+                                {data.contest.boosterPackages.map((item, k) => 
                                 <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
                                     <ListItemPrefix>
-                                        <StarIcon className='size-6' />
+                                        <SparklesIcon className='size-6' />
                                     </ListItemPrefix>
                                     <div>
                                         <Typography variant='h6'>{item.name}</Typography>
-                                        <p>Pay ₦{item.price} for {item.paidVote} votes and get {item.bonusVote} votes</p>
+                                        <p>Pay <span className='font-bold'>₦{item.price} </span> 
+                                        and each vote given to you shall be  
+                                        <span className='font-bold'> multiply by {item.vote}</span>, is valid for <span className='font-bold'>{item.duration * 10} days</span></p>
                                     </div>
-                                    <ListItemSuffix>
-                                        <Button size='sm' className='bg-primary'>Pay Now</Button>
+                                    <ListItemSuffix className='shrink-0'>
+                                        <Button size='sm' className='bg-primary'>Buy Now</Button>
                                     </ListItemSuffix>
                                 </ListItem>
                                 )}
@@ -165,8 +163,7 @@ const Sections = ({ data = {}}) => {
                     </Card>
                     <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
                         <CardBody>
-                            <Avatar src={data?.contest?.contestImage || '/images/img4.jpeg'} alt='competition-image' variant='rounded' className='!size-44 block' />
-                            <Typography variant="h5" className="my-4">{data?.contest?.contestName}</Typography>
+                            <Typography variant="h5" className="mb-4">Terms and Conditions</Typography>
                             <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{__html: data?.contest?.tnc}} />
                         </CardBody>
                     </Card>
