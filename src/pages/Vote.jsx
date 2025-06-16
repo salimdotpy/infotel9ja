@@ -3,8 +3,8 @@ import useContestantStore from '@/store/contestantStore';
 import useContestStore from '@/store/contestStore';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { IWOL } from '@/utils/constants';
-import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon, SparklesIcon, StarIcon } from '@heroicons/react/24/outline';
-import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
+import { CubeIcon, DocumentCheckIcon, DocumentDuplicateIcon, EnvelopeIcon, GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, SparklesIcon, StarIcon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, Dialog, DialogBody, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { BiLogoFacebook, BiLogoTelegram, BiLogoTwitter, BiLogoWhatsapp } from 'react-icons/bi';
@@ -59,6 +59,7 @@ const Sections = ({ data = {}}) => {
     const [quantity, setQuantity] = useState(data?.contest?.minVote || 2);
     const [value, copy] = useCopyToClipboard();
     const [copied, setCopied] = useState(false);
+    const [open, setOpen] = useState(true);
     const shareUrl = `https://salimtech.pythonanywhere.com/vote/${data.id}`;
     const votePrice = data?.contest?.votePrice || 50;
 
@@ -118,13 +119,13 @@ const Sections = ({ data = {}}) => {
                             <Typography variant="h5" className="mb-4">Welcome Bonus Packages</Typography>
                             <Alert variant='ghost' color='yellow' className='mb-4'>
                                 <span className='font-bold'>Note:</span>
-                                <span> To activate your voting page, you need to buy one of the Packages</span>
+                                <span> To activate your voting page, you need to buy one of the Bonus Packages</span>
                             </Alert>
                             <List className='p-0'>
                                 {data.contest.bonusPackages.map((item, k) => 
                                 <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
                                     <ListItemPrefix>
-                                        <StarIcon className='size-6' />
+                                        <GiftIcon className='size-6' />
                                     </ListItemPrefix>
                                     <div>
                                         <Typography variant='h6'>{item.name}</Typography>
@@ -143,7 +144,7 @@ const Sections = ({ data = {}}) => {
                             <Typography variant="h5" className="mb-4">Gems Booster Bonus Packages</Typography>
                             <List className='p-0'>
                                 {data.contest.boosterPackages.map((item, k) => 
-                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                /*<ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
                                     <ListItemPrefix>
                                         <SparklesIcon className='size-6' />
                                     </ListItemPrefix>
@@ -154,6 +155,24 @@ const Sections = ({ data = {}}) => {
                                         <span className='font-bold'> multiply by {item.vote}</span>, is valid for <span className='font-bold'>{item.duration * 10} days</span></p>
                                     </div>
                                     <ListItemSuffix className='shrink-0'>
+                                        <Button size='sm' className='bg-primary'>Buy Now</Button>
+                                    </ListItemSuffix>
+                                </ListItem>*/
+                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                    <ListItemPrefix>
+                                        <CubeIcon className='size-6' />
+                                    </ListItemPrefix>
+                                    <div>
+                                        <Typography variant='h6'>{item.name}</Typography>
+                                        <p>
+                                            💎x{item.vote} | ⌚ <span className='font-bold'>{item.duration * 10} days</span>
+                                        </p>
+                                        <p hidden> <span className='font-bold'>₦{item.price} </span> 
+                                        and each vote given to you shall be  
+                                        <span className='font-bold'> multiply by {item.vote}</span>, is valid for <span className='font-bold'>{item.duration * 10} days</span></p>
+                                    </div>
+                                    <ListItemSuffix className='shrink-0'>
+                                        <p className='font-bold'>₦{item.price} </p>
                                         <Button size='sm' className='bg-primary'>Buy Now</Button>
                                     </ListItemSuffix>
                                 </ListItem>
@@ -169,6 +188,9 @@ const Sections = ({ data = {}}) => {
                     </Card>
                 </div>
             </div>
+            <Confirmation open={open} handler={()=>setOpen(!open)}>
+                Ade
+            </Confirmation>
         </section>
     )
 }
@@ -200,12 +222,12 @@ export const ProductQuantity = ({ min = 1, max = Infinity, unitPrice = 1, getTot
 
     return (
         <div className='*:inline-block space-x-3 shrink-0'>
-            <IconButton size='sm' variant='outlined' className="disabled:!cursor-not-allowed disabled:pointer-events-auto !size-7" onClick={decrement} disabled={quantity <= min}>
+            <IconButton size='sm' variant='outlined' className="disabled:!cursor-not-allowed disabled:pointer-events-auto !size-7 border-fore text-fore" onClick={decrement} disabled={quantity <= min}>
                 <MinusIcon className='size-4' />
             </IconButton>
             <Typography variant='h6'>{quantity}</Typography>
             {/* <input value={quantity} className='border border-primary focus-visible:!outline-primary/90 rounded-md px-3 py-2'  /> */}
-            <IconButton size='sm' variant='outlined' className="disabled:!cursor-not-allowed disabled:pointer-events-auto !size-7" onClick={increment} disabled={quantity >= max}>
+            <IconButton size='sm' variant='outlined' className="disabled:!cursor-not-allowed disabled:pointer-events-auto !size-7 border-fore text-fore" onClick={increment} disabled={quantity >= max}>
                 <PlusIcon className='size-4' />
             </IconButton>
         </div>
@@ -237,4 +259,20 @@ Thank you so much for your help!`;
         link = `https://api.whatsapp.com/send?text=${encodedMessage}`;
     }
     window.open(link,'_blank');
+}
+
+const Confirmation = ({open, handler, title='Confirmation', children}) => {
+    return (
+        <Dialog open={open} handler={handler} size="sm">
+            <DialogBody divider className="grid place-items-center gap-5 md:p-16 relative border-0 bg-header rounded-lg text-fore">
+                <XMarkIcon className="mr-3 h-5 w-5 absolute top-3 right-0" onClick={handler} />
+                <InformationCircleIcon className='size-16 text-fore' />
+                <Typography variant='h5'>{title}</Typography>
+                {children || 'Body'}
+                <Button className={`bg-primary`} onClick={handler}>
+                    OK
+                </Button>
+            </DialogBody>
+        </Dialog>
+    );
 }
