@@ -20,12 +20,12 @@ const Vote = () => {
         setLoading(true);
         const fetchData = async () => {
             const data = await fetchContestantById(id);
-            const contest = await fetchContestWithBoosterById(id);
             if (data?.error) {
                 toast.error(data?.error);
                 navigate("/contests");
             }
-            data.contest = contest || null;
+            const contest = await fetchContestWithBoosterById(data?.contestId);
+            data.contest = contest || {};
             setContestant(data);
         };
         fetchData();
@@ -34,7 +34,7 @@ const Vote = () => {
     
     useDocumentTitle(`${contestant?.fullname} - ${contestant?.contest?.contestName} - InfoTel9ja` || 'Vote - InfoTel9ja');
     const links = [
-        { name: contestant?.contest?.contestName || '', href: `/contest/${contestant?.contest?.id}` },
+        { name: contestant?.contest?.contestName || 'Contest', href: `/contest/${contestant?.contest?.id}` },
         { name: `Vote for ${contestant?.fullname || ''}`, href: '' },
     ]
     return (
