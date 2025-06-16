@@ -3,8 +3,8 @@ import useContestantStore from '@/store/contestantStore';
 import useContestStore from '@/store/contestStore';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { IWOL } from '@/utils/constants';
-import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
-import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, Tooltip, Typography } from '@material-tailwind/react';
+import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon, StarIcon } from '@heroicons/react/24/outline';
+import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { BiLogoFacebook, BiLogoTelegram, BiLogoTwitter, BiLogoWhatsapp } from 'react-icons/bi';
@@ -112,13 +112,61 @@ const Sections = ({ data = {}}) => {
                         </div>
                     </CardBody>
                 </Card>
-                <div className='flex flex-wrap gap-6 px-4 w-full'>
-                    <Card className='bg-header text-fore basis-full lg:basis-1/2'>
+                <div className='flex flex-wrap gap-6 px-4 w-full *:grow'>
+                    <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
+                        <CardBody>
+                            <Typography variant="h5" className="mb-4">Welcome Bonus Packages</Typography>
+                            <Alert variant='ghost' color='yellow' className='mb-4'>
+                                <span className='font-bold'>Note:</span>
+                                <span> To activate your voting page, you need to buy one of the Packages</span>
+                            </Alert>
+                            <List className='p-0'>
+                                {data.contest.bonusPackages.map((item, k) => 
+                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                    <ListItemPrefix>
+                                        <StarIcon className='size-6' />
+                                    </ListItemPrefix>
+                                    <div>
+                                        <Typography variant='h6'>{item.name}</Typography>
+                                        <p>Pay ₦{item.price} for {item.paidVote} votes and get {item.bonusVote} votes</p>
+                                    </div>
+                                    <ListItemSuffix>
+                                        <Button size='sm' className='bg-primary'>Pay Now</Button>
+                                    </ListItemSuffix>
+                                </ListItem>
+                                )}
+                            </List>
+                        </CardBody>
+                    </Card>
+                    <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
+                        <CardBody>
+                            <Typography variant="h5" className="mb-4">Welcome Bonus Packages</Typography>
+                            <Alert variant='ghost' color='yellow' className='mb-4'>
+                                <span className='font-bold'>Note:</span>
+                                <span> To activate your voting page, you need to buy one of the Packages</span>
+                            </Alert>
+                            <List className='p-0'>
+                                {data.contest.bonusPackages.map((item, k) => 
+                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                    <ListItemPrefix>
+                                        <StarIcon className='size-6' />
+                                    </ListItemPrefix>
+                                    <div>
+                                        <Typography variant='h6'>{item.name}</Typography>
+                                        <p>Pay ₦{item.price} for {item.paidVote} votes and get {item.bonusVote} votes</p>
+                                    </div>
+                                    <ListItemSuffix>
+                                        <Button size='sm' className='bg-primary'>Pay Now</Button>
+                                    </ListItemSuffix>
+                                </ListItem>
+                                )}
+                            </List>
+                        </CardBody>
+                    </Card>
+                    <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
                         <CardBody>
                             <Avatar src={data?.contest?.contestImage || '/images/img4.jpeg'} alt='competition-image' variant='rounded' className='!size-44 block' />
-                            <Typography variant="h5" className="my-4">
-                                {data?.contest?.contestName}
-                            </Typography>
+                            <Typography variant="h5" className="my-4">{data?.contest?.contestName}</Typography>
                             <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{__html: data?.contest?.tnc}} />
                         </CardBody>
                     </Card>
