@@ -3,13 +3,14 @@ import useContestantStore from '@/store/contestantStore';
 import useContestStore from '@/store/contestStore';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { IWOL } from '@/utils/constants';
-import { DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
+import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusIcon, PlusIcon } from '@heroicons/react/24/outline';
 import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { BiLogoFacebook, BiLogoWhatsapp } from 'react-icons/bi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { useCopyToClipboard } from 'usehooks-ts';
 
 const Vote = () => {
     const [contestant, setContestant] = useState(null);
@@ -56,14 +57,16 @@ export default Vote;
 
 const Sections = ({ data = {}}) => {
     const [quantity, setQuantity] = useState(data?.contest?.minVote || 2);
-    const today = new Date();
+    const [value, copy] = useCopyToClipboard();
+    const [copied, setCopied] = useState(false);
+    const shareUrl = `https://salimtech.pythonanywhere.com/vote/${data.id}`;
 
     return (
         <section id='vote' className='py-10'>
             <div className='container xl:w-[90%] mx-auto'>
                 <Card className='bg-header text-fore basis-full lg:basis-1/2 mb-6 mx-4'>
                     <CardBody className='flex flex-wrap gap-5 *:grow *:basis-[45%]'>
-                        <Avatar src={data?.image || '/images/img4.jpeg'} alt={data?.fullname} variant='rounded' className='h-[250px]' />
+                        <Avatar src={data?.image || '/images/img4.jpeg'} alt={data?.fullname} variant='rounded' className='h-[300px]' />
                         <div>
                             <Typography variant="h5" className="mb-4">{data?.fullname}</Typography>
                             <labe>Total Gem(s) Aquire:</labe> <br />
@@ -72,23 +75,27 @@ const Sections = ({ data = {}}) => {
                                 <span>💎</span>
                             </div>
                             <div className='flex gap-2 items-center my-4'>
-                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize'>
-                                    <DocumentDuplicateIcon className='size-4' /> Copy Link
+                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize' onMouseLeave={() =>setCopied(false)} onClick={()=>{
+                                    copy(shareUrl);
+                                    setCopied(true);
+                                    toast.success('Your vote link copied successfully!');}}>
+                                    {copied ?  <><DocumentCheckIcon className='size-4' /> Link Copied</>:
+                                    <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
                                 </Button>
                                 <Tooltip content='Share via facebook'>
-                                    <IconButton size='sm' variant='outlined'>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, 'f')}>
                                         <BiLogoFacebook className='size-5' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via whatsapp'>
-                                    <IconButton size='sm' variant='outlined'>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl)}>
                                         <BiLogoWhatsapp className='size-5' />
                                     </IconButton>
                                 </Tooltip>
                             </div>
                             <labe>Number of votes you want to get:</labe> <br />
                             <ProductQuantity min={data?.contest?.minVote} getQty={setQuantity} />
-                            <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center sticky bottom-5`}>
+                            <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`}>
                                 Pay ₦{quantity * data?.contest?.votePrice} for {quantity} Gems
                             </Button>
                         </div>
@@ -148,3 +155,32 @@ export const ProductQuantity = ({ min = 1, max = Infinity, unitPrice = 1, getTot
         </div>
     )
 };
+
+const socialShare = (url, media = 'w') => {
+    const message = `HELP ME WIN A BRAND NEW MIRRORLESS CAMERA!
+
+I need your support! Please vote for me in the InfoTel9ja contest. Each vote costs #50, and you can vote as many times as you'd like.
+
+Here's how your votes add up:
+✅ 1 vote = #50
+✅ 2 votes = #100
+✅ 5 votes = #250
+✅ 10 votes = #500
+
+Click the link below to cast your vote:
+${url}
+
+Thank you so much for your help!`;
+    const encodedMessage = encodeURIComponent(message);
+    let link = '';
+    if (media === 'f') {
+         link = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedMessage}`;
+    } else if (media === 't') {
+         link = `https://twitter.com/intent/tweet?text=${encodedMessage}`;
+    } else if (media === 'tel') {
+         link = `https://t.me/share/url?url=${encodedUrl}&text=${encodedMessage}`;
+    } else {
+        link = `https://api.whatsapp.com/send?text=${encodedMessage}`;
+    }
+    window.open(link,'_blank');
+}
