@@ -31,6 +31,7 @@ import AddContest from "./pages/admin/AddContest";
 import { hexToRgb } from "./utils";
 import ContestList from "./pages/admin/ContestList";
 import EditContest from "./pages/admin/EditContest";
+import Vote from "./pages/Vote";
 
 function App() {
   const { theme } = useTheme();
@@ -80,6 +81,7 @@ function App() {
           <Route path="/about" element={<About />} />
           <Route path="/contests" element={<Compitions />} />
           <Route path="/contest/:id" element={<Compition />} />
+          <Route path="/vote/:id" element={<Vote />} />
           <Route path="/past-winners" element={<Winners />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />

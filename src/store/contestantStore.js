@@ -8,30 +8,14 @@ import dayjs from 'dayjs';
 const useContestantStore = create((set, get) => ({
     contestants: [],
     loading: false,
-    fetchContestantWithBoosterById: async (contestantId) => {
+    fetchContestantById: async (contestantId) => {
         try {
             // Fetch contestant data
             const contestantDoc = await getDoc(doc(db, 'contestants', contestantId));
             if (!contestantDoc.exists()) {
                 return { error: "Contestant not found" };
             }
-
-            const contestantData = contestantDoc.data();
-
-            // Fetch related boosters
-            const boosterQuery = query(collection(db, 'boosters'), where('contestantId', '==', contestantId));
-            const boosterSnap = await getDocs(boosterQuery);
-            const boosters = boosterSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-            return {
-                id: contestantDoc.id,
-                ...contestantData,
-                boosterPackages: boosters,
-                bonusPackages: parseIfJson(contestantData.bonusPackages),
-                winnersPrice: parseIfJson(contestantData.winnersPrice),
-                regDate: parseIfJson(contestantData.regDate),
-                votingDate: parseIfJson(contestantData.votingDate),
-            };
+            return { id: contestantDoc.id, ...contestantDoc.data() };
         } catch (error) {
             return { error: error.message };
         }

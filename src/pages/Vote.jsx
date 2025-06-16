@@ -8,45 +8,39 @@ import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
-const Compition = () => {
-    useDocumentTitle('Contests - InfoTel9ja');
-
-    const [contest, setContest] = useState(null);
+const Vote = () => {
+    const [contestant, setContestant] = useState(null);
     const [loading, setLoading] = useState(false);
     const { fetchContestWithBoosterById } = useContestStore();
-    const { notContestant } = useContestantStore();
+    const { fetchContestantById } = useContestantStore();
     const { id } = useParams();
     const navigate = useNavigate();
     
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
-            const data = await fetchContestWithBoosterById(id);
-            let contestants = await notContestant('contestId', id, true);
-            contestants = contestants?.sort((a, b) => {
-                if (a?.votes < b?.votes) return -1;
-                if (a?.votes > b?.votes) return 1;
-                return 0;
-            });
+            const data = await fetchContestantById(id);
+            const contest = await fetchContestWithBoosterById(id);
             if (data?.error) {
                 toast.error(data?.error);
                 navigate("/contests");
             }
-            data.contestants = contestants || [];
-            setContest(data);
+            data.contest = contest || null;
+            setContestant(data);
         };
         fetchData();
         setLoading(false);
     }, [id]);
-
+    
+    useDocumentTitle(`${contestant?.fullname} - ${contestant?.contest?.contestName} - InfoTel9ja` || 'Vote - InfoTel9ja');
     const links = [
-        { name: 'Contests', href: '/contests' },
-        { name: contest?.contestName || '', href: '' },
+        { name: contestant?.contest?.contestName || '', href: `/contest/${contestant?.contest?.id}` },
+        { name: `Vote for ${contestant?.fullname}`, href: '' },
     ]
     return (
         <>
-            <HeroBreaCrumbs page={contest?.contestName || ''} links={links} />
-            {!loading && contest ? <Sections data={contest} /> :
+            <HeroBreaCrumbs page={contestant?.fullname || ''} links={links} />
+            {!loading && contestant ? <>Comming Soon</> :
             <LoadingComponent />
             }
             <FooterSection />
@@ -54,7 +48,7 @@ const Compition = () => {
     );
 };
 
-export default Compition;
+export default Vote;
 
 const Sections = ({ data = {}}) => {
     const today = new Date();
