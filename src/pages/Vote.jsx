@@ -60,6 +60,7 @@ const Sections = ({ data = {}}) => {
     const [value, copy] = useCopyToClipboard();
     const [copied, setCopied] = useState(false);
     const shareUrl = `https://salimtech.pythonanywhere.com/vote/${data.id}`;
+    const votePrice = data?.contest?.votePrice || 50;
 
     return (
         <section id='vote' className='py-10'>
@@ -83,12 +84,12 @@ const Sections = ({ data = {}}) => {
                                     <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
                                 </Button>
                                 <Tooltip content='Share via facebook'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, 'f')}>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 'f')}>
                                         <BiLogoFacebook className='size-5' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via whatsapp'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl)}>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice)}>
                                         <BiLogoWhatsapp className='size-5' />
                                     </IconButton>
                                 </Tooltip>
@@ -96,7 +97,7 @@ const Sections = ({ data = {}}) => {
                             <labe>Number of votes you want to get:</labe> <br />
                             <ProductQuantity min={data?.contest?.minVote} getQty={setQuantity} />
                             <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`}>
-                                Pay ₦{quantity * data?.contest?.votePrice} for {quantity} Gems
+                                Pay ₦{quantity * votePrice} for {quantity} Gems
                             </Button>
                         </div>
                     </CardBody>
@@ -156,16 +157,14 @@ export const ProductQuantity = ({ min = 1, max = Infinity, unitPrice = 1, getTot
     )
 };
 
-const socialShare = (url, media = 'w') => {
-    const message = `HELP ME WIN A BRAND NEW MIRRORLESS CAMERA!
-
-I need your support! Please vote for me in the InfoTel9ja contest. Each vote costs #50, and you can vote as many times as you'd like.
+const socialShare = (url, price=50, media = 'w') => {
+    const message = `I need your support! Please vote for me in the InfoTel9ja contest. Each vote costs ₦${price}, and you can vote as many times as you'd like.
 
 Here's how your votes add up:
-✅ 1 vote = #50
-✅ 2 votes = #100
-✅ 5 votes = #250
-✅ 10 votes = #500
+✅ 1 vote = ₦${price}
+✅ 2 votes = ₦${price * 2}
+✅ 5 votes = ₦${price * 5}
+✅ 10 votes = ₦${price * 10}
 
 Click the link below to cast your vote:
 ${url}
