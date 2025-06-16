@@ -130,7 +130,7 @@ const Sections = ({ data = {}}) => {
                                         <Typography variant='h6'>{item.name}</Typography>
                                         <p>Pay <span className='font-bold'>₦{item.price}</span> for <span className='font-bold'>{item.paidVote} votes</span> and get <span className='font-bold'>{item.bonusVote} votes as bonus</span></p>
                                     </div>
-                                    <ListItemSuffix>
+                                    <ListItemSuffix className='shrink-0'>
                                         <Button size='sm' className='bg-primary'>Pay Now</Button>
                                     </ListItemSuffix>
                                 </ListItem>
