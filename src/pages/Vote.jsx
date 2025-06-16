@@ -35,11 +35,11 @@ const Vote = () => {
     useDocumentTitle(`${contestant?.fullname} - ${contestant?.contest?.contestName} - InfoTel9ja` || 'Vote - InfoTel9ja');
     const links = [
         { name: contestant?.contest?.contestName || '', href: `/contest/${contestant?.contest?.id}` },
-        { name: `Vote for ${contestant?.fullname}`, href: '' },
+        { name: `Vote for ${contestant?.fullname || ''}`, href: '' },
     ]
     return (
         <>
-            <HeroBreaCrumbs page={contestant?.fullname || ''} links={links} />
+            <HeroBreaCrumbs page={contestant?.fullname || 'Contestant'} links={links} />
             {!loading && contestant ? <>Comming Soon</> :
             <LoadingComponent />
             }
