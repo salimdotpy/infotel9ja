@@ -7,7 +7,7 @@ import { DocumentCheckIcon, DocumentDuplicateIcon, InformationCircleIcon, MinusI
 import { Alert, Avatar, Badge, Button, Card, CardBody, CardHeader, Chip, IconButton, Input, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { BiLogoFacebook, BiLogoWhatsapp } from 'react-icons/bi';
+import { BiLogoFacebook, BiLogoTelegram, BiLogoTwitter, BiLogoWhatsapp } from 'react-icons/bi';
 import { Link, useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'usehooks-ts';
@@ -83,14 +83,24 @@ const Sections = ({ data = {}}) => {
                                     {copied ?  <><DocumentCheckIcon className='size-4' /> Link Copied</>:
                                     <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
                                 </Button>
+                                <Tooltip content='Share via whatsapp'>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice)}>
+                                        <BiLogoWhatsapp className='size-5' />
+                                    </IconButton>
+                                </Tooltip>
                                 <Tooltip content='Share via facebook'>
                                     <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 'f')}>
                                         <BiLogoFacebook className='size-5' />
                                     </IconButton>
                                 </Tooltip>
-                                <Tooltip content='Share via whatsapp'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice)}>
-                                        <BiLogoWhatsapp className='size-5' />
+                                <Tooltip content='Share via Twitter'>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 't')}>
+                                        <BiLogoTwitter className='size-5' />
+                                    </IconButton>
+                                </Tooltip>
+                                <Tooltip content='Share via Telegram'>
+                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 'tel')}>
+                                        <BiLogoTelegram className='size-5' />
                                     </IconButton>
                                 </Tooltip>
                             </div>
