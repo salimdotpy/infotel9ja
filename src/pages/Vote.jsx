@@ -71,7 +71,7 @@ const Sections = ({ data = {}}) => {
                         <Avatar src={data?.image || '/images/img4.jpeg'} alt={data?.fullname} variant='rounded' className='h-[300px]' />
                         <div>
                             <Typography variant="h5" className="mb-4">{data?.fullname} ({data?.role || 'Contestant'})</Typography>
-                            <labe>Total Gem(s) Aquire:</labe> <br />
+                            <labe>Total Gem(s) Aquired:</labe> <br />
                             <div className='flex items-center jus'>
                                 <Typography variant="h3">{data?.votes || 0}</Typography>
                                 <span>💎</span>
