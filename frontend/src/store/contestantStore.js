@@ -35,24 +35,35 @@ const useContestantStore = create((set, get) => ({
     },
 
     // Fetch all contestants with their boosters
-    fetchContestantWithBooster: async () => {
+    fetchContestantWithBooster: async (contestantId) => {
         set({ loading: true });
-        const contestantsSnap = await getDocs(collection(db, 'contestants'));
-        const contestants = contestantsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        const q = query(collection(db, 'subscriptions'), where('contestantId', '==', contestantId));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            let subs = snapshot.docs.map(doc => {
+                const result = {id: doc.id, ...doc.data()};
+                result.expired = dayjs().diff(result.expired_at);
+                return result;
+            });
+            const boostersSnap = await getDocs(collection(db, 'boosters'));
+            const boosters = boostersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+            subs = subs.map(sub => ({ ...sub, booster: boosters.filter(booster => booster.id === sub.boosterId),}));
+            return subs;
+        }
+        return false;
+    },
 
-        const boostersSnap = await getDocs(collection(db, 'boosters'));
-        const boosters = boostersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-
-        const ContestantWithBooster = contestants.map(contestant => ({
-            ...contestant,
-            bonusPackages: parseIfJson(contestant.bonusPackages),
-            winnersPrice: parseIfJson(contestant.winnersPrice),
-            regDate: parseIfJson(contestant.regDate),
-            votingDate: parseIfJson(contestant.votingDate),
-            boosterPackages: boosters.filter(booster => booster.contestantId === contestant.id),
-        }));
-
-        set({ contestants: ContestantWithBooster, loading: false });
+    fetchContestantSub: async (contestantId) => {
+        const q = query(collection(db, 'subscriptions'), where('contestantId', '==', contestantId));
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+            // console.log({...data});
+            const doc = data[data.length - 1];
+            doc.expired = (dayjs(doc.expired_at).diff(dayjs()) < 1);
+            return doc;
+        }
+        return false;
     },
 
     createContestant: async (form) => {

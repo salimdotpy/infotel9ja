@@ -32,6 +32,7 @@ import { hexToRgb } from "./utils";
 import ContestList from "./pages/admin/ContestList";
 import EditContest from "./pages/admin/EditContest";
 import Vote from "./pages/Vote";
+import VerifyPayment from "./pages/VerifyPayment";
 
 function App() {
   const { theme } = useTheme();
@@ -82,6 +83,7 @@ function App() {
           <Route path="/contests" element={<Compitions />} />
           <Route path="/contest/:id" element={<Compition />} />
           <Route path="/vote/:id" element={<Vote />} />
+          <Route path="/verify/:ref/:id" element={<VerifyPayment />} />
           <Route path="/past-winners" element={<Winners />} />
           <Route path="/terms" element={<Terms />} />
           <Route path="/contact" element={<ContactUs />} />
