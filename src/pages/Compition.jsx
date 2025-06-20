@@ -24,8 +24,8 @@ const Compition = () => {
             const data = await fetchContestWithBoosterById(id);
             let contestants = await notContestant('contestId', id, true);
             contestants = contestants?.sort((a, b) => {
-                if (a?.votes < b?.votes) return -1;
-                if (a?.votes > b?.votes) return 1;
+                if (a?.total < b?.total) return -1;
+                if (a?.total > b?.total) return 1;
                 return 0;
             });
             if (data?.error) {
@@ -83,7 +83,7 @@ const Sections = ({ data = {}}) => {
                                 {data.contestants ? data.contestants.map((contestant, key) => 
                                 <Card key={key} className='flex-1 bg-back min-w-40'  data-aos="fade-up" data-aos-delay={`${key}00`}>
                                     <CardBody className='flex gap-1.5 flex-col items-center text-center text-fore px-2'>
-                                        <Badge placement="top-end" overlap="circular" content={contestant?.votes || 0} color="green" withBorder>
+                                        <Badge placement="top-end" overlap="circular" content={contestant?.total} color="green" withBorder>
                                             <Avatar src={contestant?.image} size='xl' />
                                         </Badge>
                                         <Typography variant="h6" className="!line-clamp-2">

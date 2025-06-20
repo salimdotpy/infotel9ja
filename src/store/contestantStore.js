@@ -26,7 +26,9 @@ const useContestantStore = create((set, get) => ({
             const q = query(collection(db, 'contestants'), where(field, '==', value));
             const snapshot = await getDocs(q);
             if (fetch) {
-                return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
+                const result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                return result.map((doc) => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
+                
             }
             return !snapshot.empty;
         } catch (error) {
