@@ -4,19 +4,17 @@ import useContestStore from '@/store/contestStore';
 import CountdownTimer from '@/ui/CountdownTimer';
 import PaystackButton from '@/ui/PaystackButton';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
+import { API_BASE_URL } from '@/utils';
 import { IWL } from '@/utils/constants';
 import { createDoc } from '@/utils/settings';
 import { CubeIcon, DocumentCheckIcon, DocumentDuplicateIcon, GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { Alert, Avatar, Button, Card, CardBody, CardFooter, Dialog, DialogBody, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
+import { Alert, Avatar, Button, Card, CardBody, Dialog, DialogBody, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
-import { useForm } from 'react-hook-form';
 import { BiLogoFacebook, BiLogoTelegram, BiLogoTwitter, BiLogoWhatsapp } from 'react-icons/bi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useCopyToClipboard } from 'usehooks-ts';
-import * as yup from "yup";
 
 const Vote = () => {
     const [contestant, setContestant] = useState(null);
@@ -55,7 +53,6 @@ const Vote = () => {
             <HeroBreaCrumbs page={contestant?.fullname || 'Contestant'} links={links} />
             {!loading && contestant ? <Sections data={contestant} /> :
             <LoadingComponent />
-            // {dayjs().diff(dayjs(contestant.created_at), 'd')}
             }
             <FooterSection />
         </>
@@ -70,7 +67,7 @@ const Sections = ({ data = {}}) => {
     const [copied, setCopied] = useState(false);
     const [openModal, setOpenModal] = useState(1);
     const [modalData, setModalData] = useState({});
-    const shareUrl = `https://salimtech.pythonanywhere.com/vote/${data.id}`;
+    const shareUrl = `${API_BASE_URL}/vote/${data.id}`;
     const votePrice = data?.contest?.votePrice || 50;
     const handleComplete = () => {
         toast.error("⏰ Time's up!");
@@ -360,7 +357,7 @@ const CheckoutForm = ({open, handler, data}) => {
         setLoading(true);
         try {
             const form = { ...udata, email, mobile };
-            console.log(form);
+            // console.log(form);
             
             const result = await createDoc(form);
             return {id: result.id};

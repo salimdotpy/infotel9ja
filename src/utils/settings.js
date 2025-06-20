@@ -1,6 +1,6 @@
 import { deleteDoc, doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { addDoc, collection, db } from "./firebase";
-import { except_, keyToTitle } from ".";
+import { API_BASE_URL, except_, keyToTitle } from ".";
 import axios from "axios";
 
 const settingsCol = collection(db, "settings");
@@ -117,42 +117,10 @@ export async function createDoc(req) {
 
 export async function verifyOrderTransaction(reference, orderId) {
     try {
-        const response = await axios.post('http://localhost:3000/api/verify-paystack', { reference, orderId });
+        const response = await axios.post(`${API_BASE_URL}/api/verify-paystack`, { reference, orderId });
         console.log('Transaction verified:', response.data);
-        // Handle success (e.g., show a success message)
         return response
     } catch (error) {
         console.error('Verification failed:', error.response?.data || error.message);
-        // Handle error (e.g., show error to user)
     }
 }
-
-
-/*
-export const transactions = mysqlTable('transactions', {
-  id: int().primaryKey().autoincrement(),
-  user_id: int().references(()=>users.id),
-  wallet_type: varchar({length:40}).default('main'),
-  amount:  varchar({length:255}).notNull().default(0),
-  charge:  varchar({length:255}).notNull().default(0),
-  purpose: varchar({length:40}),
-  status: varchar({length:40}),
-  trx: varchar({length:40}),
-  phone: varchar({length:40}).default(null),
-  network: varchar({length:40}).default(null),
-  plan_size: varchar({length:40}).default(null),
-  prev_balance: varchar({length:255}),
-  new_balance: varchar({length:255}),
-  details: varchar({length:255}).default(null),
-  created_at: timestamp().defaultNow(),
-  updated_at: timestamp().defaultNow(),
-});
-
-export const payrefs = mysqlTable('payrefs', {
-  id: int().primaryKey().autoincrement(),
-  user_id: int().references(()=>users.id),
-  reference: varchar({length:40}),
-  created_at: timestamp().defaultNow(),
-  updated_at: timestamp().defaultNow(),
-});
-*/
