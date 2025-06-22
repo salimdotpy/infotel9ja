@@ -33,7 +33,7 @@ export const hexToRgb = (val, hex = true) => {
   }
 }
 
-export const sendGeneralEmail = async (email, subject, message, receiverName = '') => {
+const sendGeneralEmail = async (email, subject, message, receiverName = '') => {
   let smtp_setting = await fetchSetting('email');
   const transporter = nodemailer.createTransport({
     service: 'gmail',

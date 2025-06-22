@@ -1,12 +1,10 @@
-// pages/api/verify-paystack.js
-
 import admin from '@/lib/firebase-admin';
 import axios from 'axios';
 import dayjs from 'dayjs';
-import Cors from 'cors'
+import Cors from 'cors';
 import initMiddleware from '@/lib/init-middleware';
 
-const db = admin.firestore();
+export const db = admin.firestore();
 
 const cors = initMiddleware(
   Cors({

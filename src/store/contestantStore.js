@@ -28,7 +28,7 @@ const useContestantStore = create((set, get) => ({
             if (fetch) {
                 const result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
                 return result.map((doc) => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
-                
+
             }
             return !snapshot.empty;
         } catch (error) {
@@ -79,7 +79,7 @@ const useContestantStore = create((set, get) => ({
         try {
             const contestantRef = await addDoc(collection(db, 'contestants'), { ...form, created_at: date, updated_at: date });
             get().fetchContestantWithBooster();
-            return { message: "Contestant created successfully!" };
+            return { message: "Contestant created successfully!", id: contestantRef.id };
         } catch (error) {
             return { error: error.message };
         }

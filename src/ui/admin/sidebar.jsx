@@ -23,7 +23,7 @@ export const links = [
     { name: 'Contests List', href: '/admin/contest/list', Icon: NumberedListIcon },
     { name: 'SETTINGS', head: true },
     { name: 'System Settings', href: '/admin/setting/system', Icon: Cog8ToothIcon },
-    // { name: 'Gem Booster', href: '/admin/setting/booster', Icon: SparklesIcon },
+    { name: 'Email Settings', href: '/admin/setting/email', Icon: EnvelopeIcon },
     { name: 'Sponsor Package', href: '/admin/setting/sponsor', Icon: LifebuoyIcon },
     // { name: 'Leaderboard', href: '/admin/setting/leaderboard', Icon: TrophyIcon },
     // { name: 'Bonus', href: '/admin/setting/bonus', Icon: GiftIcon },

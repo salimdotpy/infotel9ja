@@ -33,6 +33,7 @@ import ContestList from "./pages/admin/ContestList";
 import EditContest from "./pages/admin/EditContest";
 import Vote from "./pages/Vote";
 import VerifyPayment from "./pages/VerifyPayment";
+import EmailSettings from "./pages/admin/EmailSettings";
 
 function App() {
   const { theme } = useTheme();
@@ -103,6 +104,7 @@ function App() {
           <Route path="setting/sponsor" element={<SponsorSettings />} />
           <Route path="setting/leaderboard" element={<LeaderboardSettings />} />
           <Route path="setting/bonus" element={<BonusSettings />} />
+          <Route path="setting/email" element={<EmailSettings />} />
         </Route>
         <Route path="*" element={<NotFound />} />
       </Routes>

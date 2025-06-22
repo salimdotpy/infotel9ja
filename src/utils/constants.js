@@ -48,3 +48,60 @@ export const SOO = [
     "Yobe",
     "Zamfara"
 ]
+
+export const EMAIL_TEMP = [`
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InfoTel9ja Global Network Email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        .email-container {
+            max-width: 600px;
+            margin: 20px auto;
+            background: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .email-header {
+            background: #00C600;
+            color: #ffffff;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .email-header img {
+            max-width: 100px;
+        }
+        .email-header h1 {
+            margin: 0;
+            font-size: 24px;
+        }
+        .email-body {
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .email-footer {
+            background: #f4f4f4;
+            color: #777;
+            text-align: center;
+            padding: 15px;
+            font-size: 14px;
+        }
+        .email-footer a {
+            color: #2b2d42;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>`, '</body></html>'];

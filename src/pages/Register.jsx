@@ -73,7 +73,10 @@ const RegisterSection = () => {
         formData.contestId = id;
         try {
             const result = await createContestant(formData);
-            if (result?.message) toast.success(result.message);
+            if (result?.message) {
+                toast.success(result.message);
+                navigate(`/vote/${result.id}`);
+            }
             else if (result?.error) toast.error(result.error);
         } catch (err) {
             toast.error(err.message);
