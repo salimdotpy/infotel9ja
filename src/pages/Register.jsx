@@ -14,6 +14,7 @@ import ImageUploader from "@/ui/ImageUploader";
 import { useNavigate, useParams } from "react-router-dom";
 import useContestStore from "@/store/contestStore";
 import useContestantStore from "@/store/contestantStore";
+import { sendGeneralEmail } from "@/utils/settings";
 
 export default function Register() {
     useDocumentTitle('Registration Page - InfoTel9ja');
@@ -75,6 +76,11 @@ const RegisterSection = () => {
             const result = await createContestant(formData);
             if (result?.message) {
                 toast.success(result.message);
+                const vl = `https://infotel9ja.vercel.app/vote/${result.id}`;
+                const msg = `Thanks for the ongoing contest <br /> 
+                below is your voting link:<br /><br /><b><a href="${vl}">${vl}</a></b>`
+                const form = { to: formData.email, subject: 'Registration Messages', message: msg, receiverName: formData.fullname }
+                const result = await sendGeneralEmail(form);
                 navigate(`/vote/${result.id}`);
             }
             else if (result?.error) toast.error(result.error);
