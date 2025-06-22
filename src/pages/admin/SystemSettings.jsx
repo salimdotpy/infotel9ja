@@ -72,7 +72,7 @@ const SystemSettings = () => {
   const handleMail = async () => {
     const form = { to: 'salimdotpy@gmail.com', subject: 'Testing Mail', message: 'This is a test mail, please ignore it if you are not meant to get this email.', receiverName: 'Salimdotpy' }
     const result = await sendGeneralEmail(form);
-    
+
     result.message ? toast.success(result.message) :
     toast.error(result.error);
   }
@@ -87,7 +87,6 @@ const SystemSettings = () => {
 
       <Card className="bg-header text-fore">
         <CardBody>
-          <Button variant="outined" size="sm" onClick={handleMail}>Test Mail</Button>
           <Typography variant="h6" className="mb-4 text-fore">
             General Settings
           </Typography>
