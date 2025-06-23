@@ -77,8 +77,7 @@ const RegisterSection = () => {
             if (result?.message) {
                 toast.success(result.message);
                 const vl = `https://infotel9ja.vercel.app/vote/${result.id}`;
-                const msg = `Thanks for the ongoing contest <br /> 
-                below is your voting link:<br /><br /><b><a href="${vl}">${vl}</a></b>`
+                const msg = `Thanks for the ongoing contest <br />below is your voting link:<br /><br /><b><a href="${vl}">${vl}</a></b>`;
                 const form = { to: formData.email, subject: 'Registration Messages', message: msg, receiverName: formData.fullname }
                 const result = await sendGeneralEmail(form);
                 navigate(`/vote/${result.id}`);

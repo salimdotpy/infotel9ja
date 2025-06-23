@@ -127,7 +127,7 @@ export async function verifyOrderTransaction(reference, orderId) {
 
 export async function sendGeneralEmail(req) {
     try {
-        const response = await axios.post(`${API_BASE_URL}`, req);
+        const response = await axios.post(`${API_BASE_URL}/api/mail`, req);
         return response.data;
     } catch (error) {
         const response = await axios.post(`http://localhost:3000/api/mail`, req);
