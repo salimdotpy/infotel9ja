@@ -24,8 +24,8 @@ const Compition = () => {
             const data = await fetchContestWithBoosterById(id);
             let contestants = await notContestant('contestId', id, true);
             contestants = contestants?.sort((a, b) => {
-                if (a?.total < b?.total) return -1;
-                if (a?.total > b?.total) return 1;
+                if (a?.total > b?.total) return -1;
+                if (a?.total < b?.total) return 1;
                 return 0;
             });
             if (data?.error) {
