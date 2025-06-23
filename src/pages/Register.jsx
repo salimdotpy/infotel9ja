@@ -76,14 +76,16 @@ const RegisterSection = () => {
             const result = await createContestant(formData);
             if (result?.message) {
                 toast.success(result.message);
-                const vl = `https://infotel9ja.vercel.app/vote/${result.id}`;
-                const msg = `Thanks for the ongoing contest <br />below is your voting link:<br /><br /><b><a href="${vl}">${vl}</a></b>`;
-                const form = { to: formData.email, subject: 'Registration Messages', message: msg, receiverName: formData.fullname }
-                const result = await sendGeneralEmail(form);
+                const vl = `https://infotel9ja-backend.vercel.app/vote/${result.id}`;
+                const msg = `You've registered successfully for the ongoing <b>(${contest.contestName})</b> contest <br />below is your voting link:<br /><br /><b><a href="${vl}">${vl}</a></b>`;
+                const form = { to: formData.email, subject: 'Registered Successfully', message: msg, receiverName: formData.fullname }
+                await sendGeneralEmail(form);
                 navigate(`/vote/${result.id}`);
             }
             else if (result?.error) toast.error(result.error);
         } catch (err) {
+            console.log(err);
+            
             toast.error(err.message);
         } finally {
             setLoading(false);
@@ -177,7 +179,7 @@ const RegisterSection = () => {
                                 </div>
                             </div>
                             <div className='flex flex-row-reverse justify-between mt-6 items-center gap-5'>
-                                <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center sticky bottom-5`} loading={loading}>
+                                <Button type="submit" className={`mt-6 bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center`} loading={loading}>
                                     Submit
                                 </Button>
                                 <Button type="reset" className={`bg-fore text-header disabled:!pointer-events-auto disabled:cursor-not-allowed`}>
