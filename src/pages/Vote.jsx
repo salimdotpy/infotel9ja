@@ -92,7 +92,7 @@ const Sections = ({ data = {}}) => {
                                 <span>💎</span>
                             </div>
                             <div className='flex gap-2 items-center my-4'>
-                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize' onMouseLeave={() =>setCopied(false)} onClick={()=>{
+                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize text-fore border-fore' onMouseLeave={() =>setCopied(false)} onClick={()=>{
                                     copy(shareUrl);
                                     setCopied(true);
                                     toast.success('Your vote link copied successfully!');}}>
@@ -100,23 +100,23 @@ const Sections = ({ data = {}}) => {
                                     <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
                                 </Button>
                                 <Tooltip content='Share via whatsapp'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice)}>
-                                        <BiLogoWhatsapp className='size-5' />
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice)}>
+                                        <BiLogoWhatsapp className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via facebook'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 'f')}>
-                                        <BiLogoFacebook className='size-5' />
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 'f')}>
+                                        <BiLogoFacebook className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via Twitter'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 't')}>
-                                        <BiLogoTwitter className='size-5' />
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 't')}>
+                                        <BiLogoTwitter className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via Telegram'>
-                                    <IconButton size='sm' variant='outlined' onClick={()=>socialShare(shareUrl, votePrice, 'tel')}>
-                                        <BiLogoTelegram className='size-5' />
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 'tel')}>
+                                        <BiLogoTelegram className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                             </div>
