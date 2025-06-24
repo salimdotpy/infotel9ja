@@ -131,7 +131,7 @@ export const CompetitionSection = () => {
                                 <Typography>Stand a chance to win the sum of {' '}
                                     <span className='naira font-bold'>{showAmount(contest.winnersPrice?.[0]?.price || 0)}</span>
                                 </Typography>
-                                {dateDiff([today, contest.votingDate[1]]) > 1 ?
+                                {dateDiff([today, contest.votingDate[1]]) > 0 ?
                                 <Chip value="On-going" size='sm' color='green' variant='ghost' className='capitalize text-primary inline-flex' icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-primary content-['']" />} /> :
                                 <Chip value="Closed" size='sm' color='red' variant='ghost' className='capitalize inline-flex' icon={<span className="mx-auto mt-1 block h-2 w-2 rounded-full bg-red-900 content-['']" />} />  
                             }
@@ -139,7 +139,7 @@ export const CompetitionSection = () => {
                                     <Link to={`/contest/${contest.id}`}>
                                         <Button size='sm' className='bg-primary capitalize'>Explore</Button>
                                     </Link>
-                                    {dateDiff([today, contest.votingDate[1]]) > 1 &&
+                                    {dateDiff([today, contest.regDate[1]]) > 0 &&
                                     <Link to={`/register/${contest.id}`}>
                                         <Button size='sm' variant='outlined' color='blue' className='capitalize px-3'>Or be Contestant</Button>
                                     </Link>

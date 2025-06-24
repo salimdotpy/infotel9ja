@@ -3,7 +3,7 @@ import useContestStore from "@/store/contestStore";
 import { useDocumentTitle } from "@/hooks";
 import { Typography, Card, CardBody, CardHeader, Button, Select, Input, Tooltip, IconButton, CardFooter, Option, Avatar, Chip, Dialog, DialogBody, Switch } from "@material-tailwind/react";
 import { BreadCrumbs, FormSkeleton } from "@/ui/sections";
-import { MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
+import { EyeIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import { IWL, IWOL } from "@/utils/constants";
 import { dateDiff, keyToTitle } from "@/utils";
 import { Link } from "react-router-dom";
@@ -88,17 +88,13 @@ const ContestList = () => {
     return await createContestWithBooster(formData);
   };
   
-  const fieldsName = {contestImage: 'Image', contestName: 'Name', contestCategory: 'Category',  regDate: 'Duration',  status: 'Status'}
+  const fieldsName = {contestImage: 'Image', contestName: 'Name', contestCategory: 'Category',  regDate: 'Duration',  status: 'Active/Inactive'}
+  const today = new Date();
 
   return (
     <>
       <Typography variant="h5" className="mb-4 text-fore">Contests List</Typography>
       <BreadCrumbs separator="/" className="my-3 bg-header" links={[{ name: "Contests List", href: "/admin/contest/list" }]} />
-      {/* <Card className="bg-header text-fore">
-        <CardBody>
-          <ContestForm mode="create" onSubmit={handleCreate} />
-        </CardBody>
-      </Card> */}
       <Card className="bg-header text-fore mt-10">
         <CardHeader floated={false} shadow={false} className="rounded-none bg-header text-fore">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
@@ -129,9 +125,9 @@ const ContestList = () => {
             </div>
             <Input size="sm" label="Search" labelProps={{ className: IWL[0] }} className={IWL[1]} containerProps={{ className: '!min-w-28 md:w-48' }} icon={<MagnifyingGlassIcon className="size-5" />} value={searchQuery} onChange={handleSearch} />
           </div>
-          <div className="overflow-auto">
+          <div className="overflow-auto static max-h-[67dvh]">
             <table className="w-full min-w-max table-auto text-left">
-              <thead>
+              <thead className="sticky top-0 z-10">
                 <tr>
                   <th className="border-b bg-primary/20 p-4 cursor-pointer" onClick={() => handleSort('id')}>
                     <Typography variant="small" className="font-bold text-fore leading-none opacity-70">
@@ -180,24 +176,33 @@ const ContestList = () => {
                       </td>
                       <td className={classes}>
                         <Tooltip content='Registration Duration'>
-                          <Chip icon={<PencilSquareIcon className="size-4" />} color="blue" className="mb-2" value={`${dateDiff(record?.regDate)} day(s)`} variant="ghost" />
+                          <Chip icon={<PencilSquareIcon className="size-4" />} color="blue" className="mb-2" value={dateDiff([today, record?.regDate[1]]) > 0 ? `${dateDiff([today,record?.regDate[1]])} day remain` : 'Closed'} variant="ghost" />
                         </Tooltip>
                         <Tooltip content='Voting Duration'>
-                          <Chip icon={<MdHowToVote className="size-4" />} color="red" value={`${dateDiff(record?.votingDate)} day(s)`} variant="ghost" />
+                          <Chip icon={<MdHowToVote className="size-4" />} color="red" value={dateDiff([today, record?.votingDate[1]]) > 0 ? `${dateDiff([today,record?.votingDate[1]])} day remain` : 'Closed'} variant="ghost" />
                         </Tooltip>
                       </td>
                       <td className={classes}>
+                        <div className="flex justify-center">
                           <Switch color="blue" defaultChecked onChange={(e)=>switchControl('contests', record?.id, 'status', e.target.checked)} />
+                        </div>
                       </td>
                       <td className={classes}>
-                        <Tooltip content="Edit">
+                        <Tooltip content="Edit" className="py-0">
                           <Link to={`/admin/contest/edit/${record?.id}`}>
                             <IconButton color="blue" size="sm" variant="outlined" className="mr-2">
                               <PencilIcon className="size-4" />
                             </IconButton>
                           </Link>
                         </Tooltip>
-                        <Tooltip content="Delete">
+                        <Tooltip content="View" className="py-0">
+                          <Link to={`/admin/contest/view/${record?.id}`}>
+                            <IconButton color="amber" size="sm" variant="outlined" className="mr-2">
+                              <EyeIcon className="size-4" />
+                            </IconButton>
+                          </Link>
+                        </Tooltip>
+                        <Tooltip content="Delete" className="py-0">
                           <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
                             <TrashIcon className="size-4" />
                           </IconButton>
