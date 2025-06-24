@@ -190,20 +190,20 @@ const ContestList = () => {
                       <td className={classes}>
                         <Tooltip content="Edit" className="py-0">
                           <Link to={`/admin/contest/edit/${record?.id}`}>
-                            <IconButton color="blue" size="sm" variant="outlined" className="mr-2">
+                            <IconButton color="blue" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-blue-600 to-blue-400 hover:text-white">
                               <PencilIcon className="size-4" />
                             </IconButton>
                           </Link>
                         </Tooltip>
                         <Tooltip content="View" className="py-0">
                           <Link to={`/admin/contest/view/${record?.id}`}>
-                            <IconButton color="amber" size="sm" variant="outlined" className="mr-2">
+                            <IconButton color="amber" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-amber-600 to-amber-400 hover:text-white">
                               <EyeIcon className="size-4" />
                             </IconButton>
                           </Link>
                         </Tooltip>
                         <Tooltip content="Delete" className="py-0">
-                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }}>
+                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }} className="hover:bg-gradient-to-tr from-red-600 to-red-400 hover:text-white">
                             <TrashIcon className="size-4" />
                           </IconButton>
                         </Tooltip>
