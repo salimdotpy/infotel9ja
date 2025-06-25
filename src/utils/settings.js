@@ -102,6 +102,49 @@ export async function createTransaction(req) {
     }
 }
 
+const ft = async () => {
+    const q = query(
+      collection(db, 'transactions'),
+      where('contestId', '==', id),
+      where('type', '==', 'voting'),
+      where('status', '==', 'success'),
+    )
+    const snapshot = await getDocs(q);
+    if (!snapshot.empty) {
+        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+    } else {
+        return null;
+    }
+  }
+
+export async function fetchTransaction( contestId, type=false,  status='success') {
+    try {
+        let q = query(
+            collection(db, 'transactions'), 
+            where('contestId', '==', contestId), 
+            where('status', '==', status)
+        );
+        if (type) {
+            q = query(
+            collection(db, 'transactions'), 
+            where('contestId', '==', contestId), 
+            where('status', '==', status),
+            where('type', '==', type)
+        );
+        }
+        const snapshot = await getDocs(q);
+        if (!snapshot.empty) {
+            return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+        } else {
+            return null;
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+        return 'null';
+    }
+}
+
 export async function createDoc(req) {
     const { docRef, title, ...rest } = req;
     const date = new Date().toISOString();

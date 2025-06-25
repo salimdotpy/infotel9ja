@@ -738,16 +738,18 @@ export const NotFound = () => {
 
 export function BreadCrumbs({ role = 'admin', links = [], ...props }) {
     return (
-        <Breadcrumbs {...props}>
-            <Link to={`/${role}`} className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
-                Dashboard
-            </Link>
-            {links && links.map((link, key) =>
-                <Link to={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
-                    {link.name}
+        <div className='*:!w-full'>
+            <Breadcrumbs {...props}>
+                <Link to={`/${role}`} className={`text-fore hover:text-primary ${links.length ? 'opacity-60' : ''}`}>
+                    Dashboard
                 </Link>
-            )}
-        </Breadcrumbs>
+                {links && links.map((link, key) =>
+                    <Link to={link.href} key={key} className={`text-fore hover:text-primary ${key === links.length - 1 ? '' : "opacity-60"}`}>
+                        {link.name}
+                    </Link>
+                )}
+            </Breadcrumbs>
+        </div>
     )
 }
 
