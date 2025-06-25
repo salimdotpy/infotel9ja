@@ -45,7 +45,7 @@ const ViewContest = () => {
   ]
   return (
     <>
-    <Typography variant="h5" className="mb-4 text-fore">{data.contestName}</Typography>
+    <Typography variant="h5" className="mb-4 text-fore">{data.contestName} <span className="text-primary">({data.contestCategory})</span></Typography>
     <BreadCrumbs separator="/" className="my-3 bg-header !max-w-full" links={links} />
     <section className="flex flex-wrap gap-5 *:md:basis-[45%] *:grow mt-5 mb-8">
       <Card className="bg-header p-4 flex-row *:flex-1 gap-4 border">
@@ -103,7 +103,7 @@ const ViewContest = () => {
     </section>
     <section className="flex flex-wrap gap-5 *:grow *:flex-1">
       <ContestantList className="bg-header md:basis-2/4 max-w-full border" isLoading={loading} data={data.contestants} />
-      <Card className="bg-header md:basis-1/3 max-w-full border">
+      <Card className="bg-header md:basis-1/3 max-w-full border text-fore">
       <CardBody className="px-0">
         <Typography variant="h6" className="px-4 pb-2">🏆 Winners and Prizes</Typography>
         <div className="overflow-auto static max-h-[67dvh] mt-2">
@@ -158,7 +158,7 @@ const ViewContest = () => {
         </div>
       </CardBody>
       </Card>
-      <Card className="bg-header md:basis-1/3 max-w-full border">
+      <Card className="bg-header md:basis-1/3 max-w-full border text-fore">
       <CardBody className="px-0">
         <Typography variant="h6" className="px-4 pb-2">🎁 Welcome Bonus Packages</Typography>
         <div className="overflow-auto static max-h-[67dvh] mt-2">
@@ -223,7 +223,7 @@ const ViewContest = () => {
         </div>
       </CardBody>
       </Card>
-      <Card className="bg-header md:basis-1/3 max-w-full border">
+      <Card className="bg-header md:basis-1/3 max-w-full border text-fore">
       <CardBody className="px-0">
         <Typography variant="h6" className="px-4 pb-2">💎 GEM Booster Packages</Typography>
         <div className="overflow-auto static max-h-[67dvh] mt-2">
@@ -288,6 +288,14 @@ const ViewContest = () => {
         </div>
       </CardBody>
       </Card>
+      <Card className="bg-header md:basis-1/3 max-w-full border text-fore">
+      <CardBody>
+        <Typography variant="h6">⚖ Terms and Conditions</Typography>
+        <div className="overflow-auto static max-h-[67dvh] mt-2 py-3">
+          <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{__html: data?.tnc}} />
+        </div>
+      </CardBody>
+      </Card>
     </section>
     </>
   )
@@ -329,7 +337,7 @@ const ContestantList = ({isLoading = false, data = [], ...props }) => {
   return (
     <Card {...props}>
       <CardBody className="px-0">
-        <div className="flex flex-wrap gap-2 items-center justify-between px-4 pb-2">
+        <div className="flex flex-wrap gap-2 items-center justify-between px-4 pb-2 text-fore">
           <Badge content={data?.length} className="rounded-lg translate-y-0 -right-5" color="blue">
             <Typography variant="h6">👩‍👩‍👧‍👧Contestants List</Typography>
           </Badge>
@@ -385,7 +393,7 @@ const ContestantList = ({isLoading = false, data = [], ...props }) => {
                     <td className={classes}>
                       <div className="flex gap-2 items-center">
                         <Avatar src={record?.image} alt="element image" />
-                        <div className="text-sm">
+                        <div className="text-sm text-fore">
                           {record?.fullname}<br />
                           {record?.mobile}<br />
                           {record?.email.slice(0, 5)}...{record?.email.slice(12)}
@@ -397,7 +405,7 @@ const ContestantList = ({isLoading = false, data = [], ...props }) => {
                     </td>
                     <td className={classes}>
                       <Typography variant="small" className="font-normal text-fore">
-                        {record?.total}
+                        {record?.votes}
                       </Typography>
                     </td>
                     <td className={classes}>
