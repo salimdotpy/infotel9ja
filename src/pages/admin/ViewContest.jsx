@@ -10,7 +10,6 @@ import { Link, useParams } from "react-router-dom";
 import { dateDiff, getOrdinal, showAmount } from "@/utils";
 import { fetchTransaction } from "@/utils/settings";
 import useContestStore from "@/store/contestStore";
-import { switchControl } from "./ContestList";
 import { MdHowToVote } from "react-icons/md";
 
 const ViewContest = () => {

@@ -102,21 +102,6 @@ export async function createTransaction(req) {
     }
 }
 
-const ft = async () => {
-    const q = query(
-      collection(db, 'transactions'),
-      where('contestId', '==', id),
-      where('type', '==', 'voting'),
-      where('status', '==', 'success'),
-    )
-    const snapshot = await getDocs(q);
-    if (!snapshot.empty) {
-        return snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    } else {
-        return null;
-    }
-  }
-
 export async function fetchTransaction( contestId, type=false,  status='success') {
     try {
         let q = query(

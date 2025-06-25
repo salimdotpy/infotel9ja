@@ -89,7 +89,7 @@ const RegisterSection = () => {
             toast.error(err.message);
         } finally {
             setLoading(false);
-            reset()
+            // reset()
         }
       }
 

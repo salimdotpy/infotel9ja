@@ -35,6 +35,7 @@ import Vote from "./pages/Vote";
 import VerifyPayment from "./pages/VerifyPayment";
 import EmailSettings from "./pages/admin/EmailSettings";
 import ViewContest from "./pages/admin/ViewContest";
+import ContestantList from "./pages/admin/ContestantList";
 
 function App() {
   const { theme } = useTheme();
@@ -99,6 +100,7 @@ function App() {
           <Route index element={<Dashboard />} />
           <Route path="contest/add" element={<AddContest />} />
           <Route path="contest/list" element={<ContestList />} />
+          <Route path="contestant/list" element={<ContestantList />} />
           <Route path="contest/edit/:id" element={<EditContest />} />
           <Route path="contest/view/:id" element={<ViewContest />} />
           <Route path="setting/system" element={<SystemSettings />} />

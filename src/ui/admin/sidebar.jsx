@@ -16,8 +16,8 @@ keys.forEach(key => {
 export const links = [
     { name: 'Dashboard', href: '/admin', Icon: HomeIcon },
     { name: 'USER MANAGEMENT', head: true },
-    { name: 'Super Contestant', href: '/admin/email-setting', Icon: UsersIcon },
-    { name: 'Contestant', href: '/admin/email-setting', Icon: UsersIcon },
+    { name: 'Super Contestant', href: '/admin/contestant/list1', Icon: UsersIcon },
+    { name: 'Contestant', href: '/admin/contestant/list', Icon: UsersIcon },
     { name: 'CONTEST MANAGEMENT', head: true },
     { name: 'Add Contest', href: '/admin/contest/add', Icon: ChartBarIcon },
     { name: 'Contests List', href: '/admin/contest/list', Icon: NumberedListIcon },

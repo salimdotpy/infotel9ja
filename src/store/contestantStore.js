@@ -1,34 +1,40 @@
 // hooks/useUserStore.js
 import { create } from 'zustand';
-import { collection, addDoc, getDoc, getDocs, doc, deleteDoc, updateDoc, writeBatch, query, where } from 'firebase/firestore';
+import { collection, addDoc, getDoc, getDocs, doc, deleteDoc, updateDoc, query, where } from 'firebase/firestore';
 import { db } from '@/utils/firebase';
-import { parseIfJson } from '@/utils';
 import dayjs from 'dayjs';
 
 const useContestantStore = create((set, get) => ({
     contestants: [],
     loading: false,
-    fetchContestantById: async (contestantId) => {
+    fetchContestantById: async (contestantId) => {//used
         try {
             // Fetch contestant data
             const contestantDoc = await getDoc(doc(db, 'contestants', contestantId));
             if (!contestantDoc.exists()) {
                 return { error: "Contestant not found" };
             }
-            return { id: contestantDoc.id, ...contestantDoc.data() };
+            const result = { id: contestantDoc.id, ...contestantDoc.data() };
+            result.total = (result.votes || 0) + (result.bonus || 0);
+            return result;
         } catch (error) {
             return { error: error.message };
         }
     },
 
-    notContestant: async (field, value, fetch = false) => {
+    notContestant: async (field, value, fetch = false) => {//used
         try {
             const q = query(collection(db, 'contestants'), where(field, '==', value));
             const snapshot = await getDocs(q);
             if (fetch) {
-                const result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                return result.map((doc) => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
-
+                let result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                result = result.map((doc) => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
+                result = result.sort((a, b) => {
+                    if (a.total > b.total) return -1;
+                    if (a.total < b.total) return 1;
+                    return 0;
+                });
+                return result;
             }
             return !snapshot.empty;
         } catch (error) {
@@ -36,31 +42,31 @@ const useContestantStore = create((set, get) => ({
         }
     },
 
-    // Fetch all contestants with their boosters
-    fetchContestantWithBooster: async (contestantId) => {
+    fetchContestants: async () => {
         set({ loading: true });
-        const q = query(collection(db, 'subscriptions'), where('contestantId', '==', contestantId));
-        const snapshot = await getDocs(q);
-        if (!snapshot.empty) {
-            let subs = snapshot.docs.map(doc => {
-                const result = {id: doc.id, ...doc.data()};
-                result.expired = dayjs().diff(result.expired_at);
-                return result;
-            });
-            const boostersSnap = await getDocs(collection(db, 'boosters'));
-            const boosters = boostersSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-            subs = subs.map(sub => ({ ...sub, booster: boosters.filter(booster => booster.id === sub.boosterId),}));
-            return subs;
+        const contestantsSnap = await getDocs(collection(db, 'contestants'));
+        let contestants = contestantsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
+        contestants = contestants.map(doc => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
+        contestants = contestants.sort((a, b) => {
+            if (a.total > b.total) return -1;
+            if (a.total < b.total) return 1;
+            return 0;
+        });
+        let contenstantRef = [];
+        for (const item of contestants) {
+            const ref = await get().notContestant('referral', item.id, true);
+            ref.all = ref.length || 0;
+            contenstantRef.push({...item, referrals: ref.all});
         }
-        return false;
+
+        set({ contestants: contenstantRef, loading: false });
     },
 
-    fetchContestantSub: async (contestantId) => {
+    fetchContestantSub: async (contestantId) => {//used
         const q = query(collection(db, 'subscriptions'), where('contestantId', '==', contestantId));
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
-            const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }))
-            // console.log({...data});
+            const data = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
             const doc = data[data.length - 1];
             doc.expired = (dayjs(doc.expired_at).diff(dayjs()) < 1);
             return doc;
@@ -70,6 +76,7 @@ const useContestantStore = create((set, get) => ({
 
     createContestant: async (form) => {
         const age = dayjs().diff(dayjs(form.dob), 'year')
+        form.dob = form.dob.toISOString();
         const date = new Date().toISOString();
         if (age < 16) return { error: "This contest is not for under 16" };
         const checkMobile = await get().notContestant('mobile', form.mobile);
@@ -85,68 +92,39 @@ const useContestantStore = create((set, get) => ({
         }
     },
 
-    updateContestantWithBooster: async (form) => {
-        const batch = writeBatch(db);
+    updateContestant: async (form) => {
+        const { id, dob, mobile, email } = form;
+        const age = dayjs().diff(dayjs(dob), 'year')
         const date = new Date().toISOString();
-        const boosterArray = form.boosterPackages; delete form.boosterPackages;
-        const contestantId = form.id; delete form.id;
-        form.bonusPackages = JSON.stringify(form.bonusPackages);
-        form.winnersPrice = JSON.stringify(form.winnersPrice);
-        form.votingDate = JSON.stringify(form.votingDate);
-        form.regDate = JSON.stringify(form.regDate);
-
+        form.dob = form.dob.toISOString();
+        if (age < 16) return { error: "This contest is not for under 16" };
+        const checkMobile = await get().notContestant('mobile', mobile);
+        const checkEmail = await get().notContestant('email', email);
+        if (checkMobile) return {error: "Phone number has been taken, try another valid one"};
+        if (checkEmail) return {error: "Email has been taken, try another valid one"};
         try {
-            // Step 1: Prepare contestant update
-            batch.update(doc(db, 'contestants', contestantId), {...form, updated_at: date});
-
-            // Step 2: Fetch current boosters from Firestore
-            const existingBoosterSnap = await getDocs(query(collection(db, 'boosters'), where('contestantId', '==', contestantId)));
-            const existingBoostersMap = {};
-            existingBoosterSnap.forEach(docSnap => {
-                existingBoostersMap[docSnap.id] = docSnap.data();
-            });
-
-            const updatedBoosterIds = new Set();
-
-            // Step 3: Handle booster updates and additions
-            for (const booster of boosterArray) {
-                if (booster.id && existingBoostersMap[booster.id]) {
-                    // Booster exists → update it
-                    batch.update(doc(db, 'boosters', booster.id), { ...booster, contestantId, updated_at: date, });
-                    updatedBoosterIds.add(booster.id);
-                } else {
-                    // New booster → create it
-                    const newBoosterRef = doc(collection(db, 'boosters'));
-                    batch.set(newBoosterRef, { ...booster, contestantId, created_at: date, updated_at: date, });
-                }
-            }
-
-            // Step 4: Delete boosters that were removed
-            for (const existingId of Object.keys(existingBoostersMap)) {
-                if (!updatedBoosterIds.has(existingId)) {
-                    batch.delete(doc(db, 'boosters', existingId));
-                }
-            }
-
-            // Step 5: Commit and refresh
-            await batch.commit();
-            get().fetchContestantWithBooster();
-
-            return { message: "Contestant updated successfully." };
+            await updateDoc(doc(db, 'contestants', id), { ...form, updated_at: date, });
+            return { message: 'Contestant updated successfully.' };
         } catch (error) {
             return { error: error.message };
         }
     },
 
-    // Delete contestant and all their boosters
-    deleteContestantWithBooster: async (contestantId) => {
-        const boosterQuery = query(collection(db, 'boosters'), where('contestantId', '==', contestantId));
-        const boosterSnap = await getDocs(boosterQuery);
-
-        const deletePromises = boosterSnap.docs.map(docSnap =>
-            deleteDoc(doc(db, 'boosters', docSnap.id))
+    // Delete contestant and all their dependant
+    deleteContestant: async (contestantId) => {
+        const subQuery = query(collection(db, 'subscriptions'), where('contestantId', '==', contestantId));
+        const subSnap = await getDocs(subQuery);
+        const subDeletePromises = subSnap.docs.map(docSnap =>
+            deleteDoc(doc(db, 'subscriptions', docSnap.id))
         );
-        await Promise.all(deletePromises);
+        await Promise.all(subDeletePromises);
+
+        const transQuery = query(collection(db, 'transactions'), where('contestantId', '==', contestantId));
+        const transSnap = await getDocs(transQuery);
+        const transDeletePromises = transSnap.docs.map(docSnap =>
+            deleteDoc(doc(db, 'transactions', docSnap.id))
+        );
+        await Promise.all(transDeletePromises);
 
         await deleteDoc(doc(db, 'contestants', contestantId));
         get().fetchContestantWithBooster();
