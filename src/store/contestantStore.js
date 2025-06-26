@@ -22,9 +22,10 @@ const useContestantStore = create((set, get) => ({
         }
     },
 
-    notContestant: async (field, value, fetch = false) => {//used
+    notContestant: async (field, value, fetch = false, id = false) => {//used
         try {
-            const q = query(collection(db, 'contestants'), where(field, '==', value));
+            const q = id ? query(collection(db, 'contestants'), where(field, '==', value), where('id', '!=', id)) :
+            query(collection(db, 'contestants'), where(field, '==', value));
             const snapshot = await getDocs(q);
             if (fetch) {
                 let result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -76,7 +77,7 @@ const useContestantStore = create((set, get) => ({
 
     createContestant: async (form) => {
         const age = dayjs().diff(dayjs(form.dob), 'year')
-        form.dob = form.dob.toISOString();
+        form.dob = form.dob.toISOString(); form.dob = form.dob.split('T')[0];
         const date = new Date().toISOString();
         if (age < 16) return { error: "This contest is not for under 16" };
         const checkMobile = await get().notContestant('mobile', form.mobile);
@@ -96,10 +97,10 @@ const useContestantStore = create((set, get) => ({
         const { id, dob, mobile, email } = form;
         const age = dayjs().diff(dayjs(dob), 'year')
         const date = new Date().toISOString();
-        form.dob = form.dob.toISOString();
+        form.dob = form.dob.toISOString(); form.dob = form.dob.split('T')[0];
         if (age < 16) return { error: "This contest is not for under 16" };
-        const checkMobile = await get().notContestant('mobile', mobile);
-        const checkEmail = await get().notContestant('email', email);
+        const checkMobile = await get().notContestant('mobile', mobile, false, id);
+        const checkEmail = await get().notContestant('email', email, false, id);
         if (checkMobile) return {error: "Phone number has been taken, try another valid one"};
         if (checkEmail) return {error: "Email has been taken, try another valid one"};
         try {

@@ -19,16 +19,13 @@ import useContestantStore from "@/store/contestantStore";
 const ContestantList = () => {
   useDocumentTitle("Contestants List - InfoTel9ja");
 
-  const { loading, contests, fetchContestWithBooster, createContestWithBooster } = useContestStore();
-  const { loading: uload, contestants, fetchContestants, } = useContestantStore();
+  const { loading, contestants, fetchContestants, } = useContestantStore();
   const [openModal, setOpenModal] = useState(false);
   const [modalData, setModalData] = useState({});
 
   useEffect(() => {
-    fetchContestWithBooster();//.then(setUsersWithPosts);
     fetchContestants();
   }, []);
-  !uload && console.log(contestants);
   
 
   // DataTable
@@ -39,8 +36,8 @@ const ContestantList = () => {
 
   const filteredRows = useMemo(() => {
     return t_rows.filter((row) => {
-      return Object.values(row).some((value) => {
-        return String(value).toLowerCase().includes(searchQuery.toLowerCase())
+      return Object.entries(row).some(([key, value]) => {
+        return key !='image' && String(value).toLowerCase().includes(searchQuery.toLowerCase())
       }
       );
     });
@@ -89,18 +86,18 @@ const ContestantList = () => {
 
   const toggleModal = (value) => setOpenModal(openModal === value ? 0 : value);
   
-  const fieldsName = {fullname: 'PersonalInfo', mobile: 'ContactInfo', votes: 'Vote Info',  referral: 'Referrals',  status: 'Active/Inactive'}
+  const fieldsName = {fullname: 'PersonalInfo', mobile: 'ContactInfo', total: 'Vote Info',  referral: 'Referrals',  status: 'Active/Inactive'}
   const today = new Date();
 
   return (
     <>
       <Typography variant="h5" className="mb-4 text-fore">Contestants List</Typography>
-      <BreadCrumbs separator="/" className="my-3 bg-header" links={[{ name: "Contestants List", href: "/admin/contest/list" }]} />
+      <BreadCrumbs separator="/" className="my-3 bg-header" links={[{ name: "Contestants List", href: "/admin/contestant/list" }]} />
       <Card className="bg-header text-fore mt-10">
         <CardHeader floated={false} shadow={false} className="rounded-none bg-header text-fore">
           <div className="flex flex-col justify-between gap-8 md:flex-row md:items-center">
             <Typography variant="h6">Contestants List</Typography>
-            <div className="flex w-full shrink-0 gap-2 md:w-max">
+            <div className="hidden w-full shrink-0 gap-2 md:w-max">
               <Link to='/admin/contest/add'>
                 <Button variant="outlined" size="sm" className="border-primary text-fore">Add New</Button>
               </Link>
@@ -128,7 +125,7 @@ const ContestantList = () => {
           </div>
           <div className="overflow-auto static max-h-[67dvh]">
             <table className="w-full min-w-max table-auto text-left">
-              <thead className="sticky top-0 z-10">
+              <thead className="sticky top-0 z-10 bg-header">
                 <tr>
                   <th className="border-b bg-primary/20 p-4 cursor-pointer" onClick={() => handleSort('id')}>
                     <Typography variant="small" className="font-bold text-fore leading-none opacity-70">
@@ -165,7 +162,7 @@ const ContestantList = () => {
                             <Avatar src={record?.image} alt="element image" />
                             <div className="text-sm text-fore">
                               <b>{record?.gender ==='Male' ? 'Mr.' : 'Mrs.'}</b> {shortDescription(record?.fullname, 13)}<br />
-                              <b>Dob</b>: {formatDate(dayjs(record?.dob.seconds).toString()).split(':')[0].slice(0, -2)}<br />
+                              <b>Dob</b>: {formatDate(record?.dob).split(':')[0].slice(0, -2)}<br />
                               <b>Gender</b>: {record?.gender}<br />
                             </div>
                           </div>
@@ -178,24 +175,29 @@ const ContestantList = () => {
                         </div>
                       </td>
                       <td className={classes}>
-                        <Typography variant="small" className="font-normal text-fore">
-                          {record?.contestName}
-                        </Typography>
+                        <div className="text-sm text-fore">
+                          <b>Votes</b>: {record?.votes || 0}<br />
+                          <b>Bonus</b>: {record?.bonus || 0}<br />
+                          <b>Total</b>: {record?.total || 0}<br />
+                        </div>
                       </td>
                       <td className={classes}>
                         <Typography variant="small" className="font-normal text-fore">
-                          {record?.contestCategory}
+                          {record?.referrals}
                         </Typography>
                       </td>
                       <td className={classes}>
-                        <Link to={`/admin/contest/edit/${record?.id}`}>
+                          <Chip value={record?.active ? 'Active' : 'Inactive'} color={record?.active ? 'green' : 'red'} variant="ghost" className="inline capitalize" size="sm" />
+                      </td>
+                      <td className={classes}>
+                        <Link to={`/admin/contestant/edit/${record?.id}`}>
                           <Tooltip content="Edit" className="py-0">
                             <IconButton color="blue" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-blue-600 to-blue-400 hover:text-white">
                               <PencilIcon className="size-4" />
                             </IconButton>
                           </Tooltip>
                         </Link>
-                        <Link to={`/admin/contest/view/${record?.id}`}>
+                        <Link to={`/admin/contestant/view/${record?.id}`}>
                           <Tooltip content="View" className="py-0">
                             <IconButton color="amber" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-amber-600 to-amber-400 hover:text-white">
                               <EyeIcon className="size-4" />
@@ -203,7 +205,7 @@ const ContestantList = () => {
                           </Tooltip>
                         </Link>
                         <Tooltip content="Delete" className="py-0">
-                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id }); toggleModal(3) }} className="hover:bg-gradient-to-tr from-red-600 to-red-400 hover:text-white">
+                          <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id, name: record.fullname }); toggleModal(3) }} className="hover:bg-gradient-to-tr from-red-600 to-red-400 hover:text-white">
                             <TrashIcon className="size-4" />
                           </IconButton>
                         </Tooltip>
@@ -254,20 +256,20 @@ export default ContestantList;
 const DeleteModal = ({ open, handler, data }) => {
   const schema = yup.object({});
   const [loading, setLoading] = useState(false);
-  const { deleteContestWithBooster } = useContestStore();
+  const { deleteContestant } = useContestantStore();
 
   const { register, reset, handleSubmit, formState: { errors }, } = useForm({ resolver: yupResolver(schema), });
 
   useEffect(() => {
     if (data) {
-      reset({ id: data.id, });
+      reset({ ...data });
     }
   }, [data, reset]);
 
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      await deleteContestWithBooster(formData.id);
+      await deleteContestant(formData.id);
       toast.success("Contestant deleted successfully!");
     } catch (error) {
       toast.error(`Deletion failed. ${error}`);
@@ -284,7 +286,14 @@ const DeleteModal = ({ open, handler, data }) => {
         {data?.id ? (
           <Card color="transparent" shadow={false} className='w-full max-w-[500px] text-fore'>
             <Typography variant="h4">Confirmation</Typography>
-            <Typography className="mt-1 font-normal">Are you sure to delete this item? Once deleted cannot be undone.</Typography>
+            <Typography className="mt-1 font-normal">
+              Are you sure to delete this item?<br />
+              <b>Note: Deleting it will auto delete the following:</b><br />
+              {shortDescription(data?.name, 14)}'s Info<br />
+              {shortDescription(data?.name, 14)}'s Transaction<br />
+              {shortDescription(data?.name, 14)}'s Subscription<br />
+              <b>Once deleted cannot be undone.</b>
+            </Typography>
             <form className="mb-2 mt-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
               <input type="hidden" {...register('id')} defaultValue={data?.id} />
               <div className="flex items-center justify-end mt-6 gap-3">

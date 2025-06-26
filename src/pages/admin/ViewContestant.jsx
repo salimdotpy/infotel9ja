@@ -12,8 +12,8 @@ import { fetchTransaction } from "@/utils/settings";
 import useContestStore from "@/store/contestStore";
 import { MdHowToVote } from "react-icons/md";
 
-const ViewContest = () => {
-  useDocumentTitle("View Contest - InfoTel9ja");
+const ViewContestant = () => {
+  useDocumentTitle("View Contestant - InfoTel9ja");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState([]);
   const [overview, setOverview] = useState({contestants: 0, amount: 0, votes: 0, bonus: 0});
@@ -23,10 +23,10 @@ const ViewContest = () => {
   useEffect(() => {
     const fetchData = async ()=> {
       setLoading(true);
-      const contest = await fetchContestWithBoosterById(id);
+      const contestant = await fetchContestWithBoosterById(id);
       const result = await notContestant('contestId', id, true);
-      contest.contestants = result;
-      setData(contest);
+      contestant.contestants = result;
+      setData(contestant);
       const contestants = result.length || 0;
       const votes = result.reduce((votes, item) => votes + (item.votes || 0), 0);
       const bonus = result.reduce((bonus, item) => bonus + (item.bonus || 0), 0);
@@ -39,7 +39,7 @@ const ViewContest = () => {
   }, []);
   
   const links = [
-    { name: "Contests List", href: "/admin/contest/list" }, 
+    { name: "Contests List", href: "/admin/contestant/list" }, 
     { name: data.contestName, href: "" }
   ]
   return (
@@ -299,7 +299,7 @@ const ViewContest = () => {
     </>
   )
 }
-export default ViewContest;
+export default ViewContestant;
 
 const ContestantList = ({isLoading = false, data = [], ...props }) => {
   const [searchQuery, setSearchQuery] = useState("");
@@ -413,7 +413,7 @@ const ContestantList = ({isLoading = false, data = [], ...props }) => {
                       </Typography>
                     </td>
                     <td className={classes}>
-                          <Link to={`/admin/contestant/edit/${record?.id}`}>
+                          <Link to={`/admin/contestant/view/${record?.id}`}>
                         <Tooltip content="View" className="py-0">
                             <IconButton color="amber" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-amber-600 to-amber-400 hover:text-white">
                               <EyeIcon className="size-4" />

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FooterSection, FormSkeleton, HeroBreaCrumbs } from "../ui/sections";
 import { useDocumentTitle, useFileHandler } from "../hooks";
-import { Button, Card, CardBody, Input, Option, Radio, Select, Textarea, Typography } from "@material-tailwind/react";
+import { Button, Card, CardBody, Input, Radio, Textarea, Typography } from "@material-tailwind/react";
 import { IWOL, SOO } from "@/utils/constants";
 
 import * as yup from "yup";
@@ -20,7 +20,7 @@ export default function Register() {
     useDocumentTitle('Registration Page - InfoTel9ja');
     return (
         <>
-            <HeroBreaCrumbs page="Contestant Registration Page" links={[{name: 'Register', href: 'register'}]} />
+            <HeroBreaCrumbs page="Contestant Registration Page" links={[{ name: 'Register', href: 'register' }]} />
             <RegisterSection />
             <FooterSection />
         </>
@@ -40,7 +40,7 @@ const schema = yup.object({
     gender: yup.string().required('Gender is required'),
     team: yup.string().optional(),
     image: ImageSchema.image_input.required('Choose Image Please')
-  })
+});
 
 const RegisterSection = () => {
     const { handleSubmit, setValue, register, clearErrors, reset, formState: { errors }, } = useForm({ resolver: yupResolver(schema), })
@@ -51,7 +51,7 @@ const RegisterSection = () => {
     const { createContestant } = useContestantStore();
     const { id } = useParams();
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
@@ -85,13 +85,13 @@ const RegisterSection = () => {
             else if (result?.error) toast.error(result.error);
         } catch (err) {
             console.log(err);
-            
+
             toast.error(err.message);
         } finally {
             setLoading(false);
-            // reset()
+            reset()
         }
-      }
+    }
 
     return (
         <section id='contact' className='py-10' data-aos="fade-up">
@@ -100,7 +100,7 @@ const RegisterSection = () => {
                     <CardBody>
                         <Typography variant='h4' className='text-fore font-[tahoma]'>
                             {!loading && contest ? `Register for (${contest.contestName})` :
-                            <FormSkeleton size={1} />}
+                                <FormSkeleton size={1} />}
                         </Typography>
                         <form method='post' className="mt-8 mb-2 text-fore" onSubmit={handleSubmit(onSubmit)}>
                             <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
@@ -108,49 +108,49 @@ const RegisterSection = () => {
                                     <label className="text-fore">Contestant Name</label>
                                     <Input placeholder='Ex: Ojo Ade' {...register('fullname')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.fullname} />
                                     {errors.fullname && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.fullname.message}
+                                        {errors.fullname.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Phone Number</label>
                                     <Input type="tel" placeholder='Ex: 08012345678' {...register('mobile')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.mobile} />
                                     {errors.mobile && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.mobile.message}
+                                        {errors.mobile.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Email Address</label>
                                     <Input type="email" placeholder='Ex: example@website.com' {...register('email')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.email} />
                                     {errors.email && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.email.message}
+                                        {errors.email.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Date of Birth</label>
                                     <Input type="date" {...register('dob')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.dob} />
                                     {errors.dob && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.dob.message}
+                                        {errors.dob.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Referral Code</label>
                                     <Input placeholder='(Optional)' {...register('referral')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.referral} />
                                     {errors.referral && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.referral.message}
+                                        {errors.referral.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">State Of Origin</label>
-                                    <SearchableSelect name="sate" options={SOO} className="h-[150px]" onSelect={(val)=>{setValue("state", val); clearErrors('state')}} />
+                                    <SearchableSelect name="sate" options={SOO} className="h-[150px]" onSelect={(val) => { setValue("state", val); clearErrors('state') }} />
                                     {errors.state && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.state.message}
+                                        {errors.state.message}
                                     </Typography>}
                                 </div>
                                 <div>
                                     <label className="text-fore">Address</label>
                                     <Textarea placeholder='Enter your full address' {...register('address')} size='lg' className={IWOL[1]} labelProps={{ className: IWOL[0], }} error={errors.address} />
                                     {errors.address && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.address.message}
+                                        {errors.address.message}
                                     </Typography>}
                                 </div>
                                 <div>
@@ -163,18 +163,18 @@ const RegisterSection = () => {
                                 <div>
                                     <label className="text-fore">Gender</label>
                                     <div className="border border-blue-gray-200 rounded-lg space-x-5">
-                                        <Radio label="Male" name="gender" labelProps={{className: 'text-fore'}} value={'Male'} color="green" onChange={(e)=>{setValue('gender', e.target.defaultValue); clearErrors('gender')}} />
-                                        <Radio label="Female" name="gender" labelProps={{className: 'text-fore'}} value={'Female'} color="green" onChange={(e)=>{setValue('gender', e.target.defaultValue); clearErrors('gender')}} />
+                                        <Radio label="Male" name="gender" labelProps={{ className: 'text-fore' }} value={'Male'} color="green" onChange={(e) => { setValue('gender', e.target.defaultValue); clearErrors('gender') }} />
+                                        <Radio label="Female" name="gender" labelProps={{ className: 'text-fore' }} value={'Female'} color="green" onChange={(e) => { setValue('gender', e.target.defaultValue); clearErrors('gender') }} />
                                     </div>
                                     {errors.gender && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.gender.message}
+                                        {errors.gender.message}
                                     </Typography>}
                                 </div>
                                 <div hidden={!contest?.contestCategory?.includes('Football')}>
                                     <label className="text-fore">Football Team</label>
-                                    <SearchableSelect name="team" options={SOO} className="h-[150px]" onSelect={(val)=>{setValue("team", val); clearErrors('team')}} />
+                                    <SearchableSelect name="team" options={SOO} className="h-[150px]" onSelect={(val) => { setValue("team", val); clearErrors('team') }} />
                                     {errors.team && <Typography color="red" className="mt-2 text-xs font-normal">
-                                    {errors.team.message}
+                                        {errors.team.message}
                                     </Typography>}
                                 </div>
                             </div>
