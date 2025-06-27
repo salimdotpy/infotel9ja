@@ -95,16 +95,6 @@ const ViewContestant = () => {
         </div>
         <div className="w-full grow xl:w-8/12 md:w-6/12">
           <div className="flex flex-wrap gap-5 *:md:basis-[45%] *:grow w-full">
-            <Card className="bg-header border p-4 w-full">
-              <Typography variant="h6" color="green">User Gem Booster Info</Typography>
-              <div className="mt-3 text-fore">
-                <p>Name: <b>{data.sub.booster.name}</b></p>
-                <p>Price: <b className="naira">{data.sub.booster.price}</b></p>
-                <Typography>⌚ Remaining Time</Typography>
-              </div>
-              <CountdownTimer targetTime={data.sub.expired_at} playSound={true} />
-              {/* {JSON.stringify(data.sub)} */}
-            </Card>
             <Card className="bg-header p-4 flex-row flex-wrap *:flex-1 gap-4 border">
               <Card className="bg-purple-50" shadow={false}>
                 <CardBody className="flex flex-col gap-y-3 px-3 items-center">
@@ -133,6 +123,15 @@ const ViewContestant = () => {
                   <small className="text-nowrap">Total Vote</small>
                 </CardBody>
               </Card>
+            </Card>
+            <Card className="bg-header border p-4 w-full">
+              <Typography variant="h6" color="green">User Gem Booster Info</Typography>
+              <div className="mt-3 text-fore">
+                <p>Name: <b>{data.sub.booster.name}</b></p>
+                <p>Price: <b className="naira">{data.sub.booster.price}</b></p>
+                <Typography>⌚ Remaining Time</Typography>
+              </div>
+              <CountdownTimer targetTime={data.sub.expired_at} playSound={true} />
             </Card>
           </div>
           <Card className="bg-header border p-6 w-full mt-5">

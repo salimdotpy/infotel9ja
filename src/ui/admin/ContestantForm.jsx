@@ -137,7 +137,7 @@ const ContestantForm = ({ onSubmit, initialValues = {}, mode = "create" }) => {
                 </div>
                 <div>
                     <label className="text-fore">Gender</label>
-                    <div className="border border-blue-gray-200 rounded-lg space-x-5">
+                    <div className="border border-blue-gray-200 rounded-lg md:space-x-5">
                         <Radio label="Male" name="gender" defaultChecked={initialValues.gender === 'Male'} labelProps={{ className: 'text-fore' }} value={'Male'} color="green" onChange={(e) => { setValue('gender', e.target.defaultValue); clearErrors('gender') }} />
                         <Radio label="Female" name="gender" defaultChecked={initialValues.gender === 'Female'} labelProps={{ className: 'text-fore' }} value={'Female'} color="green" onChange={(e) => { setValue('gender', e.target.defaultValue); clearErrors('gender') }} />
                     </div>
