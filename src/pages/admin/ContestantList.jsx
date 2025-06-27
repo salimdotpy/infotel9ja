@@ -7,7 +7,7 @@ import { EyeIcon, MagnifyingGlassIcon, PencilIcon, TrashIcon, XMarkIcon } from "
 import { IWL, IWOL } from "@/utils/constants";
 import { dateDiff, formatDate, keyToTitle, shortDescription } from "@/utils";
 import { Link } from "react-router-dom";
-import { PencilSquareIcon } from "@heroicons/react/24/solid";
+import { PencilSquareIcon, TvIcon } from "@heroicons/react/24/solid";
 import { MdHowToVote } from "react-icons/md";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -190,25 +190,18 @@ const ContestantList = () => {
                           <Chip value={record?.active ? 'Active' : 'Inactive'} color={record?.active ? 'green' : 'red'} variant="ghost" className="inline capitalize" size="sm" />
                       </td>
                       <td className={classes}>
-                        <Link to={`/admin/contestant/edit/${record?.id}`}>
-                          <Tooltip content="Edit" className="py-0">
-                            <IconButton color="blue" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-blue-600 to-blue-400 hover:text-white">
-                              <PencilIcon className="size-4" />
-                            </IconButton>
-                          </Tooltip>
-                        </Link>
                         <Link to={`/admin/contestant/view/${record?.id}`}>
                           <Tooltip content="View" className="py-0">
-                            <IconButton color="amber" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-amber-600 to-amber-400 hover:text-white">
-                              <EyeIcon className="size-4" />
+                            <IconButton color="blue" size="sm" variant="outlined" className="mr-2 hover:bg-gradient-to-tr from-blue-600 to-blue-400 hover:text-white">
+                              <TvIcon className="size-4" />
                             </IconButton>
                           </Tooltip>
                         </Link>
-                        <Tooltip content="Delete" className="py-0">
+                        {/* <Tooltip content="Delete" className="py-0">
                           <IconButton color="red" size="sm" variant="outlined" onClick={() => { setModalData({ id: record?.id, name: record.fullname }); toggleModal(3) }} className="hover:bg-gradient-to-tr from-red-600 to-red-400 hover:text-white">
                             <TrashIcon className="size-4" />
                           </IconButton>
-                        </Tooltip>
+                        </Tooltip> */}
                       </td>
                     </tr>
                   )

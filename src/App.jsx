@@ -36,7 +36,6 @@ import VerifyPayment from "./pages/VerifyPayment";
 import EmailSettings from "./pages/admin/EmailSettings";
 import ViewContest from "./pages/admin/ViewContest";
 import ContestantList from "./pages/admin/ContestantList";
-import EditContestant from "./pages/admin/EditContestant";
 import ViewContestant from "./pages/admin/ViewContestant";
 
 function App() {
@@ -103,7 +102,6 @@ function App() {
           <Route path="contest/add" element={<AddContest />} />
           <Route path="contest/list" element={<ContestList />} />
           <Route path="contestant/list" element={<ContestantList />} />
-          <Route path="contestant/edit/:id" element={<EditContestant />} />
           <Route path="contestant/view/:id" element={<ViewContestant />} />
           <Route path="contest/edit/:id" element={<EditContest />} />
           <Route path="contest/view/:id" element={<ViewContest />} />
