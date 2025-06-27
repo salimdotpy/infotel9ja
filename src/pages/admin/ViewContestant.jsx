@@ -89,8 +89,8 @@ const ViewContestant = () => {
               <Button color="green" size="sm" fullWidth>Add/Subtract Vote</Button>
               <Button color="purple" size="sm" fullWidth>Vote Transaction Log</Button>
               <Button color="blue" size="sm" fullWidth>Send Mail</Button>
+              <ToggleSwitch />
             </div>
-            <ToggleSwitch />
           </Card>
         </div>
         <div className="w-full grow xl:w-8/12 md:w-6/12">
@@ -144,7 +144,7 @@ const ViewContestant = () => {
 }
 export default ViewContestant;
 
-const ToggleSwitch = ({
+const ToggleSwitch1 = ({
   name = "status",
   checkedLabel = "Active",
   uncheckedLabel = "Banned",
@@ -178,9 +178,24 @@ const ToggleSwitch = ({
 
       {/* Handle */}
       <div
-        className={`absolute top-0 bottom-0 w-1/2 rounded-md bg-[#0b0f2a] transition-transform duration-300 ${checked ? "translate-x-full" : "translate-x-0"
+        className={`absolute top-0 bottom-0 w-1/2 rounded-md bg-[#0b0f2a] transition-transform duration-300 ${checked ? "translate-x-full" : "translate-x-1/2"
           }`}
       />
+    </div>
+  );
+};
+
+const ToggleSwitch = ({ name = "status", checkedLabel = "Active", uncheckedLabel = "Banned", size='sm', isChecked = true, ...props }) => {
+  const [checked, setChecked] = useState(isChecked);
+
+  return (
+    <div onClick={() => setChecked(!checked)} className="rounded-md overflow-hidden cursor-pointer select-none">
+      <input type="hidden" name={name} value={checked ? "1" : "0"} {...props} onChange={(e)=>console.log(checked)} />
+      <div className={`flex ${checked ? 'translate-x-0' : '-translate-x-[calc(100%-15px)]'} w-full text-center bg-gray-100 text-white transition-transform duration-500`}>
+        <Button size={size} color="green" className="w-[calc(100%-15px)] shrink-0 capitalize rounded-none">{checkedLabel}</Button>
+        <div className="w-[15px] p-2 shrink-0 bg-black"></div>
+        <Button size={size} color="red" className="w-[calc(100%-15px)] shrink-0 capitalize rounded-none">{uncheckedLabel}</Button>
+      </div>
     </div>
   );
 };
