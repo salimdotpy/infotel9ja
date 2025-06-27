@@ -29,7 +29,6 @@ const useContestantStore = create((set, get) => ({
             const snapshot = await getDocs(q);
             if (fetch) {
                 let result = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-                result = result.map((doc) => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
                 result = result.sort((a, b) => {
                     if (a.total > b.total) return -1;
                     if (a.total < b.total) return 1;
@@ -47,7 +46,6 @@ const useContestantStore = create((set, get) => ({
         set({ loading: true });
         const contestantsSnap = await getDocs(collection(db, 'contestants'));
         let contestants = contestantsSnap.docs.map(doc => ({ id: doc.id, ...doc.data() }));
-        contestants = contestants.map(doc => ({ total: ((doc.votes || 0) + (doc.bonus || 0)), ...doc }));
         contestants = contestants.sort((a, b) => {
             if (a.total > b.total) return -1;
             if (a.total < b.total) return 1;
@@ -78,6 +76,7 @@ const useContestantStore = create((set, get) => ({
     createContestant: async (form) => {
         const age = dayjs().diff(dayjs(form.dob), 'year')
         form.dob = form.dob.toISOString(); form.dob = form.dob.split('T')[0];
+        form.votes = 0; form.bonus = 0; form.total = 0;
         const date = new Date().toISOString();
         if (age < 16) return { error: "This contest is not for under 16" };
         const checkMobile = await get().notContestant('mobile', form.mobile);

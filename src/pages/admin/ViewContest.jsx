@@ -1,8 +1,8 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useDocumentTitle } from "@/hooks";
-import { Avatar, Badge, Card, CardBody, Chip, IconButton, Input, Switch, Tooltip, Typography } from "@material-tailwind/react";
+import { Avatar, Badge, Card, CardBody, Chip, IconButton, Input, Tooltip, Typography } from "@material-tailwind/react";
 import { BreadCrumbs, FormSkeleton } from "@/ui/sections";
-import { BanknotesIcon, CheckIcon, DocumentIcon, GiftIcon, UsersIcon } from "@heroicons/react/24/solid";
+import { BanknotesIcon, DocumentIcon, GiftIcon, UsersIcon } from "@heroicons/react/24/solid";
 import { IWL } from "@/utils/constants";
 import { EyeIcon, MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 import useContestantStore from "@/store/contestantStore";
@@ -10,7 +10,7 @@ import { Link, useParams } from "react-router-dom";
 import { dateDiff, getOrdinal, showAmount } from "@/utils";
 import { fetchTransaction } from "@/utils/settings";
 import useContestStore from "@/store/contestStore";
-import { MdHowToVote } from "react-icons/md";
+import { MdDiamond, MdHowToVote } from "react-icons/md";
 
 const ViewContest = () => {
   useDocumentTitle("View Contest - InfoTel9ja");
@@ -28,8 +28,8 @@ const ViewContest = () => {
       contest.contestants = result;
       setData(contest);
       const contestants = result.length || 0;
-      const votes = result.reduce((votes, item) => votes + (item.votes || 0), 0);
-      const bonus = result.reduce((bonus, item) => bonus + (item.bonus || 0), 0);
+      const votes = result.reduce((votes, item) => votes + item.votes, 0);
+      const bonus = result.reduce((bonus, item) => bonus + item.bonus, 0);
       const trans = await fetchTransaction(id);
       const amount = trans ? trans.reduce((tran, item) => tran + (item.amount || 0), 0) : 0;
       setOverview((prev) => ({ ...prev, contestants, votes, bonus, amount }));
@@ -71,7 +71,7 @@ const ViewContest = () => {
         <Card className="bg-blue-50" shadow={false}>
           <CardBody className="flex flex-col gap-y-3 px-3 items-center">
             <div className="bg-header basis-auto p-3 rounded-full">
-              <CheckIcon className="size-10 text-blue-500" />
+              <MdDiamond className="size-10 text-blue-500" />
             </div>
             <Typography variant="h4" color="blue">{overview.votes}</Typography>
             <small className="text-nowrap">Total Vote</small>            
@@ -395,7 +395,7 @@ const ContestantList = ({isLoading = false, data = [], ...props }) => {
                         <div className="text-sm text-fore">
                           {record?.fullname}<br />
                           {record?.mobile}<br />
-                          {record?.email.slice(0, 5)}...{record?.email.slice(12)}
+                          {record?.email.slice(0, 5)}...{record?.email.slice(-12)}
                         </div>
                       </div>
                     </td>

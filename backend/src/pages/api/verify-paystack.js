@@ -63,12 +63,14 @@ export default async function handler(req, res) {
 
         if (transData.type === 'voting') {
           const { vote, bonus } = transData.data_values;
-          updatePayload.votes = (transData.previousVote || 0) + (vote || 0);
-          updatePayload.bonus = (transData.previousBonus || 0) + ((bonus || 0) - (vote || 0));
+          updatePayload.votes = transData.previousVote + vote;
+          updatePayload.bonus = transData.previousBonus + (bonus - vote);
+          updatePayload.total = updatePayload.votes + updatePayload.bonus;
         } else if (transData.type === 'bonus') {
           const { paidVote, bonusVote } = transData.data_values;
-          updatePayload.votes = (transData.previousVote || 0) + paidVote;
-          updatePayload.bonus = (transData.previousBonus || 0) + bonusVote;
+          updatePayload.votes = transData.previousVote + paidVote;
+          updatePayload.bonus = transData.previousBonus + bonusVote;
+          updatePayload.total = updatePayload.votes + updatePayload.bonus;
           updatePayload.active = 1;
         }
 

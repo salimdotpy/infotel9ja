@@ -102,17 +102,17 @@ export async function createTransaction(req) {
     }
 }
 
-export async function fetchTransaction( contestId, type=false,  status='success') {
+export async function fetchTransaction( id, type=false, which='contestId', status='success') {
     try {
         let q = query(
             collection(db, 'transactions'), 
-            where('contestId', '==', contestId), 
+            where(which, '==', id), 
             where('status', '==', status)
         );
         if (type) {
             q = query(
             collection(db, 'transactions'), 
-            where('contestId', '==', contestId), 
+            where(which, '==', id), 
             where('status', '==', status),
             where('type', '==', type)
         );

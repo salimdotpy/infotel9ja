@@ -47,8 +47,9 @@ export default function CountdownTimer({ targetTime, onComplete, playSound = fal
   }, [targetTime, onComplete, playSound]);
 
   return (
-    <div className="flex flex-col items-center justify-center bg-gradient-to-br from-indigo-600 to-primary/60 text-white rounded-xl shadow-xl px-6 py-2 w-full max-w-md animate-fadeIn">
-      <div className="flex gap-x-4 text-3xl font-bold tracking-widest">
+  <div className="bg-gradient-to-br from-indigo-600 to-primary/60 text-white rounded-xl shadow-xl px-6 py-2 max-w-full animate-fadeIn">
+    <div className="w-full overflow-x-auto">
+      <div className="flex gap-x-4 text-3xl font-bold tracking-widest whitespace-nowrap !mx-auto w-max">
         {timeLeft.years > 0 && <TimeUnit label="Years" value={timeLeft.years} />}
         {timeLeft.months > 0 &&  <TimeUnit label="Months" value={timeLeft.months} /> }
         {timeLeft.days > 0 && <TimeUnit label="Days" value={timeLeft.days} /> }
@@ -56,9 +57,9 @@ export default function CountdownTimer({ targetTime, onComplete, playSound = fal
         <TimeUnit label="Minutes" value={timeLeft.minutes} />
         <TimeUnit label="Seconds" value={timeLeft.seconds} />
       </div>
+      </div>
       <audio ref={audioRef} src="/alert.mp3" preload="auto" />
-    </div>
-  );
+    </div>);
 }
 
 
