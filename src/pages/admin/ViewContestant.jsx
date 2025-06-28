@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useDocumentTitle, useFileHandler } from "@/hooks";
-import { Avatar, Button, Card, CardBody, Chip, Input, Radio, Textarea, Typography } from "@material-tailwind/react";
+import { Avatar, Button, Card, CardBody, Chip, Dialog, DialogBody, Input, Radio, Textarea, Typography } from "@material-tailwind/react";
 import { BreadCrumbs, FormSkeleton, LoadingComponent } from "@/ui/sections";
 import { BanknotesIcon } from "@heroicons/react/24/solid";
-import { IWOL, SOO } from "@/utils/constants";
-import { NewspaperIcon } from "@heroicons/react/24/outline";
+import { IWL, IWOL, SOO } from "@/utils/constants";
+import { NewspaperIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import useContestantStore from "@/store/contestantStore";
 import { useNavigate, useParams } from "react-router-dom";
-import { formatDate, getOrdinal, ImageSchema, showAmount } from "@/utils";
-import { fetchTransaction } from "@/utils/settings";
+import { formatDate, getOrdinal, ImageSchema, showAmount, toggleHandler } from "@/utils";
+import { createDoc, fetchTransaction } from "@/utils/settings";
 import { MdDiamond } from "react-icons/md";
 import useContestStore from "@/store/contestStore";
 import { toast } from "react-toastify";
@@ -18,17 +18,21 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { SearchableSelect } from "@/ui/SearchableSelect";
 import ImageUploader from "@/ui/ImageUploader";
+import { ProductQuantity } from "../Vote";
 
 const ViewContestant = () => {
   useDocumentTitle("View Contestant - InfoTel9ja");
   const [loading, setLoading] = useState(false);
   const [data, setData] = useState(null);
   const [overview, setOverview] = useState({ amount: 0, trans: 0, votes: 0 });
+  const [openModal, setOpenModal] = useState(0);
+  const [modalData, setModalData] = useState({});
+
   const { fetchContestantById, fetchContestantSub, notContestant, updateContestant } = useContestantStore();
   const { fetchContestWithBoosterById } = useContestStore();
   const { id } = useParams();
   const navigate = useNavigate();
-  
+
   const fetchData = async () => {
     setLoading(true);
     const contestant = await fetchContestantById(id);
@@ -54,6 +58,8 @@ const ViewContestant = () => {
     fetchData();
   }, []);
 
+  const toggleModal = (value) => setOpenModal(openModal === value ? 0 : value);
+
   const handleUpdate = async (formData) => {
     const result = await updateContestant(formData);
     fetchData();
@@ -72,40 +78,40 @@ const ViewContestant = () => {
       <section className="flex flex-wrap gap-5 mt-5 mb-8">
         <div className="w-full grow xl:w-3/12 md:w-5/12 space-y-5">
           <Card className="bg-header p-4 border text-fore">
-          {!loading ?  <>
+            {!loading ? <>
               <Avatar src={data?.image} alt="Contestant profile" variant="rounded" className="w-full object-fill h-[200px]" />
               <div className="mt-3">
                 <Typography variant="h6" className="truncate">{data?.fullname}</Typography>
                 <span className="text-xs">Joined at <strong>{formatDate(data?.created_at)}</strong></span>
               </div>
-            </> : <FormSkeleton size={3} className="space-y-2 !p-0 first:[&_div]:rounded-md first:[&_div]:h-[150px]"/>
-              }
-          </Card> 
+            </> : <FormSkeleton size={3} className="space-y-2 !p-0 first:[&_div]:rounded-md first:[&_div]:h-[150px]" />
+            }
+          </Card>
           <Card className="bg-header p-4 border text-fore">
             <Typography variant="h6">User Information</Typography>
             <ul className="border rounded-lg text-xs mt-3 divide-y">
-            {!loading ? <>
-              <li className="flex justify-between items-center gap-x-6 py-2 px-3">
-                Name <b className="text-right">{data?.fullname}</b>
-              </li>
-              <li className="flex justify-between items-center gap-x-6 py-2 px-3">
-                Total Votes <b className="text-right text-sm">{data?.total}</b>
-              </li>
-              <li className="flex justify-between items-center gap-x-6 py-2 px-3">
-                Position <b className="text-right text-sm">{data?.position[0] <= 3 && '🏆'} {data?.position}</b>
-              </li>
-              <li className="flex justify-between items-center gap-x-6 py-2 px-3">
-                Status <Chip size="sm" value={data?.active === 1 ? 'Active' : 'Banned'} color={data?.active === 1 ? 'green' : 'red'} className="capitalize py-0.5" />
-              </li>
-            </>
-            : <FormSkeleton size={6} className="space-y-2 !p-0"/>
-            }
-            </ul> 
+              {!loading ? <>
+                <li className="flex justify-between items-center gap-x-6 py-2 px-3">
+                  Name <b className="text-right">{data?.fullname}</b>
+                </li>
+                <li className="flex justify-between items-center gap-x-6 py-2 px-3">
+                  Total Votes <b className="text-right text-sm">{data?.total}</b>
+                </li>
+                <li className="flex justify-between items-center gap-x-6 py-2 px-3">
+                  Position <b className="text-right text-sm">{data?.position[0] <= 3 && '🏆'} {data?.position}</b>
+                </li>
+                <li className="flex justify-between items-center gap-x-6 py-2 px-3">
+                  Status <Chip size="sm" value={data?.active === 1 ? 'Active' : 'Banned'} color={data?.active === 1 ? 'green' : 'red'} className="capitalize py-0.5" />
+                </li>
+              </>
+                : <FormSkeleton size={6} className="space-y-2 !p-0" />
+              }
+            </ul>
           </Card>
           <Card className="bg-header p-4 border text-fore">
             <Typography variant="h6">User Action</Typography>
             <div className="mt-3 space-y-3">
-              <Button color="green" size="sm" fullWidth>Add/Subtract Vote</Button>
+              <Button color="green" size="sm" onClick={() => { setModalData(data); toggleModal(1) }} fullWidth>Add/Subtract Vote</Button>
               <Button color="purple" size="sm" fullWidth>Vote Transaction Log</Button>
               <Button color="yellow" size="sm" fullWidth>Referral Log</Button>
               <Button color="blue" size="sm" fullWidth>Send Mail</Button>
@@ -116,35 +122,35 @@ const ViewContestant = () => {
           <div className="flex flex-wrap gap-5 *:md:basis-[45%] *:grow w-full">
             <Card className="bg-header p-4 flex-row flex-wrap *:flex-1 gap-4 border">
               {!loading ? <>
-              <Card className="bg-purple-50" shadow={false}>
-                <CardBody className="flex flex-col gap-y-3 px-3 items-center">
-                  <div className="bg-header basis-auto p-3 rounded-full">
-                    <BanknotesIcon className="size-10 text-purple-500" />
-                  </div>
-                  <Typography variant="h4" color="purple" className="naira">{showAmount(overview.amount)}</Typography>
-                  <small className="text-nowrap">Total amount</small>
-                </CardBody>
-              </Card>
-              <Card className="bg-amber-50" shadow={false}>
-                <CardBody className="flex flex-col gap-y-3 px-3 items-center">
-                  <div className="bg-header basis-auto p-3 rounded-full">
-                    <NewspaperIcon className="size-10 text-amber-500" />
-                  </div>
-                  <Typography variant="h4" color="amber">{overview.trans}</Typography>
-                  <small className="text-nowrap">Total Transaction</small>
-                </CardBody>
-              </Card>
-              <Card className="bg-blue-50" shadow={false}>
-                <CardBody className="flex flex-col gap-y-3 px-3 items-center">
-                  <div className="bg-header basis-auto p-3 rounded-full">
-                    <MdDiamond className="size-10 text-blue-500" />
-                  </div>
-                  <Typography variant="h4" color="blue">{overview.votes}</Typography>
-                  <small className="text-nowrap">Total Vote</small>
-                </CardBody>
-              </Card>
+                <Card className="bg-purple-50" shadow={false}>
+                  <CardBody className="flex flex-col gap-y-3 px-3 items-center">
+                    <div className="bg-header basis-auto p-3 rounded-full">
+                      <BanknotesIcon className="size-10 text-purple-500" />
+                    </div>
+                    <Typography variant="h4" color="purple" className="naira">{showAmount(overview.amount)}</Typography>
+                    <small className="text-nowrap">Total amount</small>
+                  </CardBody>
+                </Card>
+                <Card className="bg-amber-50" shadow={false}>
+                  <CardBody className="flex flex-col gap-y-3 px-3 items-center">
+                    <div className="bg-header basis-auto p-3 rounded-full">
+                      <NewspaperIcon className="size-10 text-amber-500" />
+                    </div>
+                    <Typography variant="h4" color="amber">{overview.trans}</Typography>
+                    <small className="text-nowrap">Total Transaction</small>
+                  </CardBody>
+                </Card>
+                <Card className="bg-blue-50" shadow={false}>
+                  <CardBody className="flex flex-col gap-y-3 px-3 items-center">
+                    <div className="bg-header basis-auto p-3 rounded-full">
+                      <MdDiamond className="size-10 text-blue-500" />
+                    </div>
+                    <Typography variant="h4" color="blue">{overview.votes}</Typography>
+                    <small className="text-nowrap">Total Vote</small>
+                  </CardBody>
+                </Card>
               </>
-              : [1,2,3].map((key) => <FormSkeleton key={key} size={3} className="space-y-2 !p-0 first:[&_div]:rounded-full first:[&_div]:h-[100px]"/>)
+                : [1, 2, 3].map((key) => <FormSkeleton key={key} size={3} className="space-y-2 !p-0 first:[&_div]:rounded-full first:[&_div]:h-[100px]" />)
               }
             </Card>
             {data?.sub && <Card className="bg-header border p-4 w-full">
@@ -158,21 +164,22 @@ const ViewContestant = () => {
             </Card>}
           </div>
           <Card className="bg-header border p-6 w-full mt-5">
-            {!loading && data ? 
-            <ContestantForm data={data} onSubmit={handleUpdate} />
-            : <FormSkeleton size={7} className="!p-0 *:h-10"/>
-          }
+            {!loading && data ?
+              <ContestantForm data={data} onSubmit={handleUpdate} />
+              : <FormSkeleton size={7} className="!p-0 *:h-10" />
+            }
           </Card>
         </div>
       </section>
+      <AddSubtractModal open={openModal === 1} handler={() => {toggleModal(1); fetchData();}} data={modalData} />
     </>
   )
 }
 export default ViewContestant;
 
-export const ToggleSwitch = ({ checkedLabel = "Active", uncheckedLabel = "Banned", size = 'sm', isChecked = true, onChange = null}) => {
+export const ToggleSwitch = ({ checkedLabel = "Active", uncheckedLabel = "Banned", size = 'sm', isChecked = true, onChange = null }) => {
   const [checked, setChecked] = useState(isChecked);
-  useEffect(()=> {
+  useEffect(() => {
     if (onChange) onChange(checked + 0);
   }, [checked]);
   return (
@@ -201,8 +208,8 @@ const schema = yup.object({
 });
 
 const ContestantForm = ({ onSubmit, data = {} }) => {
-  const {created_at, updated_at, position, sub, contest, ...rest} = data;
-  
+  const { created_at, updated_at, position, sub, contest, ...rest } = data;
+
   const defaultValues = { ...rest };
   const { handleSubmit, setValue, register, clearErrors, reset, formState: { errors }, } = useForm({ resolver: yupResolver(schema), defaultValues, });
   const { imgFiles, isFileLoading, onFileChange, setImgFiles } = useFileHandler({ setValue, clearErrors });
@@ -316,4 +323,120 @@ const ContestantForm = ({ onSubmit, data = {} }) => {
     </form>
   );
 };
-// export default ToggleSwitch;
+
+const AddSubtractModal = ({ open, handler, data }) => {
+  const [loading, setLoading] = useState(false);
+  const [udata, setData] = useState(data || {});
+  const [quantity, setQuantity] = useState(1);
+  const [remark, setRemark] = useState(null);
+  const [action, setAction] = useState(1);
+  const { updateContestantVote } = useContestantStore();
+
+  // Reset form values whenever `data` changes
+  useEffect(() => {
+    if (data && data?.id) {
+      const { contest, sub, bonus, votes, contestId, id, mobile } = data;
+      const { votePrice, minVote } = contest;
+      setQuantity(minVote);
+      const form = { docRef: 'transactions', title: 'Transaction', type: 'voting', status: 'admin', contestId, contestantId: id, previousVote: votes, previousBonus: bonus, votePrice, mobile };
+      // const { votePrice, quantity, subs, previousVote, previousBonus } = data;
+      // form.amount = votePrice * quantity; 
+      // form.previousVote = votes; form.previousBonus = bonus;
+      // form.data_values = {vote: quantity, multiply: 1, bonus: quantity * multiply}
+      setData({ ...form }); setRemark(null); setAction(1);
+    }
+  }, [data, open]);
+
+  const onSubmit = async () => {
+    setLoading(true);
+    const { votePrice, ...rest } = udata;
+    rest.amount = (votePrice * quantity) * (-action || 1);
+    rest.email = remark;
+    rest.data_values = {vote: quantity * (action || -1), multiply: 1, bonus: quantity};
+    // console.log(rest);
+    
+    try {
+      const { vote } = rest.data_values;
+      const { previousVote, previousBonus } = rest;
+      const total = vote + previousBonus + previousVote;
+      if (total < 1) {
+        toast.error('No vote to subtract from');
+      } else {
+        const result = await createDoc(rest);
+        const response = await updateContestantVote({id: rest.contestantId, total, votes: (vote + previousBonus)});
+        if (response.message) {
+          toast.success(response.message);
+        } else {
+          toast.error(response.error)
+        }
+      }
+    } catch (error) {
+      toast.error(error.message);
+    } finally {
+      setLoading(false);
+      handler();
+    }
+  }
+
+  return (
+    <Dialog open={open} handler={handler} size="md" className='bg-header'>
+      <DialogBody className="text-fore">
+        <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
+        <Card color="transparent" shadow={false} className='w-full text-fore'>
+          <Typography variant="h5">Add / Subtract Vote</Typography>
+          <hr className="w-full my-3" />
+          <div className="mb-2 mt-2 text-fore">
+            <div className="mb-6 flex flex-wrap gap-6 px-2 pt-3 w-full">
+              <div className="w-full sm:w-1/2 grow">
+                <p>Number of vote(s)</p>
+                <ProductQuantity min={2} getQty={setQuantity} />
+              </div>
+              <div className="w-full sm:w-1/3 grow">
+                <p>Action</p>
+                <ToggleSwitch isChecked={action ? true : false} checkedLabel="Add" uncheckedLabel="Subtract" onChange={(val) => setAction(val)} />
+              </div>
+              <div className="w-full">
+                <label>Remark</label>
+                <Input labelProps={{ className: IWOL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWOL[1]} onChange={(e) => setRemark(e.target.value)} />
+              </div>
+            </div>
+            <div className="flex items-center justify-end mt-6 gap-3">
+              <Button onClick={toggleHandler(handler)} color="red" size="sm" variant="outlined">
+                Close
+              </Button>
+              <Button size="sm" className="bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center" loading={loading} disabled={!remark} onClick={onSubmit}>
+                Submit
+              </Button>
+            </div>
+          </div>
+        </Card>
+      </DialogBody>
+    </Dialog>
+  );
+}
+
+`
+amount 150 (number)
+contestId
+contestantId
+created_at
+data_values { bonus: 3, multiply: 1, vote: 3 }
+email "osenikamorudeen36@gmail.com"
+mobile "09168461116"
+previousBonus 20
+previousVote 10
+status "success"
+type "voting"
+
+==========================
+contestId: "mOyamQkdED88mF56wZbW"
+contestantId: "DcVWVfvXfQc8SQu00PBQ"
+docRef: "transactions"
+minVote: 2
+previousBonus: 83
+previousVote: 20
+status: "admin"
+title: "Transaction"
+type: "voting"
+votePrice: 50
+`

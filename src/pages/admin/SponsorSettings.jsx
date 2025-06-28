@@ -264,8 +264,6 @@ const AddModal = ({ open, handler, data }) => {
     setLoading(true);
     try {
       const response = await editSetting(formData);
-      console.log(formData);
-
       if (response.message) {
         toast.success(response.message);
       } else {

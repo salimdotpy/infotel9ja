@@ -291,7 +291,7 @@ const Confirmation = ({open, handler, title='Confirmation', children}) => {
 
 const CheckoutForm = ({open, handler, data}) => {
     const [loading, setLoading] = useState(false);
-    const [udata, setData] = useState(data || {})
+    const [udata, setData] = useState(data || {});
     const [email, setEmail] = useState(data?.email);
     const [mobile, setMobile] = useState(data?.email);
 

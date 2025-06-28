@@ -102,9 +102,21 @@ const useContestantStore = create((set, get) => ({
         const checkEmail = await get().notContestant('email', email, false, id);
         if (checkMobile) return {error: "Phone number has been taken, try another valid one"};
         if (checkEmail) return {error: "Email has been taken, try another valid one"};
+        delete form.id;
         try {
             await updateDoc(doc(db, 'contestants', id), { ...form, updated_at: date, });
             return { message: 'Contestant updated successfully.' };
+        } catch (error) {
+            return { error: error.message };
+        }
+    },
+
+    updateContestantVote: async (form) => {
+        const { id, ...rest } = form;
+        const date = new Date().toISOString();
+        try {
+            await updateDoc(doc(db, 'contestants', id), { ...rest , updated_at: date, });
+            return { message: 'Contestant vote updated successfully.' };
         } catch (error) {
             return { error: error.message };
         }
