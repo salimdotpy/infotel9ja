@@ -338,11 +338,7 @@ const AddSubtractModal = ({ open, handler, data }) => {
       const { contest, sub, bonus, votes, contestId, id, mobile } = data;
       const { votePrice, minVote } = contest;
       setQuantity(minVote);
-      const form = { docRef: 'transactions', title: 'Transaction', type: 'voting', status: 'admin', contestId, contestantId: id, previousVote: votes, previousBonus: bonus, votePrice, mobile };
-      // const { votePrice, quantity, subs, previousVote, previousBonus } = data;
-      // form.amount = votePrice * quantity; 
-      // form.previousVote = votes; form.previousBonus = bonus;
-      // form.data_values = {vote: quantity, multiply: 1, bonus: quantity * multiply}
+      const form = { docRef: 'transactions', title: 'Transaction', type: 'voting', status: 'success', contestId, contestantId: id, previousVote: votes, previousBonus: bonus, votePrice, mobile: 'admin' };
       setData({ ...form }); setRemark(null); setAction(1);
     }
   }, [data, open]);
@@ -350,20 +346,18 @@ const AddSubtractModal = ({ open, handler, data }) => {
   const onSubmit = async () => {
     setLoading(true);
     const { votePrice, ...rest } = udata;
-    rest.amount = (votePrice * quantity) * (-action || 1);
+    rest.amount = 0;//(votePrice * quantity) * (-action || 1);
     rest.email = remark;
     rest.data_values = {vote: quantity * (action || -1), multiply: 1, bonus: quantity};
-    // console.log(rest);
-    
     try {
       const { vote } = rest.data_values;
       const { previousVote, previousBonus } = rest;
       const total = vote + previousBonus + previousVote;
-      if (total < 1) {
+      if (total < 0) {
         toast.error('No vote to subtract from');
       } else {
-        const result = await createDoc(rest);
-        const response = await updateContestantVote({id: rest.contestantId, total, votes: (vote + previousBonus)});
+        await createDoc(rest);
+        const response = await updateContestantVote({id: rest.contestantId, total, votes: (vote + previousVote)});
         if (response.message) {
           toast.success(response.message);
         } else {

@@ -15,7 +15,7 @@ const useContestantStore = create((set, get) => ({
                 return { error: "Contestant not found" };
             }
             const result = { id: contestantDoc.id, ...contestantDoc.data() };
-            result.total = (result.votes || 0) + (result.bonus || 0);
+            // result.total = (result.votes || 0) + (result.bonus || 0);
             return result;
         } catch (error) {
             return { error: error.message };
