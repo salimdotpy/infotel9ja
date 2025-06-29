@@ -34,7 +34,7 @@ const SendEmail = () => {
     setLoading(true);
     try {
       formData.to = Array.isArray(data) ? data.join(',') : data.email;
-      formData.receiverName = '😎';
+      formData.receiverName = ' ';
       const response = await sendGeneralEmail(formData);
       response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
