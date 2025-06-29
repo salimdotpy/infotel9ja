@@ -1,5 +1,5 @@
 import { useDocumentTitle } from "@/hooks";
-import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
+import { BreadCrumbs, FormSkeleton, LoadingComponent } from "@/ui/sections";
 import { EMAIL_TEMP, IWL } from "@/utils/constants";
 import { Button, Card, CardBody, Input, Typography } from "@material-tailwind/react";
 import React, { useEffect, useState } from "react";
@@ -61,15 +61,17 @@ const EmailSettings = () => {
     clearErrors('email_template');
   }
 
-  if (!data) return <LoadingComponent />;
+  // if (!data) return <LoadingComponent />;
 
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore">Email Setting</Typography>
+      <BreadCrumbs separator="/" className="my-3 bg-header !max-w-full" links={[{name: 'Email Setting', href: ''}]} />
       <Card className="bg-header text-fore">
         <CardBody>
           <Typography variant="h6">Email Configuration</Typography>
           <hr className="w-full my-3" />
+          {!loading && data ?
           <form className="mt-8 mb-2 text-fore" method='post' onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
               <div>
@@ -102,6 +104,8 @@ const EmailSettings = () => {
               Update
             </Button>
           </form>
+            : <FormSkeleton size={14} className="!p-0 *:h-10 flex flex-wrap items-center gap-6 !space-y-0 *:rounded-md *:grow *:basis-1/3" />
+          }
         </CardBody>
       </Card>
     </React.Fragment>

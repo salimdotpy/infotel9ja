@@ -37,6 +37,7 @@ import EmailSettings from "./pages/admin/EmailSettings";
 import ViewContest from "./pages/admin/ViewContest";
 import ContestantList from "./pages/admin/ContestantList";
 import ViewContestant from "./pages/admin/ViewContestant";
+import SendEmail from "./pages/admin/SendEmail";
 
 function App() {
   const { theme } = useTheme();
@@ -103,6 +104,7 @@ function App() {
           <Route path="contest/list" element={<ContestList />} />
           <Route path="contestant/list" element={<ContestantList />} />
           <Route path="contestant/view/:id" element={<ViewContestant />} />
+          <Route path="contestant/send-mail/:id?" element={<SendEmail />} />
           <Route path="contest/edit/:id" element={<EditContest />} />
           <Route path="contest/view/:id" element={<ViewContest />} />
           <Route path="setting/system" element={<SystemSettings />} />

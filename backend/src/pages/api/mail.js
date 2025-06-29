@@ -26,7 +26,7 @@ export default async function handler(req, res) {
   });
   const sitename = system_setting?.siteTitle || "InfoTel9ja";
   let msg = email_setting?.email_template;
-  msg = msg ? msg.replace('{{username}}', receiverName).replace('{{email}}', to).replace('{{message}}', message) : message;
+  msg = msg ? msg.replace('{{username}}', receiverName).replace('{{email}}', (to.split(',').length > 0) ? 'Contestant' : to).replace('{{message}}', message) : message;
   const mailOptions = {
     from: `${sitename} < ${email_setting?.email_from}`,
     to,

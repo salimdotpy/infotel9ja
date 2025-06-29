@@ -1,5 +1,5 @@
 import { useDocumentTitle, useFileHandler } from "@/hooks";
-import { BreadCrumbs, LoadingComponent } from "@/ui/sections";
+import { BreadCrumbs, FormSkeleton, LoadingComponent } from "@/ui/sections";
 import { hexToRgb, ImageSchema } from "@/utils";
 import { IWL } from "@/utils/constants";
 import { CloudArrowUpIcon, PencilIcon } from "@heroicons/react/24/outline";
@@ -77,7 +77,7 @@ const SystemSettings = () => {
     toast.error(result.error);
   }
 
-  if(loading && !data) return <LoadingComponent />
+  // if(loading && !data) return <LoadingComponent />
   return (
     <React.Fragment>
       <Typography variant="h5" className="mb-4 text-fore text-wrap break-words !w-full">
@@ -90,6 +90,7 @@ const SystemSettings = () => {
           <Typography variant="h6" className="mb-4 text-fore">
             General Settings
           </Typography>
+          {!loading && data ?
           <form className="mb-2 text-fore" method="post" onSubmit={handleSubmit(onSubmit)}>
             <div className="mb-1 flex flex-wrap gap-6 *:basis-[40%] *:grow">
               <div>
@@ -177,6 +178,8 @@ const SystemSettings = () => {
                 Update
             </Button>
           </form>
+        : <FormSkeleton size={12} className="!p-0 *:h-10 flex flex-wrap items-center gap-6 !space-y-0 *:rounded-md *:grow *:basis-1/3" />
+        }
         </CardBody>
       </Card>
     </React.Fragment>

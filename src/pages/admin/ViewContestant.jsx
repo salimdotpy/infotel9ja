@@ -6,7 +6,7 @@ import { BanknotesIcon } from "@heroicons/react/24/solid";
 import { IWL, IWOL, SOO } from "@/utils/constants";
 import { NewspaperIcon, XMarkIcon } from "@heroicons/react/24/outline";
 import useContestantStore from "@/store/contestantStore";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { formatDate, getOrdinal, ImageSchema, showAmount, toggleHandler } from "@/utils";
 import { createDoc, fetchTransaction } from "@/utils/settings";
 import { MdDiamond } from "react-icons/md";
@@ -47,6 +47,8 @@ const ViewContestant = () => {
     const all = await notContestant('contestId', contestant.contestId, true);
     contestant.position = all.findIndex(item => item.id === contestant.id);
     contestant.position = `${contestant.position + 1}${getOrdinal(contestant.position + 1)}`;
+    const totalRef = all.filter(doc => doc.referral === contestant.id);
+    contestant.totalRef = totalRef || [];
     const trans = await fetchTransaction(id, false, 'contestantId');
     const amount = trans ? trans.reduce((tran, item) => tran + (item.amount || 0), 0) : 0;
     setOverview((prev) => ({ ...prev, votes: contestant.total, amount, trans: (trans?.length || 0) }));
@@ -101,10 +103,13 @@ const ViewContestant = () => {
                   Position <b className="text-right text-sm">{data?.position[0] <= 3 && '🏆'} {data?.position}</b>
                 </li>
                 <li className="flex justify-between items-center gap-x-6 py-2 px-3">
+                  Referrals <b className="text-right text-sm">{data?.totalRef?.length}</b>
+                </li>
+                <li className="flex justify-between items-center gap-x-6 py-2 px-3">
                   Status <Chip size="sm" value={data?.active === 1 ? 'Active' : 'Banned'} color={data?.active === 1 ? 'green' : 'red'} className="capitalize py-0.5" />
                 </li>
               </>
-                : <FormSkeleton size={6} className="space-y-2 !p-0" />
+                : <FormSkeleton size={7} className="space-y-2 !p-0" />
               }
             </ul>
           </Card>
@@ -114,7 +119,9 @@ const ViewContestant = () => {
               <Button color="green" size="sm" onClick={() => { setModalData(data); toggleModal(1) }} fullWidth>Add/Subtract Vote</Button>
               <Button color="purple" size="sm" fullWidth>Vote Transaction Log</Button>
               <Button color="yellow" size="sm" fullWidth>Referral Log</Button>
-              <Button color="blue" size="sm" fullWidth>Send Mail</Button>
+              <Link to={`/admin/contestant/send-mail/${data?.id}`} className="block">
+                <Button color="blue" size="sm" fullWidth>Send Mail</Button>
+              </Link>
             </div>
           </Card>
         </div>
@@ -171,7 +178,7 @@ const ViewContestant = () => {
           </Card>
         </div>
       </section>
-      <AddSubtractModal open={openModal === 1} handler={() => {toggleModal(1); fetchData();}} data={modalData} />
+      <AddSubtractModal open={openModal === 1} handler={() => toggleModal(1)} data={modalData} callback={fetchData} />
     </>
   )
 }
@@ -324,7 +331,7 @@ const ContestantForm = ({ onSubmit, data = {} }) => {
   );
 };
 
-const AddSubtractModal = ({ open, handler, data }) => {
+const AddSubtractModal = ({ open, handler, data, callback = null }) => {
   const [loading, setLoading] = useState(false);
   const [udata, setData] = useState(data || {});
   const [quantity, setQuantity] = useState(1);
@@ -368,6 +375,7 @@ const AddSubtractModal = ({ open, handler, data }) => {
       toast.error(error.message);
     } finally {
       setLoading(false);
+      callback && callback();
       handler();
     }
   }
@@ -408,29 +416,3 @@ const AddSubtractModal = ({ open, handler, data }) => {
     </Dialog>
   );
 }
-
-`
-amount 150 (number)
-contestId
-contestantId
-created_at
-data_values { bonus: 3, multiply: 1, vote: 3 }
-email "osenikamorudeen36@gmail.com"
-mobile "09168461116"
-previousBonus 20
-previousVote 10
-status "success"
-type "voting"
-
-==========================
-contestId: "mOyamQkdED88mF56wZbW"
-contestantId: "DcVWVfvXfQc8SQu00PBQ"
-docRef: "transactions"
-minVote: 2
-previousBonus: 83
-previousVote: 20
-status: "admin"
-title: "Transaction"
-type: "voting"
-votePrice: 50
-`
