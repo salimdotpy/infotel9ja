@@ -122,12 +122,17 @@ cd infotel9ja
 To identify and reward the most influential personalities and football diehard fans in Osun State,
 while promoting community engagement, participation, and social interaction through a digital contest platform.
 
-**🤝 Contributing**
+---
+
+## 🤝 Contributing
+
 Contributions, suggestions, and improvements are welcome!
 Feel free to open an issue or submit a pull request.
 
-**👨‍💻 Author**
+---
+
+## 👨‍💻 Author
 
 - Selim Adekola
 - 📧 salimdotpy@gmail.com
-- 📞 +2348076738293
+- 📞 [https://wa.me/+2348076738293](+2348076738293)
