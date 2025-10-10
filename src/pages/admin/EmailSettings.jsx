@@ -29,7 +29,6 @@ const EmailSettings = () => {
   const onSubmit = async (formData) => {
     setLoading(true);
     try {
-      console.log(formData);
       const response = await updateSetting(formData, 'email.config');
       response.message ? toast.success(response.message) : toast.error(response.error);
     } catch (error) {
