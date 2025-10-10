@@ -135,4 +135,4 @@ Feel free to open an issue or submit a pull request.
 
 - Selim Adekola
 - 📧 salimdotpy@gmail.com
-- 📞 [https://wa.me/+2348076738293](+2348076738293)
+- 📞 [+2348076738293](https://wa.me/+2348076738293)
