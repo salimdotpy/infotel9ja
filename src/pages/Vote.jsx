@@ -6,7 +6,7 @@ import PaystackButton from '@/ui/PaystackButton';
 import { FooterSection, HeroBreaCrumbs, LoadingComponent } from '@/ui/sections';
 import { API_BASE_URL } from '@/utils';
 import { IWL } from '@/utils/constants';
-import { createDoc } from '@/utils/settings';
+import { createDoc, createDocApi } from '@/utils/settings';
 import { CubeIcon, DocumentCheckIcon, DocumentDuplicateIcon, GiftIcon, InformationCircleIcon, MinusIcon, PlusIcon, XMarkIcon } from '@heroicons/react/24/outline';
 import { Alert, Avatar, Button, Card, CardBody, Dialog, DialogBody, IconButton, Input, List, ListItem, ListItemPrefix, ListItemSuffix, Tooltip, Typography } from '@material-tailwind/react';
 import dayjs from 'dayjs';
@@ -23,7 +23,7 @@ const Vote = () => {
     const { fetchContestantById, fetchContestantSub } = useContestantStore();
     const { id } = useParams();
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         setLoading(true);
         const fetchData = async () => {
@@ -34,15 +34,15 @@ const Vote = () => {
             }
             const contest = await fetchContestWithBoosterById(data.contestId);
             data.contest = contest;
-            const  sub = await fetchContestantSub(id);
-            data.sub = sub ? {...sub, booster: contest?.boosterPackages?.filter(doc => doc.id === sub.boosterId)[0]} : null;
+            const sub = await fetchContestantSub(id);
+            data.sub = sub ? { ...sub, booster: contest?.boosterPackages?.filter(doc => doc.id === sub.boosterId)[0] } : null;
             setContestant(data);
             // console.log(data.sub);
         };
         fetchData();
         setLoading(false);
     }, [id]);
-    
+
     useDocumentTitle(`${contestant?.fullname} - ${contestant?.contest?.contestName} - InfoTel9ja` || 'Vote - InfoTel9ja');
     const links = [
         { name: contestant?.contest?.contestName || 'Contest', href: `/contest/${contestant?.contest?.id}` },
@@ -52,7 +52,7 @@ const Vote = () => {
         <>
             <HeroBreaCrumbs page={contestant?.fullname || 'Contestant'} links={links} />
             {!loading && contestant ? <Sections data={contestant} /> :
-            <LoadingComponent />
+                <LoadingComponent />
             }
             <FooterSection />
         </>
@@ -61,7 +61,7 @@ const Vote = () => {
 
 export default Vote;
 
-const Sections = ({ data = {}}) => {
+const Sections = ({ data = {} }) => {
     const [quantity, setQuantity] = useState(data?.contest?.minVote || 2);
     const [value, copy] = useCopyToClipboard();
     const [copied, setCopied] = useState(false);
@@ -92,37 +92,38 @@ const Sections = ({ data = {}}) => {
                                 <span>💎</span>
                             </div>
                             <div className='flex gap-2 items-center my-4'>
-                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize text-fore border-fore' onMouseLeave={() =>setCopied(false)} onClick={()=>{
+                                <Button size='sm' variant='outlined' className='flex items-center gap-2 capitalize text-fore border-fore' onMouseLeave={() => setCopied(false)} onClick={() => {
                                     copy(shareUrl);
                                     setCopied(true);
-                                    toast.success('Your vote link copied successfully!');}}>
-                                    {copied ?  <><DocumentCheckIcon className='size-4' /> Link Copied</>:
-                                    <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
+                                    toast.success('Your vote link copied successfully!');
+                                }}>
+                                    {copied ? <><DocumentCheckIcon className='size-4' /> Link Copied</> :
+                                        <><DocumentDuplicateIcon className='size-4' /> Copy Link</>}
                                 </Button>
                                 <Tooltip content='Share via whatsapp'>
-                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice)}>
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={() => socialShare(shareUrl, votePrice)}>
                                         <BiLogoWhatsapp className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via facebook'>
-                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 'f')}>
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={() => socialShare(shareUrl, votePrice, 'f')}>
                                         <BiLogoFacebook className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via Twitter'>
-                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 't')}>
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={() => socialShare(shareUrl, votePrice, 't')}>
                                         <BiLogoTwitter className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                                 <Tooltip content='Share via Telegram'>
-                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={()=>socialShare(shareUrl, votePrice, 'tel')}>
+                                    <IconButton size='sm' variant='outlined' className='border-fore' onClick={() => socialShare(shareUrl, votePrice, 'tel')}>
                                         <BiLogoTelegram className='size-5 text-fore' />
                                     </IconButton>
                                 </Tooltip>
                             </div>
                             <p>Number of votes you want to get:</p>
                             <ProductQuantity min={data?.contest?.minVote} getQty={setQuantity} />
-                            <Button type="submit" className={`mt-6 bg-primary`} onClick={() => { setModalData({type: 'voting', quantity, votePrice, contestId: data.contestId, contestantId: data.id, previousVote: data?.votes || 0, previousBonus: data?.bonus || 0, sub: (data?.sub && !data?.sub?.expired ? data?.sub?.booster : null)}); toggleModal(2) }}>
+                            <Button type="submit" className={`mt-6 bg-primary`} onClick={() => { setModalData({ type: 'voting', quantity, votePrice, contestId: data.contestId, contestantId: data.id, previousVote: data?.votes || 0, previousBonus: data?.bonus || 0, sub: (data?.sub && !data?.sub?.expired ? data?.sub?.booster : null) }); toggleModal(2) }}>
                                 Pay ₦{quantity * votePrice} for {quantity} Gems
                             </Button>
                         </div>
@@ -137,64 +138,66 @@ const Sections = ({ data = {}}) => {
                                 <span> To activate your voting page, you need to buy one of the Bonus Packages</span>
                             </Alert>
                             <List className='p-0'>
-                                {data.contest.bonusPackages.map((item, k) => 
-                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
-                                    <ListItemPrefix>
-                                        <GiftIcon className='size-6' />
-                                    </ListItemPrefix>
-                                    <div>
-                                        <Typography variant='h6'>{item.name}</Typography>
-                                        <p>Pay <span className='font-bold'>₦{item.price}</span> for <span className='font-bold'>{item.paidVote} votes</span> and get <span className='font-bold'>{item.bonusVote} votes as bonus</span></p>
-                                    </div>
-                                    <ListItemSuffix className='shrink-0'>
-                                        <Button size='sm' className='bg-primary' onClick={() => {
-                                            setModalData({email: data.email, mobile: data.mobile, type: 'bonus', contestId: data.contestId, contestantId: data.id, previousVote: data?.votes || 0, previousBonus: data?.bonus || 0, data_values: item}); toggleModal(2) }}>Pay Now</Button>
-                                    </ListItemSuffix>
-                                </ListItem>
+                                {data.contest.bonusPackages.map((item, k) =>
+                                    <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                        <ListItemPrefix>
+                                            <GiftIcon className='size-6' />
+                                        </ListItemPrefix>
+                                        <div>
+                                            <Typography variant='h6'>{item.name}</Typography>
+                                            <p>Pay <span className='font-bold'>₦{item.price}</span> for <span className='font-bold'>{item.paidVote} votes</span> and get <span className='font-bold'>{item.bonusVote} votes as bonus</span></p>
+                                        </div>
+                                        <ListItemSuffix className='shrink-0'>
+                                            <Button size='sm' className='bg-primary' onClick={() => {
+                                                setModalData({ email: data.email, mobile: data.mobile, type: 'bonus', contestId: data.contestId, contestantId: data.id, previousVote: data?.votes || 0, previousBonus: data?.bonus || 0, data_values: item }); toggleModal(2)
+                                            }}>Pay Now</Button>
+                                        </ListItemSuffix>
+                                    </ListItem>
                                 )}
                             </List>
                         </CardBody>
-                    </Card> }
+                    </Card>}
                     <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
                         <CardBody>
-                            {data?.sub && !data?.sub?.expired ? 
-                            <div>
-                                <Typography variant='h6'>{data.sub.booster.name} (💎x{data.sub.booster.vote})</Typography>
-                                <Typography>⌚ Remaining Time</Typography>
-                                <CountdownTimer targetTime={data.sub.expired_at} onComplete={handleComplete} playSound={true} />
-                            </div>
-                            : 
-                            <><Typography variant="h5" className="mb-4">Gems Booster Bonus Packages</Typography>
-                            <List className='p-0'>
-                                {data.contest.boosterPackages.map((item, k) => 
-                                <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
-                                    <ListItemPrefix>
-                                        <CubeIcon className='size-6' />
-                                    </ListItemPrefix>
-                                    <div>
-                                        <Typography variant='h6'>{item.name}</Typography>
-                                        <p>
-                                            💎x{item.vote} | ⌚ <span className='font-bold'>{item.duration * 10} days</span>
-                                        </p>
-                                        <p hidden> <span className='font-bold'>₦{item.price} </span> 
-                                        and each vote given to you shall be  
-                                        <span className='font-bold'> multiply by {item.vote}</span>, is valid for <span className='font-bold'>{item.duration * 10} days</span></p>
-                                    </div>
-                                    <ListItemSuffix className='shrink-0'>
-                                        <p className='font-bold'>₦{item.price} </p>
-                                        <Button size='sm' className='bg-primary' onClick={() => {
-                                            setModalData({email: data.email, mobile: data.mobile, type: 'boost', contestId: data.contestId, contestantId: data.id, data_values: item});
-                                            toggleModal(2) }}>Buy Now</Button>
-                                    </ListItemSuffix>
-                                </ListItem>
-                                )}
-                            </List></>}
+                            {data?.sub && !data?.sub?.expired ?
+                                <div>
+                                    <Typography variant='h6'>{data.sub.booster.name} (💎x{data.sub.booster.vote})</Typography>
+                                    <Typography>⌚ Remaining Time</Typography>
+                                    <CountdownTimer targetTime={data.sub.expired_at} onComplete={handleComplete} playSound={true} />
+                                </div>
+                                :
+                                <><Typography variant="h5" className="mb-4">Gems Booster Bonus Packages</Typography>
+                                    <List className='p-0'>
+                                        {data.contest.boosterPackages.map((item, k) =>
+                                            <ListItem key={k} className='text-fore text-sm bg-primary/10 hover:bg-primary/20'>
+                                                <ListItemPrefix>
+                                                    <CubeIcon className='size-6' />
+                                                </ListItemPrefix>
+                                                <div>
+                                                    <Typography variant='h6'>{item.name}</Typography>
+                                                    <p>
+                                                        💎x{item.vote} | ⌚ <span className='font-bold'>{item.duration * 10} days</span>
+                                                    </p>
+                                                    <p hidden> <span className='font-bold'>₦{item.price} </span>
+                                                        and each vote given to you shall be
+                                                        <span className='font-bold'> multiply by {item.vote}</span>, is valid for <span className='font-bold'>{item.duration * 10} days</span></p>
+                                                </div>
+                                                <ListItemSuffix className='shrink-0'>
+                                                    <p className='font-bold'>₦{item.price} </p>
+                                                    <Button size='sm' className='bg-primary' onClick={() => {
+                                                        setModalData({ email: data.email, mobile: data.mobile, type: 'boost', contestId: data.contestId, contestantId: data.id, data_values: item });
+                                                        toggleModal(2)
+                                                    }}>Buy Now</Button>
+                                                </ListItemSuffix>
+                                            </ListItem>
+                                        )}
+                                    </List></>}
                         </CardBody>
                     </Card>
                     <Card className='bg-header text-fore basis-full lg:basis-[45%]'>
                         <CardBody>
                             <Typography variant="h5" className="mb-4">Terms and Conditions</Typography>
-                            <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{__html: data?.contest?.tnc}} />
+                            <div className='rsw-editor !border-0' dangerouslySetInnerHTML={{ __html: data?.contest?.tnc }} />
                         </CardBody>
                     </Card>
                 </div>
@@ -202,7 +205,7 @@ const Sections = ({ data = {}}) => {
             {/* <Confirmation open={openModal===1} handler={() => toggleModal(1)}>
                 Ade
             </Confirmation> */}
-            <CheckoutForm open={openModal===2} handler={() => toggleModal(2)} data={modalData} />
+            <CheckoutForm open={openModal === 2} handler={() => toggleModal(2)} data={modalData} />
         </section>
     )
 }
@@ -246,7 +249,7 @@ export const ProductQuantity = ({ min = 1, max = Infinity, unitPrice = 1, getTot
     )
 };
 
-const socialShare = (url, price=50, media = 'w') => {
+const socialShare = (url, price = 50, media = 'w') => {
     const message = `I need your support! Please vote for me in the InfoTel9ja contest. Each vote costs ₦${price}, and you can vote as many times as you'd like.
 
 Here's how your votes add up:
@@ -262,18 +265,18 @@ Thank you so much for your help!`;
     const encodedMessage = encodeURIComponent(message);
     let link = '';
     if (media === 'f') {
-         link = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedMessage}`;
+        link = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}&quote=${encodedMessage}`;
     } else if (media === 't') {
-         link = `https://twitter.com/intent/tweet?text=${encodedMessage}`;
+        link = `https://twitter.com/intent/tweet?text=${encodedMessage}`;
     } else if (media === 'tel') {
-         link = `https://t.me/share/url?url=${encodedUrl}&text=${encodedMessage}`;
+        link = `https://t.me/share/url?url=${encodedUrl}&text=${encodedMessage}`;
     } else {
         link = `https://api.whatsapp.com/send?text=${encodedMessage}`;
     }
-    window.open(link,'_blank');
+    window.open(link, '_blank');
 }
 
-const Confirmation = ({open, handler, title='Confirmation', children}) => {
+const Confirmation = ({ open, handler, title = 'Confirmation', children }) => {
     return (
         <Dialog open={open} handler={handler} size="sm">
             <DialogBody divider className="grid place-items-center gap-5 md:p-16 relative border-0 bg-header rounded-lg text-fore">
@@ -289,7 +292,7 @@ const Confirmation = ({open, handler, title='Confirmation', children}) => {
     );
 }
 
-const CheckoutForm = ({open, handler, data}) => {
+const CheckoutForm = ({ open, handler, data }) => {
     const [loading, setLoading] = useState(false);
     const [udata, setData] = useState(data || {});
     const [email, setEmail] = useState(data?.email);
@@ -298,16 +301,16 @@ const CheckoutForm = ({open, handler, data}) => {
     // Reset form values whenever `data` changes
     useEffect(() => {
         if (data) {
-            const {type, contestId, contestantId, email, mobile} = data;
-            const form = {docRef: 'transactions', title: 'Transaction', type, contestId, contestantId, status: 'intial', data_values: data.data_values};
-            if(type === 'voting'){
+            const { type, contestId, contestantId, email, mobile } = data;
+            const form = { docRef: 'transactions', title: 'Transaction', type, contestId, contestantId, status: 'intial', data_values: data.data_values };
+            if (type === 'voting') {
                 const { votePrice, quantity, sub, previousVote, previousBonus } = data;
-                form.amount = votePrice * quantity;  form.previousVote = previousVote;
-                const multiply =  sub?.vote || 1; form.previousBonus = previousBonus;
-                form.data_values = {vote: quantity, multiply, bonus: quantity * multiply}
+                form.amount = votePrice * quantity; form.previousVote = previousVote;
+                const multiply = sub?.vote || 1; form.previousBonus = previousBonus;
+                form.data_values = { vote: quantity, multiply, bonus: quantity * multiply }
             } else if (type === 'boost') {
                 const { price, contestId, created_at, updated_at, ...rest } = data.data_values;
-                form.data_values = {...rest, price}
+                form.data_values = { ...rest, price }
                 form.amount = price;
             } else if (type === 'bonus') {
                 const { price } = data.data_values;
@@ -318,7 +321,7 @@ const CheckoutForm = ({open, handler, data}) => {
             setData({ ...form });
             setEmail(email);
             setMobile(mobile);
-            
+
         }
     }, [data]);
 
@@ -357,43 +360,43 @@ const CheckoutForm = ({open, handler, data}) => {
         setLoading(true);
         try {
             const form = { ...udata, email, mobile };
-            // console.log(form);
-            
-            const result = await createDoc(form);
-            return {id: result.id};
+            const result = await createDocApi(form);
+            toast.success(result.message);
+            return { id: result.id };
         } catch (error) {
-            toast.error(error.message);
+            console.error(error);
+            toast.error(error.response?.data?.error || error.message || 'Failed to create document');
             return;
         } finally {
             setLoading(false);
             handler();
         }
     }
-    const title = {voting: 'Cast your votes', bonus: 'Purchasing Bonus Package', boost: 'Purchasing Booster Package', }
+    const title = { voting: 'Cast your votes', bonus: 'Purchasing Bonus Package', boost: 'Purchasing Booster Package', }
     return (
         <Dialog open={open} handler={handler} size="xs" className='bg-header'>
             <DialogBody className="text-fore">
-            <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
-            {data ? (<Card color="transparent" shadow={false} className='w-full text-fore'>
-                <Typography variant="h5">{title[data.type] || 'Payment Checkout'}</Typography>
-                <hr className="w-full my-3" />
-                <div className="mb-2 mt-2 text-fore">
-                <div className="mb-6 flex flex-col gap-6 px-2 pt-3 w-full">
-                    <div>
-                    <Input name='email' defaultValue={data?.email} label='Enter Email' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} onChange={(e)=>setEmail(e.target.value)} />
+                <XMarkIcon className="mr-3 h-5 w-5 absolute z-10 top-3 right-0" onClick={handler} />
+                {data ? (<Card color="transparent" shadow={false} className='w-full text-fore'>
+                    <Typography variant="h5">{title[data.type] || 'Payment Checkout'}</Typography>
+                    <hr className="w-full my-3" />
+                    <div className="mb-2 mt-2 text-fore">
+                        <div className="mb-6 flex flex-col gap-6 px-2 pt-3 w-full">
+                            <div>
+                                <Input name='email' defaultValue={data?.email} label='Enter Email' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} onChange={(e) => setEmail(e.target.value)} />
+                            </div>
+                            <div>
+                                <Input type="tel" name='mobile' defaultValue={data?.mobile} label='Enter Phone Number' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} onChange={(e) => setMobile(e.target.value)} />
+                            </div>
+                        </div>
+                        <PaystackButton size="sm" className="bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center" loading={loading} disabled={!email || !mobile} fullWidth {...paymentConfig} onSubmit={onSubmit}>
+                            {udata?.type === 'voting' ? `Pay ₦${udata?.amount} for ${udata?.data_values?.vote} Gems` :
+                                `Pay ₦${udata?.amount} Now`}
+                        </PaystackButton>
                     </div>
-                    <div>
-                    <Input type="tel" name='mobile' defaultValue={data?.mobile} label='Enter Phone Number' labelProps={{ className: IWL[0] }} containerProps={{ className: 'min-w-0 w-full' }} className={IWL[1]} onChange={(e)=> setMobile(e.target.value)} />
-                    </div>
-                </div>
-                <PaystackButton size="sm" className="bg-primary disabled:!pointer-events-auto disabled:cursor-not-allowed justify-center" loading={loading} disabled={!email || !mobile} fullWidth {...paymentConfig} onSubmit={onSubmit}>
-                    {udata?.type === 'voting' ? `Pay ₦${udata?.amount} for ${udata?.data_values?.vote} Gems` :
-                    `Pay ₦${udata?.amount} Now`}
-                </PaystackButton>
-                </div>
-            </Card>) : (
-                <Typography variant="h5">Invalid Data</Typography>
-            )}
+                </Card>) : (
+                    <Typography variant="h5">Invalid Data</Typography>
+                )}
             </DialogBody>
         </Dialog>
     )

@@ -102,20 +102,20 @@ export async function createTransaction(req) {
     }
 }
 
-export async function fetchTransaction( id, type=false, which='contestId', status='success') {
+export async function fetchTransaction(id, type = false, which = 'contestId', status = 'success') {
     try {
         let q = query(
-            collection(db, 'transactions'), 
-            where(which, '==', id), 
+            collection(db, 'transactions'),
+            where(which, '==', id),
             where('status', '==', status)
         );
         if (type) {
             q = query(
-            collection(db, 'transactions'), 
-            where(which, '==', id), 
-            where('status', '==', status),
-            where('type', '==', type)
-        );
+                collection(db, 'transactions'),
+                where(which, '==', id),
+                where('status', '==', status),
+                where('type', '==', type)
+            );
         }
         const snapshot = await getDocs(q);
         if (!snapshot.empty) {
@@ -123,7 +123,7 @@ export async function fetchTransaction( id, type=false, which='contestId', statu
         } else {
             return null;
         }
-        
+
     } catch (error) {
         console.log(error.message);
         return 'null';
@@ -137,10 +137,14 @@ export async function createDoc(req) {
         const result = await addDoc(collection(db, docRef), { ...rest, created_at: date, updated_at: date });
         return { message: `${title} created successfully!`, id: result?.id };
     } catch (error) {
-        console.log(error.message);
-
+        console.log(error.message, 'createDoc');
         return { error: error.message, id: null };
     }
+}
+
+export async function createDocApi(data) {
+    const { data: result } = await axios.post(`${API_BASE_URL}/api/create-doc`, data);
+    return result;
 }
 
 export async function verifyOrderTransaction(reference, orderId) {
